@@ -1,0 +1,15 @@
+{* required when parenting Mailer design theme from some other design themes of the Site app; this file woun't be used when parented from the theme of the Site app (!) *}
+
+<!-- navigation breadcrumbs -->
+{if isset($breadcrumbs)}
+    <div class="breadcrumbs">
+        <a href="{$wa_app_url}">{$wa->accountName()}</a>
+        {if $breadcrumbs}
+            {foreach $breadcrumbs as $breadcrumb}
+                » <a href="{$breadcrumb.url}">{$breadcrumb.name|escape}</a>
+            {/foreach}
+        {else} » {/if}
+    </div>
+{/if}
+
+{$content}

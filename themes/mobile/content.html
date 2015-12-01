@@ -1,0 +1,21 @@
+<!-- navigation breadcrumbs -->
+{if isset($breadcrumbs)}
+    <div class="content-nav-wrapper">
+        <div class="nav-group">
+            <div class="nav-list">
+                <div class="nav-item">
+                    <a href="{$wa_app_url}">{$wa->accountName()}</a>
+                </div>
+                {if $breadcrumbs}
+                    {foreach $breadcrumbs as $breadcrumb}
+                        <div class="nav-item">
+                            <a href="{$breadcrumb.url}">{$breadcrumb.name|escape}</a>
+                        </div>
+                    {/foreach}
+                {/if}
+            </div>
+        </div>
+    </div>
+{/if}
+
+{$content}

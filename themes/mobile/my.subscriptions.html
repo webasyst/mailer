@@ -1,0 +1,51 @@
+<div class="subscribe-form-wrapper">
+
+    <h1 class="header-item">[`My subscriptions`]</h1>
+
+    {if $just_confirmed}
+        <div class="line sub-header-item">[`Thanks for subscription!`]</div>
+    {/if}
+
+    {if $just_subscribed_again}
+        <div class="line sub-header-item">[`Thanks for subscription!`]</div>
+    {/if}
+
+    {if $just_updated}
+        <div class="line sub-header-item">[`Your subscription list successfully updated.`]</div>
+    {/if}
+
+    {if $just_unsubscribed || $unsubscriber}
+        <div class="line sub-header-item">[`You are unsubscribed from all mailing campaigns.`]</div>
+    {/if}
+
+    <form action="{$wa->getUrl('mailer/frontend/mySubscriptions')}" method="post">
+        {if $unsubscriber}
+            <div class="line button-item">
+                <input class="button" value="[`Subscribe again`]" type="submit" name="subscribe_again">
+            </div>
+        {else}
+            {if $subscriptions}
+                <div class="line sub-header-item">
+                    [`Select emailing campaigns you would like to participate in:`]
+                </div>
+                {foreach $subscriptions as $subscription}
+                    <div class="line field-item">
+                        <input type="checkbox" name="list[]" value="{$subscription.subscription_info.list_id}" id="subscription-{$subscription.subscription_info.list_id}" {if $subscription.subscribed}checked{/if}/>
+                        <label for="subscription-{$subscription.subscription_info.list_id}">{$subscription.subscription_info.list_name}</label>
+                    </div>
+                {/foreach}
+                <div class="line field-item">
+                    <input class="button" value="[`Save`]" type="submit" name="update_subscriptions"/>
+                </div>
+            {/if}
+
+            <div class="line button-item">
+                <input class="button" value="[`Unsubscribe from all mailings`]" type="submit" name="unsubscribe_from_all"/>
+            </div>
+        {/if}
+
+        {$wa->csrf()}
+    </form>
+</div>
+
+{$wa->globals('isMyAccount', true)}
