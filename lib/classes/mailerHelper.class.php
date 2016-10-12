@@ -15,7 +15,10 @@ class mailerHelper
         foreach ($fields as $f) {
             $id = $f->getId();
             if (!in_array($id, $exclude)) {
-                $vars['{$'.$f->getId().'}'] = $f->getName();
+                $vars['{$'.$id.'}'] = $f->getName();
+                if ($id == 'name') {
+                    $vars['{$'.$id.'}'] = _w('Full name');
+                }
             }
         }
         return $vars;

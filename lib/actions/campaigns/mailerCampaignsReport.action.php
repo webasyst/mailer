@@ -82,6 +82,9 @@ class mailerCampaignsReportAction extends waViewAction
                 $check_return_path = true;
             }
         }
+        if (wa('mailer')->getConfig()->getOption('disable_web_worker')) {
+            $check_return_path = false;
+        }
 
         $this->view->assign('recipient_criterias', mailerHelper::getRecipients($campaign['id']));
         $this->view->assign('allow_return_path_edit', $allow_return_path_edit);

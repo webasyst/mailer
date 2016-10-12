@@ -42,7 +42,12 @@ class mailerCampaignsReportUpdateAction extends mailerCampaignsReportAction
         // Assign $campaign['duration'] and $campaign['estimated_finish_datetime']
         $this->updateCampaignTimes($campaign, $params, $stats);
 
-        $this->view->assign('is_sending', wao(new mailerMessage($campaign_id))->isSending());
+        $is_sending = false;
+        if ($campaign['status'] == mailerMessageModel::STATUS_SENDING) {
+            $is_sending = wao(new mailerMessage($campaign_id))->isSending();
+        }
+
+        $this->view->assign('is_sending', $is_sending);
         $this->view->assign('campaign', $campaign);
         $this->view->assign('params', $params);
         $this->view->assign('stats', $stats);

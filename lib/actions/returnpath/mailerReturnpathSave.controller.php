@@ -55,7 +55,7 @@ class mailerReturnpathSaveController extends waJsonController
             $id = $rpm->insert($data);
         }
 
-        wa()->getStorage()->set('mailer_rp_status_'.$id, true);
+        wa()->getStorage()->del('mailer_rp_status_'.$id);
 
         $this->response = $id;
     }

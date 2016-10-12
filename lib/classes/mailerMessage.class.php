@@ -304,7 +304,9 @@ class mailerMessage extends mailerSimpleMessage
                 }
                 // set Returh-Path
                 if (trim($this->data['return_path'])) {
-                    $message->setReturnPath(str_replace('@', '+'.$row_id.'@', $this->data['return_path']));
+                    // do not modify return path or handle exception after send
+                    //$message->setReturnPath(str_replace('@', '+'.$row_id.'@', $this->data['return_path']));
+                    $message->setReturnPath($this->data['return_path']);
                 } elseif ($this->data['return_path'] === ' ') {
                     $this->setHeader($message, 'X-Log-ID', $row_id);
                 }
@@ -334,9 +336,15 @@ class mailerMessage extends mailerSimpleMessage
                 $message->addPart(mailerHtml2text::convert($body), 'text/plain');
                 $message->generateId();
 
+                if (!$message->getSender()) {
+                    $message->setSender($message->getFrom());
+                }
+
                 // send message
                 $recipient_status = $mailer->send($message) ? mailerMessageLogModel::STATUS_SENT : mailerMessageLogModel::STATUS_SENDING_ERROR;
+
             } catch (Exception $e) {
+
                 if ($this->data['return_path'] &&
                     $e instanceof Swift_TransportException &&
                     strpos($e->getMessage(), '553') !== false)
@@ -357,7 +365,7 @@ class mailerMessage extends mailerSimpleMessage
             if ($recipient_status == mailerMessageLogModel::STATUS_SENT) {
                 $result[$email] = '';
             } else {
-                $result[$email] = ifempty($error, _w('Bounced by sender mail server'));//.' '.print_r(array($recipient_status, $row), 1);
+                $result[$email] = ifempty($error, _w('Bounced by sender mail server'));//*/.' '.print_r(array($recipient_status, $row), 1)));
             }
         }
 
@@ -366,19 +374,10 @@ class mailerMessage extends mailerSimpleMessage
 
     public function testReturnPathSmtpSender()
     {
-        $transport = $this->getTransport();
-        if ($transport instanceof Swift_SmtpTransport) {
-            if (!$transport->isStarted()) {
-                $transport->start();
-            }
-
-            try {
-                $transport->executeCommand(sprintf("MAIL FROM: <%s>\r\n", $this->data['return_path']), array(250));
-            } catch (Exception $e) {
-                return false;
-            }
-        }
-        return true;
+        $result = $this->sendTestMessage(array(
+            $this->data['return_path'] => $this->data['return_path'],
+        ));
+        return empty($result[$this->data['return_path']]);
     }
 
     protected function sendMessage()
@@ -506,7 +505,8 @@ class mailerMessage extends mailerSimpleMessage
                     $this->log_model->setStatus($row_id, $recipient_status);
                 } catch (Exception $e) {
                     if ($i == 1 && $this->data['return_path'] &&
-                        $e instanceof Swift_TransportException && (strpos($e->getMessage(), '553') !== false || strpos($e->getMessage(), '550') !== false))
+                        $e instanceof Swift_TransportException &&
+                        (strpos($e->getMessage(), '553') !== false || strpos($e->getMessage(), '550') !== false))
                     {
 
                         //

@@ -1,6 +1,7 @@
 /* general layout */
 
 #wa { background: url('../img/grey-noisy-bg.jpg') repeat; }
+#wa-app { overflow: visible; }
 
 .m-sidebar { margin-top: 18px; }
 .m-sidebar ul.menu-v li.selected a { background: #e3e3e3; }

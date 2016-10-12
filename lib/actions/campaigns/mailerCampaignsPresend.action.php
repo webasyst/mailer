@@ -49,16 +49,22 @@ class mailerCampaignsPresendAction extends waViewAction
                         exit;
                     }
                 } catch (waException $e) {
-                    $errormsg = _w('Unable to prepare recipients list. Another user attempted to start sending this campaign?');
+                    $errormsg = array(_w('Unable to prepare recipients list. Another user attempted to start sending this campaign?'));
                 }
             }
+        }
+
+        $return_path_ok = true;
+        if (!$errormsg) {
+            // This breaks smarty vars assigned before it
+            $return_path_ok = $this->isReturnPathOk($campaign, $params);
         }
 
         $this->view->assign('errormsg', $errormsg);
         $this->view->assign('cron_command', 'php '.wa()->getConfig()->getRootPath().'/cli.php mailer send<br>php '.wa()->getConfig()->getRootPath().'/cli.php mailer check');
         $this->view->assign('cron_ok', wa()->getSetting('last_cron_time') + 3600*2 > time());
         $this->view->assign('last_cron_time', wa()->getSetting('last_cron_time'));
-        $this->view->assign('return_path_ok', $this->isReturnPathOk($campaign, $params));
+        $this->view->assign('return_path_ok', $return_path_ok);
         $this->view->assign('unique_recipients', $params['recipients_count']);
         $this->view->assign('routing_ok', !!wa()->getRouteUrl('mailer', true));
 
@@ -174,21 +180,12 @@ class mailerCampaignsPresendAction extends waViewAction
             );
         }
 
-        // check return-path form smtp sender
-        $mm = new mailerMessage($campaign);
-        if ($mm->testReturnPathSmtpSender() === false) {
-            return array(
-                'status'=>false,
-                'reason'=>4,
-                'return-path'=>$campaign['return_path']
-            );
-        }
-
         // Check cache in session
         $status = wa()->getStorage()->get('mailer_rp_status_'.$rp['id']);
         if (isset($status)) {
             return array(
-                'reason'=>5,
+                'return-path'=>$campaign['return_path'],
+                'reason'=>wa()->getStorage()->get('mailer_rp_reason_'.$rp['id']),
                 'status'=>$status
             );
         }
@@ -197,17 +194,33 @@ class mailerCampaignsPresendAction extends waViewAction
         try {
             $mail_reader = new waMailPOP3($rp);
             $mail_reader->count();
-            wa()->getStorage()->set('mailer_rp_status_'.$rp['id'], true);
-            return array(
-                'status'=>true
-            );
         } catch (Exception $e) {
+            wa()->getStorage()->set('mailer_rp_status_'.$rp['id'], false);
+            wa()->getStorage()->set('mailer_rp_reason_'.$rp['id'], 3);
+            return array(
+                'return-path'=>$campaign['return_path'],
+                'status'=>false,
+                'reason'=>3
+            );
         }
 
-        wa()->getStorage()->set('mailer_rp_status_'.$rp['id'], false);
+        // check return-path from smtp sender
+        $mm = new mailerMessage($campaign);
+        if ($mm->testReturnPathSmtpSender() === false) {
+            wa()->getStorage()->set('mailer_rp_status_'.$rp['id'], false);
+            wa()->getStorage()->set('mailer_rp_reason_'.$rp['id'], 4);
+            return array(
+                'status'=>false,
+                'reason'=>4,
+                'return-path'=>$campaign['return_path']
+            );
+        }
+
+        wa()->getStorage()->set('mailer_rp_status_'.$rp['id'], true);
+        wa()->getStorage()->del('mailer_rp_reason_'.$rp['id']);
         return array(
-            'status'=>false,
-            'reason'=>3
+            'return-path'=>$campaign['return_path'],
+            'status'=>true
         );
     }
 }

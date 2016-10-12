@@ -7,6 +7,10 @@ class mailerCampaignsSendController extends waJsonController
 {
     public function execute()
     {
+        if (wa('mailer')->getConfig()->getOption('disable_web_worker')) {
+            return;
+        }
+
         $this->getStorage()->close();
         // set max execution time
         set_time_limit(0);

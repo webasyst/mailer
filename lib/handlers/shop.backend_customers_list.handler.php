@@ -70,7 +70,7 @@ HTML;
                     ':hash' => str_replace('ESCAPED_SLASH', '\\\\\\/', $col_hash),
                     ':title' => $title,
                     ':backend_url' => wa()->getRootUrl(true).wa()->getConfig()->getBackendUrl()."/mailer/",
-                    ':buton_value' => _w('Send newsletter in Mailer'),
+                    ':buton_value' => _wd('mailer', 'Send newsletter in Mailer'),
                     ':loading_link' => uniqid('m-shop-backend-customers-list-loading')
                 );
                 return array(
