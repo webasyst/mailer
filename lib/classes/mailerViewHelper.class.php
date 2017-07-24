@@ -41,9 +41,9 @@ class mailerViewHelper
         $old_app = wa()->getApp();
         wa('mailer', true);
 
-        $uniqid = 'mailer'.md5(serialize($mf->getById($form_id)));
+        $uniqid = 'mailer'.md5(serialize($mailer_form));
 
-        $html = mailerHelper::generateHTML($form_id, $uniqid);
+        $html = mailerHelper::generateHTML($mailer_form, $uniqid);
 
         $view = wa()->getView();
         $view->assign('uniqid', $uniqid );

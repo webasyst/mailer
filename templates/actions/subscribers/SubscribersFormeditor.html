@@ -11,279 +11,278 @@
     <div class="hint form-source">
         [`To publish the form on your site use this code:`] <strong>{literal}{$wa->mailer->form({/literal}{$form.id}{literal})}{/literal}</strong>
         <a href="javascript:void(0)" class="inline-link" id="show-external-code"><b><i>[`Publishing on external site`]</i></b></a>
-        <textarea id="external-code" readonly="readonly"><style>
+        <textarea id="external-code" readonly="readonly">&lt;style&gt;
     #{$uniqid}-iframe {
         min-width: 100%;
         min-height: 100%;
     }
-</style>
-<iframe id="{$uniqid}-iframe" src="{$wa->domainUrl()}{$wa->getUrl('mailer/frontend/form', ['id' => $form.id])}" frameborder="0"></iframe></textarea>
+&lt;/style&gt;
+&lt;iframe id="{$uniqid}-iframe" src="{$wa->domainUrl()|escape|escape}{$wa->getUrl('mailer/frontend/form', ['id' => $form.id])|escape|escape}" frameborder="0"&gt;&lt;/iframe&gt;</textarea>
     </div>
     {/if}
 </div>
+
 <div class="" style="padding: 20px;">
     <div id="hd-form-editor-form">
-        <div class="fields">
-            <input type="hidden" name="id" value="{$form.id|default:0}"/>
+        <input type="hidden" name="id" value="{$form.id|default:0}"/>
 
-            <h3>[`Form view setup`]</h3>
-            <div class="fields">
-                <div class="field">
-                    <div class="value">
-                        <table class="publicfrontend-form-fields-setup" style="white-space:nowrap;">
-                            <tbody>
-                            <tr>
-                                <td style="width: 135px;">[`Fields`]</td>
-                                <td>{if isset($form.id)}[`Preview`] <a href="{$wa->getUrl('mailer/frontend/form', ['id' => $form.id], true)}" target="_blank"><i class="icon16 new-window"></i></a>{/if}</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div>
-                                        <label><input type="checkbox" data-fld-id="name"{if !empty($form.params.fields.name)} checked{/if}>
-                                        [`Name`]</label>
-                                    </div>
-                                    <div>
-                                        <label><input type="checkbox" data-fld-id="email" checked disabled>
-                                        [`Email`]</label>
-                                    </div>
-                                    <div>
-                                        <label><input type="checkbox" data-fld-id="captcha"{if !empty($form.params.fields.captcha)} checked{/if}>
-                                        [`Captcha`]</label>
-                                    </div>
+        <h3>[`Form view setup`]</h3>
 
-                                    <div style="padding-top: 10px;">
-                                    <div style="padding-bottom: 5px;">
-                                        [`Field labels`]
-                                    </div>
-                                    <div>
-                                        <input type="radio" id="captionplace-left" name="params[captionplace]" value="left"> <label for="captionplace-left">[`Left aligned`]</label>
-                                    </div>
-                                    <div>
-                                        <input type="radio" name="params[captionplace]" value="above" id="captionplace-above"> <label for="captionplace-above">[`Top aligned`]</label>
-                                    </div>
-                                    <div>
-                                        <input type="radio" name="params[captionplace]" value="none" id="captionplace-none"> <label for="captionplace-none">[`Hide`]</label>
-                                    </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div id="form-constructor-preview">
-                                        <div class="fields">
-                                            <div data-fld-wrapper="name" class="field hidden{if !empty($form.params.fields.name)} show-when-enabled{/if}">
-                                                <div class="name caption {$form.params.captionplace|default:'left'}" style="{if !empty($form.params.captionwidth)}width: {$form.params.captionwidth}%;{/if}">
-                                                    <span class="editable-wrapper" title="[`Edit field label`]">
-                                                        <label class="editable_el editable_text">{if isset($form.params.fields.name.caption)}{$form.params.fields.name.caption|escape}{else}[`Name`]{/if}</label>
-                                                        <input type="text" class="hidden" name="params[fields][name][caption]" value="{if isset($form.params.fields.name.caption)}{$form.params.fields.name.caption|escape}{else}[`Name`]{/if}" {if empty($form.params.fields.name)}disabled{/if}/>
-                                                    </span>
-                                                </div>
-                                                <div class="value placeholder {$form.params.captionplace|default:'left'}" title="[`Edit hint for this field`]" style="{if !empty($form.params.inputmarginleft)}margin-left: {$form.params.inputmarginleft}%;{/if}">
-                                                    <input type="text" class="fill placeholder_input" name="params[fields][name][placeholder]" value="{if isset($form.params.fields.name.placeholder)}{$form.params.fields.name.placeholder|escape}{/if}" {if empty($form.params.fields.name)}disabled{/if}/>
-                                                </div>
-                                            </div>
-                                            <div data-fld-wrapper="email" class="field">
-                                                <div class="name caption {$form.params.captionplace|default:'left'}" style="{if !empty($form.params.captionwidth)}width: {$form.params.captionwidth}%;{/if}">
-                                                    <span class="editable-wrapper" title="[`Edit field label`]">
-                                                        <label class="editable_el editable_text">{if isset($form.params.fields.email.caption)}{$form.params.fields.email.caption|escape}{else}[`Email`]{/if}</label>
-                                                        <input type="text" class="hidden" name="params[fields][email][caption]" value="{if isset($form.params.fields.email.caption)}{$form.params.fields.email.caption|escape}{else}[`Email`]{/if}"/>
-                                                    </span>
-                                                </div>
-                                                <div class="value placeholder {$form.params.captionplace|default:'left'}" title="[`Edit hint for this field`]" style="{if !empty($form.params.inputmarginleft)}margin-left: {$form.params.inputmarginleft}%;{/if}">
-                                                    <input type="text" class="fill placeholder_input" name="params[fields][email][placeholder]" value="{if isset($form.params.fields.email.placeholder)}{$form.params.fields.email.placeholder|escape}{/if}"/>
-                                                </div>
-                                            </div>
-                                            <div data-fld-wrapper="captcha" class="field hidden{if !empty($form.params.fields.captcha)} show-when-enabled{/if}">
-                                                <span class="editable-wrapper" title="[`Edit field label`]">
-                                                    <label class="editable_el editable_text">{$form.params.fields.captcha.caption|escape|default:'[`Please enter symbols shown on the image:`]'}</label>
-                                                    <input type="text" class="hidden fill" name="params[fields][captcha][caption]" {if empty($form.params.fields.captcha)}disabled{/if} value="{$form.params.fields.captcha.caption|escape|default:'[`Please enter symbols shown on the image:`]'}"/>
-                                                </span>
-                                            </div>
-                                            <div data-fld-wrapper="captcha" class="field hidden{if !empty($form.params.fields.captcha)} show-when-enabled{/if}">
-                                                {$wa->captcha(null, true, "[`Reload image`]")}
-                                            </div>
-                                            <div data-fld-wrapper="lists" class="field-group">
-                                                {foreach $all_lists_list as $list}
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input data-not-check="true" type="checkbox" data-list-id="{$list.list_id}" {if !empty($form) && in_array($list.list_id, $form.lists)} checked{/if}>  {$list.list_name}
-                                                    </label>
-                                                </div>
-                                                {/foreach}
-                                            </div>
-                                            <div class="field">
-                                                <span class="editable-wrapper">
-                                                    <input type="button" class="editable_el editable_button" value="{$form.params.button_caption|escape|default:'[`Send`]'}" title="[`Edit button label`]"><input type="text" class="hidden" name="params[button_caption]" value="{$form.params.button_caption|escape|default:'[`Send`]'}"/>
-                                                </span>
-                                            </div>
-                                            <input type="hidden" name="params[captionwidth]" value="{$form.params.captionwidth|default:''}"/>
-                                            <input type="hidden" name="params[inputmarginleft]" value="{$form.params.inputmarginleft|default:''}"/>
-                                        </div>
-                                    </div>
-                                    <div class="constructor-width">
-                                        <input type="text" value="{$form.params.formwidth|default:400}" name="params[formwidth]"/>
-                                        <hr/>
-                                        <div>[`Form width (200-600px)`]</div>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-
+        <table class="publicfrontend-form-fields-setup" style="white-space:nowrap;">
+            <tbody>
+            <tr>
+                <td style="width: 135px;">[`Fields`]</td>
+                <td>{if isset($form.id)}[`Preview`] <a href="{$wa->getUrl('mailer/frontend/form', ['id' => $form.id], true)}" target="_blank"><i class="icon16 new-window"></i></a>{/if}</td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <label><input type="checkbox" data-fld-id="name"{if !empty($form.params.fields.name)} checked{/if}>
+                        [`Name`]</label>
                     </div>
-                </div>
-            <div class="field"><hr></div>
-
-            {if $all_lists_list}
-            <h3>[`Add to lists`]</h3>
-            <div class="fields">
-                <div class="field">
-                    <div class="value">
-                        [`Select lists to which new subscriber will be added:`]
+                    <div>
+                        <label><input type="checkbox" data-fld-id="email" checked disabled>
+                        [`Email`]</label>
                     </div>
-                </div>
+                    <div>
+                        <label><input type="checkbox" data-fld-id="captcha"{if !empty($form.params.fields.captcha)} checked{/if}>
+                        [`Captcha`]</label>
+                    </div>
 
-                <div class="field-group">
-                    {foreach $all_lists_list as $list}
-                    <div class="field">
-                        <div class="value">
-                            <label>
-                                <input data-lists="list" type="checkbox" name="form[lists][]" value="{$list.list_id}"{if !empty($form) && in_array($list.list_id, $form.lists)} checked{/if}>
-                                {$list.list_name}
-                            </label>
+                    <div style="padding-top: 10px;">
+                        <div style="padding-bottom: 5px;">
+                            [`Field labels`]
                         </div>
-                    </div>
-                    {/foreach}
-                    <div class="field">
-                        <div class="value"><p class="hint">[`In case no lists selected, subscriber will be added to All subscribers.`]</p></div>
-                    </div>
-                </div>
-                <div class="field" style="margin-left: 10px;">
-                    <div class="value">
-                        <label>
-                            <input data-lists="show" type="checkbox" name="params[show_subscription_list]" value="1"{if !empty($form)}{if !empty($form.params.show_subscription_list)} checked{/if}{if empty($form.lists)} disabled{/if}{/if}>
-                            [`Show list selection in the form`]
-                        </label>
-                        <p class="hint">[`In this case subscribers will be able to select lists themselves.`]</p>
-                    </div>
-                </div>
-            </div>
-            <div class="field"><hr></div>
-            {/if}
-
-            <h3>[`After form submission`]</h3>
-            <div class="fields email-template-editor">
-                <div class="field">
-                    <div class="value">
-                        [`This setting will redirect clients to any specified URL or display any text message after the form is submitted.`]
-                    </div>
-                </div>
-
-                <div class="field after-submit">
-                    <div class="value">
-                        <p>[`After successfull submission:`]</p>
-
                         <div>
-                            <label>
-                                <input type="radio" name="params[after_submit]"{if !empty($form) && $form.params.after_submit == 'redirect'} checked{/if} value="redirect">
-                                [`Redirect to URL`]
-                            </label>
-                            <span><input type="text" name="params[redirect_after_submit]" value="{$form.params.redirect_after_submit|default:''}" placeholder="http://" style="min-width:30em;margin:3px 0 5px 0;"></span>
+                            <input type="radio" id="captionplace-left" name="params[captionplace]" value="left"> <label for="captionplace-left">[`Left aligned`]</label>
                         </div>
-
-                        <div style="min-height:30px;margin-top:5px;">
-                            <label>
-                                <input type="radio" name="params[after_submit]"{if isset($form.params.after_submit) && $form.params.after_submit == 'html'} checked{/if} value="html">
-                                [`Display text instead of the form`]
-                            </label>
-                            <div style="margin-top:5px;"><textarea name="params[html_after_submit]" class="equal-width">{$form.params.html_after_submit|escape|default:'[`Thanks for subscribing!`]'}</textarea></div>
+                        <div>
+                            <input type="radio" name="params[captionplace]" value="above" id="captionplace-above"> <label for="captionplace-above">[`Top aligned`]</label>
+                        </div>
+                        <div>
+                            <input type="radio" name="params[captionplace]" value="none" id="captionplace-none"> <label for="captionplace-none">[`Hide`]</label>
                         </div>
                     </div>
+                </td>
+                <td>
+                    <div id="form-constructor-preview">
+                        <div class="fields">
+                            <div data-fld-wrapper="name" class="field hidden{if !empty($form.params.fields.name)} show-when-enabled{/if}">
+                                <div class="name caption {$form.params.captionplace|default:'left'}" style="{if !empty($form.params.captionwidth)}width: {$form.params.captionwidth}%;{/if}">
+                                    <span class="editable-wrapper" title="[`Edit field label`]">
+                                        <label class="editable_el editable_text">{if isset($form.params.fields.name.caption)}{$form.params.fields.name.caption|escape}{else}[`Name`]{/if}</label>
+                                        <input type="text" class="hidden" name="params[fields][name][caption]" value="{if isset($form.params.fields.name.caption)}{$form.params.fields.name.caption|escape}{else}[`Name`]{/if}" {if empty($form.params.fields.name)}disabled{/if}/>
+                                    </span>
+                                </div>
+                                <div class="value placeholder {$form.params.captionplace|default:'left'}" title="[`Edit hint for this field`]" style="{if !empty($form.params.inputmarginleft)}margin-left: {$form.params.inputmarginleft}%;{/if}">
+                                    <input type="text" class="fill placeholder_input" name="params[fields][name][placeholder]" value="{if isset($form.params.fields.name.placeholder)}{$form.params.fields.name.placeholder|escape}{/if}" {if empty($form.params.fields.name)}disabled{/if}/>
+                                </div>
+                            </div>
+                            <div data-fld-wrapper="email" class="field">
+                                <div class="name caption {$form.params.captionplace|default:'left'}" style="{if !empty($form.params.captionwidth)}width: {$form.params.captionwidth}%;{/if}">
+                                    <span class="editable-wrapper" title="[`Edit field label`]">
+                                        <label class="editable_el editable_text">{if isset($form.params.fields.email.caption)}{$form.params.fields.email.caption|escape}{else}[`Email`]{/if}</label>
+                                        <input type="text" class="hidden" name="params[fields][email][caption]" value="{if isset($form.params.fields.email.caption)}{$form.params.fields.email.caption|escape}{else}[`Email`]{/if}"/>
+                                    </span>
+                                </div>
+                                <div class="value placeholder {$form.params.captionplace|default:'left'}" title="[`Edit hint for this field`]" style="{if !empty($form.params.inputmarginleft)}margin-left: {$form.params.inputmarginleft}%;{/if}">
+                                    <input type="text" class="fill placeholder_input" name="params[fields][email][placeholder]" value="{if isset($form.params.fields.email.placeholder)}{$form.params.fields.email.placeholder|escape}{/if}"/>
+                                </div>
+                            </div>
+                            <div data-fld-wrapper="captcha" class="field hidden{if !empty($form.params.fields.captcha)} show-when-enabled{/if}">
+                                <span class="editable-wrapper" title="[`Edit field label`]">
+                                    <label class="editable_el editable_text">{$form.params.fields.captcha.caption|escape|default:'[`Please enter symbols shown on the image:`]'}</label>
+                                    <input type="text" class="hidden fill" name="params[fields][captcha][caption]" {if empty($form.params.fields.captcha)}disabled{/if} value="{$form.params.fields.captcha.caption|escape|default:'[`Please enter symbols shown on the image:`]'}"/>
+                                </span>
+                            </div>
+                            <div data-fld-wrapper="captcha" class="field hidden{if !empty($form.params.fields.captcha)} show-when-enabled{/if}">
+                                {$wa->captcha(null, true, "[`Reload image`]")}
+                            </div>
+                            <div data-fld-wrapper="lists" class="field-group">
+                                {foreach $all_lists_list as $list}
+                                <div class="checkbox">
+                                    <label>
+                                        <input data-not-check="true" type="checkbox" data-list-id="{$list.list_id}" {if !empty($form.id) && in_array($list.list_id, $form.lists)} checked{/if}>  {$list.list_name}
+                                    </label>
+                                </div>
+                                {/foreach}
+                            </div>
+                            <div data-fld-wrapper="agreement" class="field-group" style="padding-left:3px;white-space:normal"><label>
+                                <input type="checkbox">
+                                <div class="preview-text" style="display:inline;"></div>
+                            </label></div>
+                            <div class="field">
+                                <span class="editable-wrapper">
+                                    <input type="button" class="editable_el editable_button" value="{$form.params.button_caption|escape|default:'[`Send`]'}" title="[`Edit button label`]"><input type="text" class="hidden" name="params[button_caption]" value="{$form.params.button_caption|escape|default:'[`Send`]'}"/>
+                                </span>
+                            </div>
+                            <input type="hidden" name="params[captionwidth]" value="{$form.params.captionwidth|default:''}"/>
+                            <input type="hidden" name="params[inputmarginleft]" value="{$form.params.inputmarginleft|default:''}"/>
+                        </div>
+                    </div>
+                    <div class="constructor-width">
+                        <input type="text" value="{$form.params.formwidth|default:400}" name="params[formwidth]"/>
+                        <hr/>
+                        <div>[`Form width (200-600px)`]</div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h3>[`Personal data processing`]</h3>
+        <div class="labels-list">
+            <label>
+                <input type="radio" name="params[service_agreement]" value=""{if empty($form.params.service_agreement)} checked{/if}>
+                [`Do not require consent to personal data protection policy`]
+            </label>
+            {$link_tag = sprintf('<a href="%s" target="_blank">', _w('---INSERT A LINK HERE!---'))}
+            <label data-default-text="{sprintf_wp('By submitting this form I agree to %spersonal data protection policy%s', $link_tag, '</a>')|escape}">
+                <input type="radio" name="params[service_agreement]" value="notice"{if ifset($form.params.service_agreement) == 'notice'} checked{/if}>
+                [`Show only notice and link to policy`]
+            </label>
+            <label data-default-text="{sprintf_wp('I agree to %spersonal data protection policy%s', $link_tag, '</a>')|escape}">
+                <input type="radio" name="params[service_agreement]" value="checkbox"{if ifset($form.params.service_agreement) == 'checkbox'} checked{/if}>
+                [`Show mandatory checkbox, notice, and link`]
+            </label>
+            <div class="hidden text-editor">
+                <textarea name="params[service_agreement_hint]" style="min-width:400px;height:70px;">{ifempty($form.params.service_agreement_hint)|escape}</textarea>
+                <br>
+                <span class="hint"><a href="javascript:void(0)" class="inline-link generalte-example-link"><b><i>[`Restore original text`]</i></b></a></span>
+            </div>
+        </div>
+
+        <hr style="margin-top:22px;">
+
+        {if $all_lists_list}
+        <h3>[`Add to lists`]</h3>
+        <p>[`Select lists to which new subscriber will be added:`]</p>
+        <div class="labels-list">
+            {foreach $all_lists_list as $list}
+                <label>
+                    <input data-lists="list" type="checkbox" name="form[lists][]" value="{$list.list_id}"{if !empty($form.id) && in_array($list.list_id, $form.lists)} checked{/if}>
+                    {$list.list_name}
+                </label>
+            {/foreach}
+        </div>
+        <p class="hint">[`In case no lists selected, subscriber will be added to All subscribers.`]</p>
+
+        <div style="margin-left: 10px;">
+            <label>
+                <input data-lists="show" type="checkbox" name="params[show_subscription_list]" value="1"{if !empty($form.id)}{if !empty($form.params.show_subscription_list)} checked{/if}{if empty($form.lists)} disabled{/if}{/if}>
+                [`Show list selection in the form`]
+            </label>
+        </div>
+        <p class="hint">[`In this case subscribers will be able to select lists themselves.`]</p>
+
+        <hr>
+        {/if}
+
+        <h3>[`After form submission`]</h3>
+        <div class="email-template-editor">
+            <p class="hint">[`This setting will redirect clients to any specified URL or display any text message after the form is submitted.`]</p>
+
+            <div class="after-submit">
+                <p>[`After successfull submission:`]</p>
+
+                <div>
+                    <label>
+                        <input type="radio" name="params[after_submit]"{if !empty($form.id) && $form.params.after_submit == 'redirect'} checked{/if} value="redirect">
+                        [`Redirect to URL`]
+                    </label>
+                    <span><input type="text" name="params[redirect_after_submit]" value="{$form.params.redirect_after_submit|default:''}" placeholder="http://" style="min-width:30em;margin:3px 0 5px 0;"></span>
+                </div>
+
+                <div style="min-height:30px;margin-top:5px;">
+                    <label>
+                        <input type="radio" name="params[after_submit]"{if isset($form.params.after_submit) && $form.params.after_submit == 'html'} checked{/if} value="html">
+                        [`Display text instead of the form`]
+                    </label>
+                    <div style="margin:5px 0 8px 0;"><textarea name="params[html_after_submit]" class="equal-width" style="min-width:400px;height:70px;">{$form.params.html_after_submit|escape|default:'[`Thanks for subscribing!`]'}</textarea></div>
                 </div>
             </div>
-            <div class="field"><hr></div>
+        </div>
+        <hr>
 
-            <h3>[`Confirm subscription`]</h3>
-            <div class="field">
-                <div class="value">
-                    <input type="checkbox" id="confirmation-checkbox" name="params[confirm_mail]" value="1"{if isset($form.params.confirm_mail)} checked{/if}>
+        <h3>[`Confirm subscription`]</h3>
+        <div>
+            <input type="checkbox" id="confirmation-checkbox" name="params[confirm_mail]" value="1"{if isset($form.params.confirm_mail)} checked{/if}>
 
-                    <p class="large-hint" style="margin-top:4px;">
-                        [`Message will be sent to the subscriber's address. This message contains a special link which must be clicked to confirm the subscription.`]
-                    </p>
+            <p class="large-hint" style="margin-top:4px;">
+                [`Message will be sent to the subscriber's address. This message contains a special link which must be clicked to confirm the subscription.`]
+            </p>
+        </div>
+
+        <div class="{if empty($form.params.confirm_mail)} hidden{/if} confirm_mail field">
+            <div class="fields email-template-editor narrow-vars">
+                <div class="field template-subfield">
+                    <div class="name">[`From`]</div>
+                    <div class="value combined-selector">
+                        {$default_mail = key(waMail::getDefaultFrom())}
+                        {if $default_mail}
+                        <select class="from-select">
+                            <option value="default">[`System default`] ({$default_mail})</option>
+                            <option value=""{if isset($form.params.confirm_mail_from)} selected{/if}>[`Specified`]</option>
+                        </select><br>
+                        {/if}
+                        <input type="text" data-required="true" name="params[confirm_mail_from]" value="{if isset($form.params.confirm_mail_from)}{$form.params.confirm_mail_from|escape}{/if}" class="{if $default_mail}hidden {/if}from-input" style="margin:{if $default_mail}10px 0 0{/if} 0;min-width: 400px;">
+                    </div>
                 </div>
-                <div class="{if empty($form.params.confirm_mail)} hidden{/if} value confirm_mail field">
-                    <div class="fields email-template-editor narrow-vars">
-                        <div class="field template-subfield">
-                            <div class="name">[`From`]</div>
-                            <div class="value combined-selector">
-                                {$default_mail = key(waMail::getDefaultFrom())}
-                                {if $default_mail}
-                                <select class="from-select">
-                                    <option value="default">[`System default`] ({$default_mail})</option>
-                                    <option value=""{if isset($form.params.confirm_mail_from)} selected{/if}>[`Specified`]</option>
-                                </select><br>
-                                {/if}
-                                <input type="text" data-required="true" name="params[confirm_mail_from]" value="{if isset($form.params.confirm_mail_from)}{$form.params.confirm_mail_from|escape}{/if}" class="{if $default_mail}hidden {/if}from-input" style="margin:{if $default_mail}10px 0 0{/if} 0;min-width: 400px;">
-                            </div>
-                        </div>
 
-                        <div class="field template-subfield">
-                            <div class="name">[`Subject`]</div>
-                            <div class="value">
-                                <input type="text" data-required="true" name="params[confirm_mail_subject]" value="{$form.params.confirm_mail_subject|escape|default:'[`Please confirm your subscription`]'}" class="subject-input" style="min-width: 400px;">
-                            </div>
-                        </div>
+                <div class="field template-subfield">
+                    <div class="name">[`Subject`]</div>
+                    <div class="value">
+                        <input type="text" data-required="true" name="params[confirm_mail_subject]" value="{$form.params.confirm_mail_subject|escape|default:'[`Please confirm your subscription`]'}" class="subject-input" style="min-width: 400px;">
+                    </div>
+                </div>
 
-                        <div class="field template-subfield">
-                            <div class="name">[`Text`]</div>
-                            <div class="value">
-                                <div class="variables-link-wrapper equal-width">
-                                    <textarea data-required="true" class="body-textarea" name="params[confirm_mail_body]">{$form.params.confirm_mail_body|escape|default:'[`Dear {SUBSCRIBER_NAME}!`]
+                <div class="field template-subfield">
+                    <div class="name">[`Text`]</div>
+                    <div class="value">
+                        <div class="variables-link-wrapper equal-width">
+                            <textarea data-required="true" class="body-textarea" name="params[confirm_mail_body]">{$form.params.confirm_mail_body|escape|default:'[`Dear {SUBSCRIBER_NAME}!`]
 
 [`Please click the following link to confirm your subscription:`]
 <a href="{SUBSCRIPTION_CONFIRM_URL}">{SUBSCRIPTION_CONFIRM_URL}</a>.
 
 [`Thank you!`]'}</textarea>
-                                    {if isset($confirmation_template_vars)}
-                                    <a href="javascript:void(0)" class="variables-link inline-link" style="font-size:.8em;"><b><i>[`Variables`]</i></b></a>
-                                    {/if}
-                                </div>
-                            </div>
+                            {if isset($confirmation_template_vars)}
+                                <a href="javascript:void(0)" class="variables-link inline-link" style="font-size:.8em;"><b><i>[`Variables`]</i></b></a>
+                            {/if}
                         </div>
-
-                        {if isset($confirmation_template_vars)}
-                        <div class="field variables-wrapper">
-                            <div class="fields shadowed equal-width">
-                                {foreach $confirmation_template_vars as $k => $v}
-                                <div class="field">
-                                    <div class="name"><a href="javascript:void(0)" class="inline-link{if strlen($k) > 35} small{/if}"><b><i>{$k|escape}</i></b></a></div>
-                                    {if $v}
-                                    <div class="value hint" style="margin-left: 200px;">{$v|escape}</div>
-                                    {/if}
-                                </div>
-                                {/foreach}
-                            </div>
-                            <div class="clear-left"></div>
-                        </div>
-                        {/if}
                     </div>
                 </div>
+
+                {if isset($confirmation_template_vars)}
+                <div class="field variables-wrapper">
+                    <div class="fields shadowed equal-width">
+                        {foreach $confirmation_template_vars as $k => $v}
+                        <div class="field">
+                            <div class="name"><a href="javascript:void(0)" class="inline-link{if strlen($k) > 35} small{/if}"><b><i>{$k|escape}</i></b></a></div>
+                            {if $v}
+                            <div class="value hint" style="margin-left: 200px;">{$v|escape}</div>
+                            {/if}
+                        </div>
+                        {/foreach}
+                    </div>
+                    <div class="clear-left"></div>
+                </div>
+                {/if}
             </div>
         </div>
     </div>
 
     <div class="float-left" style="width:100%">
-        <div class="block">
-            <div id="sticky-bottom-buttons" style="background:white">
-                <div class="block">
-                    {if !empty($form)}
-                    <div class="float-right left-spaced top-spaced hint">
-                        <a href="javascript:void(0)" class="form-editor-delete" id="form-editor-delete">[`Delete this form`]</a>
-                    </div>
-                    {/if}
-
-                    <input id="form-editor-save" type="submit" class="button green" value="[`Save`]">
-                    <i class="icon16 loading" style="display:none"></i>
+        <div id="sticky-bottom-buttons" style="background:white">
+            <div class="block">
+                {if !empty($form.id)}
+                <div class="float-right left-spaced top-spaced hint">
+                    <a href="javascript:void(0)" class="form-editor-delete" id="form-editor-delete">[`Delete this form`]</a>
                 </div>
+                {/if}
+
+                <input id="form-editor-save" type="submit" class="button green" value="[`Save`]">
+                <i class="icon16 loading" style="display:none"></i>
             </div>
         </div>
     </div>
@@ -301,7 +300,7 @@
         };
     })(jQuery);
 
-    {if empty($form)}
+    {if empty($form.id)}
     $('[name="form[name]"]').focus().select();
     $('[name="params[show_subscription_list]"]').prop('disabled', true);
     $('[name="params[after_submit]"]').last().prop('checked', true);
@@ -465,11 +464,85 @@
         calc_label_width(val);
     });
 
+    (function() { "use strict";
+
+        var $preview_fieldgroup = $form.find('[data-fld-wrapper="agreement"]');
+        var $radio_wrapper = $form.find('[name="params[service_agreement]"]').closest('.labels-list').first();
+        var $textarea_wrapper = $radio_wrapper.find('.text-editor');
+        var $textarea = $textarea_wrapper.find('textarea');
+        var previous_default_text = null;
+
+        var is_init = true;
+        updatePreviewAgreement();
+        is_init = false;
+
+        $radio_wrapper.on('change', '[name="params[service_agreement]"]', function(){
+            updatePreviewAgreement(this.value)
+        });
+
+        $textarea_wrapper.on('click', '.generalte-example-link', function() {
+            setDefaultText();
+            updatePreviewAgreementText();
+            $textarea.focus();
+            return false;
+        });
+
+        $textarea.on('keyup keypress change blur', updatePreviewAgreementText);
+
+        function updatePreviewAgreement(val) {
+            if (val === undefined) {
+                val = $form.find('[name="params[service_agreement]"]:checked').val();
+            }
+
+            if (val) {
+                if (!$textarea.val() || previous_default_text == $textarea.val()) {
+                    setDefaultText();
+                }
+                updatePreviewAgreementText();
+                show($textarea_wrapper);
+                show($preview_fieldgroup);
+                if (val == 'checkbox') {
+                    $preview_fieldgroup.find(':checkbox').show();
+                } else {
+                    $preview_fieldgroup.find(':checkbox').hide();
+                }
+            } else {
+                hide($preview_fieldgroup);
+                hide($textarea_wrapper);
+            }
+        }
+
+        function updatePreviewAgreementText() {
+            $preview_fieldgroup.find('.preview-text').html($textarea.val());
+        }
+
+        function setDefaultText() {
+            previous_default_text = $radio_wrapper.find(':radio:checked').closest('label').data('default-text') || '';
+            $textarea.val(previous_default_text);
+        }
+
+        function hide($el) {
+            if (is_init) {
+                $el.hide();
+            } else {
+                $el.slideUp();
+            }
+        }
+
+        function show($el) {
+            if (is_init) {
+                $el.show();
+            } else {
+                $el.slideDown();
+            }
+        }
+    }());
+
+
     $form_constructor_preview.width($('.constructor-width').find('input').val());
 
     $('.constructor-width').on('keyup', 'input', function(e){
         var code = e.keyCode || e.which;
-
         if (code == 13) {
             $(this).blur();
         }
@@ -598,7 +671,7 @@
                     $button.parent().append(
                         $('<span><i class="icon16 yes after-button"></i> '+"[`Saved`]"+'</span>').animate({ opacity: 0 }, 1000, function() {
                             $(this).remove();
-                            {if empty($form)}
+                            {if empty($form.id)}
                                 $.wa.mailer.redispatch();
                             {/if}
                         })
@@ -629,7 +702,7 @@
         });
     }, 0);
 
-    {if !empty($form)}
+    {if !empty($form.id)}
     $delete_link.on('click', function(e){
         if (confirm("[`Are you sure?`]")) {
                $.post('?module=subscribers&action=formdelete', { id : {$form.id} }, function(data){

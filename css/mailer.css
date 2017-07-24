@@ -835,8 +835,12 @@ label input { margin-top: -3px; }
 }
 #hd-form-editor-form h3 {
     font-size: 1.2em;
-    margin-left: 9px;
+    margin-left: 0px;
     margin-bottom: 9px;
+}
+#hd-form-editor-form .labels-list label { 
+    display: block;
+    margin: 0 0 6px 0;
 }
 .form-settings-form .form-name input{
     font-size: 1.2em;

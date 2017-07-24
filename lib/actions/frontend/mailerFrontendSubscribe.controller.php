@@ -67,7 +67,7 @@ class mailerFrontendSubscribeController extends waJsonController
                     $this->logAction('subscribed_via_form', null, null, $contact_id);
                     $this->response = $contact_id;
                 } else {
-                    $this->errors = "error while susbscribing";
+                    $this->errors = "error while subscribing";
                 }
                 return;
             } else {

@@ -13,7 +13,7 @@ msgstr ""
 "%100)>=20)))?(1):2));\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 1.8.7.1\n"
 "Language: ru_RU\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\n"
@@ -1994,8 +1994,8 @@ msgstr "отредактировал список подписок в лично
 msgid "scheduled delayed sending"
 msgstr "запланировал отложенную рассылку"
 
-msgid "<a target=\"_blank\" href=\"http://www.webasyst.com/help/2024/mailer-dkim/\">What is DKIM</a>"
-msgstr "<a target=\"_blank\" href=\"http://www.webasyst.ru/help/2023/mailer-dkim/\">Что такое DKIM</a>"
+msgid "<a target=\"_blank\" href=\"https://www.webasyst.com/crm/support/2024/mailer-dkim/\">What is DKIM</a>"
+msgstr "<a target=\"_blank\" href=\"https://support.webasyst.ru/2023/mailer-dkim/\">Что такое DKIM</a>"
 
 msgid "Please enter sender's email address to use DKIM."
 msgstr "Для использования DKIM введите адрес отправителя."
@@ -2097,3 +2097,33 @@ msgstr "Ни одной рассылки не было отправлено эт
 
 msgid "Full name"
 msgstr "Полное имя"
+
+msgid "Personal data processing"
+msgstr "Обработка персональных данных"
+
+msgid "---INSERT A LINK HERE!---"
+msgstr "---ВСТАВЬТЕ СЮДА ССЫЛКУ НА ДОКУМЕНТ!---"
+
+msgid "I agree to %spersonal data protection policy%s"
+msgstr "Я принимаю условия %sполитики обработки персональных данных%s"
+
+msgid "By submitting this form I agree to %spersonal data protection policy%s"
+msgstr "Нажимая на кнопку подтверждения, я принимаю условия %sполитики обработки персональных данных%s"
+
+msgid "Do not require consent to personal data protection policy"
+msgstr "Не требовать согласия с политикой обработки персональных данных"
+
+msgid "Show only notice and link to policy"
+msgstr "Показывать только подсказку со ссылкой на политику"
+
+msgid "Show mandatory checkbox, notice, and link"
+msgstr "Предлагать включить обязательный флажок с подсказкой и ссылкой"
+
+msgid "Restore original text"
+msgstr "Восстановить стандартный текст"
+
+msgid "Show notice"
+msgstr "Показывать уведомление"
+
+msgid "Please confirm your agreement"
+msgstr "Подтвердите согласие с условиями"

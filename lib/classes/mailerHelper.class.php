@@ -473,8 +473,13 @@ class mailerHelper
 
     public static function generateHTML($form_id, $uniqid)
     {
-        $mf = new mailerFormModel();
-        $mailer_form = $mf->getById($form_id);
+        if (!is_array($form_id)) {
+            $mf = new mailerFormModel();
+            $mailer_form = $mf->getById($form_id);
+        } else {
+            $mailer_form = $form_id;
+            $form_id = $mailer_form['id'];
+        }
 
         $mfp = new mailerFormParamsModel();
         $mailer_form_params = $mfp->get($form_id);
@@ -485,7 +490,7 @@ class mailerHelper
         $view = wa()->getView();
 
         $view->assign('form', $mailer_form);
-        $view->assign('uniqid', $uniqid );
+        $view->assign('uniqid', $uniqid);
         $view->assign('params', $mailer_form_params);
         $view->assign('lists', $mailer_form_lists);
 

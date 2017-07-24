@@ -8,7 +8,7 @@ class mailerRightConfig extends waRightConfig
         $this->addItem('inspector', _w('Inspector: can only view all existing campaigns, but can not edit or send them'), 'checkbox');
     }
 
-    public function setDefaultRights($contact_id)
+    public function getDefaultRights($contact_id)
     {
         return array(
             'author' => 1,

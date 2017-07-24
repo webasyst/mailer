@@ -5,7 +5,8 @@
         $form           = $wrapper.find('form'),
         $inputsUser     = $form.find('[data-user="true"]'),
         $inputsReq      = $form.find('[name="captcha"],[name="subscriber[email]"]'),
-        $inputsCheck    = $form.find('[type="checkbox"]'),
+        $inputsCheck    = $form.find('[type="checkbox"][name="lists[]"]'),
+        $agreement_checkbox = $form.find('[type="checkbox"][name="service_agreement"]');
         $loading        = $form.find('.loading'),
         $error          = $form.find('.wa-errormsg'),
         $captcha_refresh = $form.find('.wa-captcha-refresh'),
@@ -60,17 +61,22 @@
         $error.hide();
 
         if ($inputsCheck.length &&  validateCheckbox($inputsCheck)){
-            $error.text('[`Select at least one subscription subject`]').show();
+            $error.text("[`Select at least one subscription subject`]").show();
             error = true;
         }
 
         var erros_cnt = validateRequired($inputsReq);
         if (erros_cnt) {
             if (erros_cnt > 1) {
-                $error.text('[`Required fields`]').show();
+                $error.text("[`Required fields`]").show();
             } else {
-                $error.text('[`Required field`]').show();
+                $error.text("[`Required field`]").show();
             }
+            error = true;
+        }
+
+        if (!error && $agreement_checkbox.length && !$agreement_checkbox.prop('checked')) {
+            $error.text("[`Please confirm your agreement`]").show();
             error = true;
         }
 
@@ -110,7 +116,7 @@
                         }
                     })
                     .fail(function() {
-                        $error.text('[`Server error`]').show();
+                        $error.text("[`Server error`]").show();
                     })
                     .always(function() {
                         $loading.hide();
