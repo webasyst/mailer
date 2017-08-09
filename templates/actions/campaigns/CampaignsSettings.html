@@ -86,7 +86,7 @@ form#form-campaign { 1overflow: visible; }
                                 <option value="">&lt;[`select`]&gt;</option>
                             {/if}
                             {foreach $return_paths as $rp}
-                                <option value="{$rp.email}"{if $campaign.return_path==$rp.email} selected{/if}>{$rp.email|escape}</option>
+                                <option value="{$rp.email|escape}"{if $campaign.return_path==$rp.email} selected{/if}>{$rp.email|escape}</option>
                             {/foreach}
                         </select>
                     {else}
@@ -111,7 +111,7 @@ form#form-campaign { 1overflow: visible; }
                 <div class="value">
                     <select id="sending-speed-select" name="params[speed_limit]">
                         {foreach $sending_speed_values as $s}
-                            <option value="{$s.num}"{if $s.disabled} disabled{elseif ifempty($params.speed_limit) == $s.num} selected{/if}>{$s.name}</option>
+                            <option value="{$s.num|escape}"{if $s.disabled} disabled{elseif ifempty($params.speed_limit) == $s.num} selected{/if}>{$s.name}</option>
                         {/foreach}
                     </select>
                     <br>
@@ -134,7 +134,7 @@ form#form-campaign { 1overflow: visible; }
                 <div class="field">
                     <div class="name">[`Source (utm_source):`]</div>
                     <div class="value">
-                        <input type="text" name="params[google_analytics_utm_source]" value="{ifempty($params.google_analytics_utm_source)}">
+                        <input type="text" name="params[google_analytics_utm_source]" value="{ifempty($params.google_analytics_utm_source)|escape}">
                         <br/>
                         <span class="hint">[`The type of resource that is sending you traffic, e.g. newsletter.`]</span>
                     </div>
@@ -142,7 +142,7 @@ form#form-campaign { 1overflow: visible; }
                 <div class="field">
                     <div class="name">[`Medium (utm_medium):`]</div>
                     <div class="value">
-                        <input type="text" name="params[google_analytics_utm_medium]" value="{ifempty($params.google_analytics_utm_medium)}">
+                        <input type="text" name="params[google_analytics_utm_medium]" value="{ifempty($params.google_analytics_utm_medium)|escape}">
                         <br/>
                         <span class="hint">[`The type of marketing medium that the link is featured in, e.g. email.`]</span>
                     </div>
@@ -150,7 +150,7 @@ form#form-campaign { 1overflow: visible; }
                 <div class="field">
                     <div class="name">[`Campaign (utm_campaign):`]</div>
                     <div class="value">
-                        <input type="text" name="params[google_analytics_utm_campaign]" value="{ifempty($params.google_analytics_utm_campaign)}">
+                        <input type="text" name="params[google_analytics_utm_campaign]" value="{ifempty($params.google_analytics_utm_campaign)|escape}">
                         <br/>
                         <span class="hint">[`The name of your marketing campaign, e.g. your email subject.`]</span>
                     </div>

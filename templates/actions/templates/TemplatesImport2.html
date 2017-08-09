@@ -5,8 +5,8 @@
     <ul id="import-index-selector" class="zebra">
         {foreach $html_files as $i => $filename}
             <li><label>
-                <input type="radio" name="import_index" value="{$i}">
-                {$filename}
+                <input type="radio" name="import_index" value="{$i|escape}">
+                {$filename|escape}
             </label></li>
         {/foreach}
     </ul>

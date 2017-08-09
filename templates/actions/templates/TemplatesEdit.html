@@ -329,6 +329,7 @@ var wa_app = "{$wa->app()}";
             file_uploader_div.find('.qq-upload-list').empty();
         },
         params: {
+            _csrf: {waRequest::cookie('_csrf', '')|json_encode},
             file_id: file_id,
             action: 'upload',
             image: 1

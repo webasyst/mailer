@@ -141,7 +141,11 @@ class mailerTemplatesImport2Action extends waViewAction
                 continue;
             }
             if (false !== strpos($html, $archive_path)) {
-                $files_to_extract[$archive_path] = $archive->statName($archive_path);
+                if (self::isFilenameAllowed($archive_path)) {
+                    $files_to_extract[$archive_path] = $archive->statName($archive_path);
+                } else if (SystemConfig::isDebug()) {
+                    throw new waException('File not allowed: '.htmlspecialchars($archive_path));
+                }
             }
         }
         uksort($files_to_extract, array('mailerTemplatesImport2Action', 'sortFiles'));
@@ -199,6 +203,34 @@ class mailerTemplatesImport2Action extends waViewAction
         $archive->close();
 
         return $result;
+    }
+
+    private static function isFilenameAllowed($full_path)
+    {
+        static $allowed_extensions = null;
+        if ($allowed_extensions === null) {
+            $allowed_extensions = array_fill_keys(array(
+                'js',
+                'map',
+                'css',
+                'png',
+                'jpg',
+                'jpeg',
+                'jpe',
+                'tiff',
+                'bmp',
+                'gif',
+                'svg',
+                'htc',
+                'cur',
+                'ttf',
+                'eot',
+                'otf',
+                'woff',
+                'woff2',
+            ), true);
+        }
+        return isset($allowed_extensions[pathinfo($full_path, PATHINFO_EXTENSION)]);
     }
 
     private static function sortFiles($a, $b)

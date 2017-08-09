@@ -19,7 +19,7 @@
             </div>
             <div class="dialog-buttons">
                 <div class="dialog-buttons-gradient">
-                    <input type="hidden" name="theme" value="{$theme.app_id}:{$theme.id}">
+                    <input type="hidden" name="theme" value="{$theme.app_id|escape}:{$theme.id|escape}">
                     <input type="submit" class="button red" value="[s`Revert to original`]">
                     [s`or`] <a href="#/design/themes/" class="cancel">[s`cancel`]</a>
                 </div>

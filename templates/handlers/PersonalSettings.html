@@ -36,8 +36,8 @@
 <form id="mailer-personal-settings" method="post" action="{$wa_backend_url}mailer/?module=personal&action=settingsSave&theme_id={$theme_id}">
 {foreach $files as $f}
     <div>
-        <b>{$f.id}</b><br>
-        <textarea name="files[{$f.id}]" id="ta{$f@iteration}" style="width:90%; height:200px;">{$f.content|escape}</textarea>
+        <b>{$f.id|escape}</b><br>
+        <textarea name="files[{$f.id|escape}]" id="ta{$f@iteration}" style="width:90%; height:200px;">{$f.content|escape}</textarea>
     </div>
     <br>
 {/foreach}
@@ -62,14 +62,14 @@
                                 [s`Change parent theme`]
                             </div>
                             <div class="value">
-                                <input type="hidden" name="id" value="{$theme.app_id}:{$theme.id}">
+                                <input type="hidden" name="id" value="{$theme.app_id|escape}:{$theme.id|escape}">
                                 <select name="parent_theme_id">
                                     <option value=""{if !$theme.parent_theme_id} selected="selected"{/if}>[s`Not set`]</option>
                                 {foreach $parent_themes as $app_id => $info}
                                     <optgroup label="{$info.name|escape}" title="{$app_id}">
                                         {foreach $info.themes as $parent_theme_id => $theme_name}
                                             {$parent_theme_id = "`$app_id`:`$parent_theme_id`"}
-                                            <option value="{$parent_theme_id}" title="{$parent_theme_id}"{if $parent_theme_id eq $theme.parent_theme_id} selected="selected"{else if ($parent_theme_id eq "`$theme.app_id`:`$theme.id`") || ($parent_theme_id eq $theme.id)} disabled="disabled"{/if}>{$theme_name|escape} ({$parent_theme_id})</option>
+                                            <option value="{$parent_theme_id|escape}" title="{$parent_theme_id}"{if $parent_theme_id eq $theme.parent_theme_id} selected="selected"{else if ($parent_theme_id eq "`$theme.app_id`:`$theme.id`") || ($parent_theme_id eq $theme.id)} disabled="disabled"{/if}>{$theme_name|escape} ({$parent_theme_id})</option>
                                         {/foreach}
                                     </optgroup>
                                 {/foreach}
@@ -111,7 +111,7 @@
             </div>
             <div class="dialog-buttons">
                 <div class="dialog-buttons-gradient">
-                    <input type="hidden" name="theme" value="{$theme.app_id}:{$theme.id}">
+                    <input type="hidden" name="theme" value="{$theme.app_id|escape}:{$theme.id|escape}">
                     <input type="submit" class="button red" value="[s`Revert to original`]">
                     [s`or`] <a href="#/design/themes/" class="cancel">[s`cancel`]</a>
                 </div>

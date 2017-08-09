@@ -8,7 +8,7 @@ return array(
     ),
     'frontend' => true,
     'plugins' => true,
-    'version'=>'1.0.11',
+    'version'=>'1.0.12',
     'critical'=>'1.0.0',
     'vendor' => 'webasyst',
     'license' => 'Webasyst',
@@ -18,4 +18,5 @@ return array(
     'themes' => true,
     'rights' => true,
     'my_account' => true,
+    'csrf' => true,
 );

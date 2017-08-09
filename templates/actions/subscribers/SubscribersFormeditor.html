@@ -4,7 +4,7 @@
 <form class="form-settings-form">
 <div class="block double-padded formeditor">
     <div title="[`Edit form name`]">
-        <input data-required="true" placeholder="[`form name`]" type="text" name="form[name]" value="{$form.name|default:'[`New form`]'}">
+        <input data-required="true" placeholder="[`form name`]" type="text" name="form[name]" value="{$form.name|default:'[`New form`]'|escape}">
         <i class="icon16 loading" style="vertical-align: 0;"></i>
     </div>
     {if isset($form.id)}
@@ -116,12 +116,12 @@
                                     <input type="button" class="editable_el editable_button" value="{$form.params.button_caption|escape|default:'[`Send`]'}" title="[`Edit button label`]"><input type="text" class="hidden" name="params[button_caption]" value="{$form.params.button_caption|escape|default:'[`Send`]'}"/>
                                 </span>
                             </div>
-                            <input type="hidden" name="params[captionwidth]" value="{$form.params.captionwidth|default:''}"/>
-                            <input type="hidden" name="params[inputmarginleft]" value="{$form.params.inputmarginleft|default:''}"/>
+                            <input type="hidden" name="params[captionwidth]" value="{$form.params.captionwidth|default:''|escape}"/>
+                            <input type="hidden" name="params[inputmarginleft]" value="{$form.params.inputmarginleft|default:''|escape}"/>
                         </div>
                     </div>
                     <div class="constructor-width">
-                        <input type="text" value="{$form.params.formwidth|default:400}" name="params[formwidth]"/>
+                        <input type="text" value="{$form.params.formwidth|default:400|escape}" name="params[formwidth]"/>
                         <hr/>
                         <div>[`Form width (200-600px)`]</div>
                     </div>
@@ -190,7 +190,7 @@
                         <input type="radio" name="params[after_submit]"{if !empty($form.id) && $form.params.after_submit == 'redirect'} checked{/if} value="redirect">
                         [`Redirect to URL`]
                     </label>
-                    <span><input type="text" name="params[redirect_after_submit]" value="{$form.params.redirect_after_submit|default:''}" placeholder="http://" style="min-width:30em;margin:3px 0 5px 0;"></span>
+                    <span><input type="text" name="params[redirect_after_submit]" value="{$form.params.redirect_after_submit|default:''|escape}" placeholder="http://" style="min-width:30em;margin:3px 0 5px 0;"></span>
                 </div>
 
                 <div style="min-height:30px;margin-top:5px;">
@@ -454,7 +454,7 @@
 
     // Initial state for caption place element
     {if (isset($form.params.captionplace))}
-    $form.find('[name="params[captionplace]"]').filter('[value="{$form.params.captionplace}"]').prop('checked', true);
+    $form.find('[name="params[captionplace]"]').filter('[value="{$form.params.captionplace|escape}"]').prop('checked', true);
     {else}
     $form.find('[name="params[captionplace]"]:first').prop('checked', true);
     {/if}

@@ -30,7 +30,7 @@
         <div class="name">[`From`]</div>
         <div class="value combined-selector">
             <select class="from-select">
-                <option value="default">{sprintf_wp('System default (%s)', key(waMail::getDefaultFrom()))}</option>
+                <option value="default">{sprintf_wp('System default (%s)', htmlspecialchars(key(waMail::getDefaultFrom())))}</option>
                 <option value=""{if !empty($from)} selected{/if}>[`Specified`]</option>
             </select><br>
             <input type="text" value="{$from|escape}" class="hidden from-input" style="margin:10px 0 0 0;">

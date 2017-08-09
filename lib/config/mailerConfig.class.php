@@ -31,6 +31,13 @@ class mailerConfig extends waAppConfig
     {
         parent::init();
 
+        // CSRF protection for file uploading via php://input works via GET instead of POST
+        if ($this->environment == 'backend' && waRequest::method() == 'post' && !waRequest::post('_csrf')) {
+            if (waRequest::get('action') == 'upload' && !waRequest::get('module')) {
+                $_POST['_csrf'] = waRequest::get('_csrf');
+            }
+        }
+
         // init Swift Mailer
         require_once($this->getRootPath().'/wa-system/vendors/swift/swift_required.php');
     }
