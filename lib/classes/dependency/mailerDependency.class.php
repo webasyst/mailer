@@ -194,6 +194,69 @@ abstract class mailerDependency
         }
     }
 
+    protected function callMailerRecipientsFormHandlerBeforeMainLoop(&$recipients_groups, $next_method = null)
+    {
+        $recipients_groups['categories'] = array(
+            'name' => _w('Categories'),
+            'content' => '',
+            'opened' => false,
+            'included_in_all_contacts' => true,
+            'comment' => _w('Categories are groups of contacts which you can freely manage in the Contacts application. In addition to manually created categories, there are also system categories created by other Webasyst applications; e.g., Shop-Script or Blog. Those categories contain contacts added by the corresponding applications: customers of the online store or authors of comments posted in the blog.'),
+
+            // not part of event interface, but used internally here
+            'selected' => array(),
+            'all_selected_id' => false
+        );
+
+        $this->callMethod($next_method, $recipients_groups);
+
+        // move to bottom
+        foreach (array('subscribers', 'flat_list') as $key) {
+            if (isset($recipients_groups[$key])) {
+                $group = $recipients_groups[$key];
+                unset($recipients_groups[$key]);
+                $recipients_groups[$key] = $group;
+            }
+        }
+    }
+
+    protected function callMailerRecipientsFormHandlerMainLoop(&$params, $next_method = null)
+    {
+        $recipient = $params['recipient'];
+        $recipients_groups = &$params['recipients_groups'];
+
+        $value = $recipient['value'];
+        $r_id = $recipient['id'];
+
+        if (false !== strpos($value, '/category/')) {
+            $category_id = explode('/', $value);
+            $category_id = end($category_id);
+            if ($category_id && wa_is_int($category_id)) {
+                $recipients_groups['categories']['selected'][$r_id] = $category_id;
+                $recipients_groups['categories']['opened'] = true;
+            } else {
+                $recipients_groups['categories']['all_selected_id'] = $r_id;
+            }
+        } elseif ($value == '/') {
+            $recipients_groups['categories']['all_selected_id'] = $r_id;
+        }
+
+        $this->callMethod($next_method, $params);
+    }
+
+    protected function callMailerRecipientsFormHandlerAfterMainLoop(&$recipients_groups, $next_method = null)
+    {
+        try {
+            $action = new mailerCampaignsRecipientsBlockCategoriesAction($recipients_groups['categories']);
+            $recipients_groups['categories']['content'] = trim($action->display());
+        } catch (Exception $e) {
+            // hide categories block when nothing is selected and there are no available categories
+            unset($recipients_groups['categories']);
+        }
+
+        $this->callMethod($next_method, $recipients_groups);
+    }
+
     protected function callMailerRecipientsPrepareHandlerPrepareRecipient(&$recipient, $next_method = null)
     {
         $known = true;

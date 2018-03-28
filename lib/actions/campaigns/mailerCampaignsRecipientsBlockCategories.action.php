@@ -14,9 +14,6 @@ class mailerCampaignsRecipientsBlockCategoriesAction extends waViewAction
     public function preExecute()
     {
         $this->d = mailerDependency::resolve();
-        if (!$this->d->isContacts()) {
-            throw new waException(_w('Categories group block supported only when Contacts App is available (with not PRO plugin installed)'));
-        }
     }
 
     public function execute()
@@ -56,36 +53,10 @@ class mailerCampaignsRecipientsBlockCategoriesAction extends waViewAction
 
         $data = self::getChecklistOptions($rows, $this->params['selected'], $labels);
         usort($data, array($this, 'sortHelper'));
-
-        // Disable checkboxes for categories that user does not have access rights for
-        if (!$this->d->isAdmin()) {
-            $rm = new contactsRightsModel();
-            $allowed = $rm->getAllowedCategories();
-            if ($allowed !== true) {
-                // For all categories that the user does not have access to:
-                // Disable selected categories; do not show unselected categories at all.
-                $something_to_show = false;
-                foreach($data as $id => &$d) {
-                    if (!empty($allowed[$id])) {
-                        $something_to_show = true;
-                    } else if ($d['checked']) {
-                        $something_to_show = true;
-                        $d['disabled'] = true;
-                        unset($d['list_id']);
-                    } else {
-                        unset($data[$id]);
-                    }
-                }
-                if (!$something_to_show) {
-                    // Will be caught by RecipientsFormHandler and it will remove this whole block
-                    throw new waException('No categories');
-                }
-            }
-        }
-
+        
         // Additional vars for categories template
         $this->view->assign('data', $data);
-        $this->view->assign('is_admin', $this->d->isAdmin());
+        $this->view->assign('has_check_all_contacts_rights', $this->d->hasCheckAllContactsRight());
         $this->view->assign('all_selected_id', $this->params['all_selected_id']);
     }
 

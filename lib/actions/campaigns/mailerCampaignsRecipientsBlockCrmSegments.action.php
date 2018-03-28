@@ -12,7 +12,7 @@ class mailerCampaignsRecipientsBlockCrmSegmentsAction extends waViewAction
     {
         $this->d = mailerDependency::resolve();
         if (!$this->d->isCrm()) {
-            throw new waException(_w('Crm segments group block supported only when CRM are installed'));
+            throw new waException(_w('CRM segments group block supported only when CRM are installed'));
         }
     }
 

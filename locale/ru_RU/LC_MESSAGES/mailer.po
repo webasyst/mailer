@@ -13,7 +13,7 @@ msgstr ""
 "%100)>=20)))?(1):2));\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.0.6\n"
 "Language: ru_RU\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\n"
@@ -2122,3 +2122,12 @@ msgstr "Показывать уведомление"
 
 msgid "Please confirm your agreement"
 msgstr "Подтвердите согласие с условиями"
+
+msgid "CRM segments"
+msgstr "Сегменты CRM"
+
+msgid "To select CRM segments, first create them in <a href=\"%s\">CRM</a> app."
+msgstr "Для использования сегментов CRM создайте их в приложении <a href=\"%s\">CRM</a>."
+
+msgid "CRM segments group block supported only when CRM are installed"
+msgstr "Блок сегментов CRM поддерживается только при установленном приложении CRM"
