@@ -25,9 +25,6 @@ class mailerCampaignsRecipientsAction extends waViewAction
             throw new waException('Access denied.', 403);
         }
 
-        $contacts_plugins = wa('contacts')->getConfig()->getPlugins();
-        $you_need_contacts = wa()->getUser()->getRights('contacts', 'backend') == 0 ? true : false;
-
         // Campaign params
         $mpm = new mailerMessageParamsModel();
         $params = $mpm->getByMessage($campaign_id);
@@ -59,9 +56,6 @@ class mailerCampaignsRecipientsAction extends waViewAction
         // Prepare recipients data for template: count every separate list and total number of unique addresses.
         $recipients_groups = self::getRecipientsGroups($campaign, $recipients);
 
-        // Does user have admin access to contacts app?
-        $is_contacts_admin = wa()->getUser()->getRights('contacts', 'backend') > 1;
-
         // Count all contacts
         $sql = "SELECT COUNT(*) FROM wa_contact";
         $contacts_count = $mrm->query($sql)->fetchField();
@@ -74,13 +68,12 @@ class mailerCampaignsRecipientsAction extends waViewAction
         mailerHelper::updateDraftRecipients($campaign['id'], 'NameAndCountRecipients'); // get names anf count for recipient groups, but don't fill recipientsDraft table
 
         $this->view->assign('contacts_count', $contacts_count);
-        $this->view->assign('is_contacts_admin', $is_contacts_admin);
+        $this->view->assign('has_check_all_contacts_rights', $this->hasCheckAllContactsRight());
         $this->view->assign('all_contacts_selected_id', $all_contacts_selected_id);
         $this->view->assign('recipients_groups', $recipients_groups);
         $this->view->assign('recipients', mailerHelper::getRecipients($campaign['id']));
         $this->view->assign('campaign', $campaign);
         $this->view->assign('params', $params);
-        $this->view->assign('you_need_contacts', $you_need_contacts);
 
     }
 
@@ -201,6 +194,12 @@ class mailerCampaignsRecipientsAction extends waViewAction
         }
 
         return $changed;
+    }
+
+    protected function hasCheckAllContactsRight()
+    {
+        $d = mailerDependency::resolve();
+        return $d->hasCheckAllContactsRight();
     }
 }
 

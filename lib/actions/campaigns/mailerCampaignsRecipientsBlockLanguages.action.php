@@ -6,6 +6,19 @@
  */
 class mailerCampaignsRecipientsBlockLanguagesAction extends waViewAction
 {
+    /**
+     * @var mailerContactsDependency
+     */
+    protected $d;
+
+    public function preExecute()
+    {
+        $this->d = mailerDependency::resolve();
+        if (!$this->d->isContacts()) {
+            throw new waException(_w('Languages group block supported only when Contacts App is available (with not PRO plugin installed)'));
+        }
+    }
+
     public function execute()
     {
         // Fetch category names and counts
@@ -21,14 +34,11 @@ class mailerCampaignsRecipientsBlockLanguagesAction extends waViewAction
             throw new waException('Nothing to show.');
         }
 
-        // Does user have admin access to contacts app?
-        $is_contacts_admin = wa()->getUser()->getRights('contacts', 'backend') > 1;
-
         $labels = waLocale::getAll('name');
         $labels[''] = _w('not set');
         $data = mailerCampaignsRecipientsBlockCategoriesAction::getChecklistOptions($rows, $this->params['selected'], $labels);
 
-        if (!$is_contacts_admin) {
+        if (!$this->d->isAdmin()) {
             foreach($data as $v => &$row) {
                 if ($row['checked']) {
                     $row['disabled'] = true;
@@ -42,7 +52,6 @@ class mailerCampaignsRecipientsBlockLanguagesAction extends waViewAction
         }
 
         $this->view->assign('data', $data);
-        $this->view->assign('is_contacts_admin', $is_contacts_admin);
     }
 }
 

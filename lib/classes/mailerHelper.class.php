@@ -175,28 +175,18 @@ class mailerHelper
             // Otherwise, it is a ContactsCollection hash.
             //
 
-            // See if the hash is of one of supported types
-            if (FALSE !== strpos($value['value'], '/category/')) {
-                $recipients[$key]['short'] = _w('Category');
-                $recipients[$key]['link'] = wa()->getAppUrl('contacts').'#'.$value['value'];
-            } else if (FALSE !== strpos($value['value'], '/contacts/view/')) {
-                $recipients[$key]['short'] = _w('List');
-                $recipients[$key]['link'] = wa()->getAppUrl('contacts').'#'.$value['value'];
-            } else if (FALSE !== strpos($value['value'], '/contacts/prosearch/')) {
-                // todo: remove? ContactsPro dependency
-                $recipients[$key]['short'] = _w('Search');
-                $recipients[$key]['link'] = str_replace('/contacts/prosearch/', '/contacts/search/', wa()->getAppUrl('contacts').'#'.$value['value'].'/1/');
-            } else if (FALSE !== strpos($value['value'], '/shop_customers/')) {
-                $recipients[$key]['short'] = '';
-                $recipients[$key]['link'] = null;
-            } else if (FALSE !== strpos($value['value'], '/locale=')) {
-                $recipients[$key]['short'] = _w('Language');
-                $recipients[$key]['link'] = wa()->getAppUrl('contacts').'#'.$value['value'];
-            } else if ($value['value'] == '/') {
-            } else {
-                // Not one of supported hash types. Ignore it.
-                continue;
+            $recipients[$key]['short'] = '';
+            $recipients[$key]['link'] = null;
+
+            // Delegate to proper dependency proxy
+            if (FALSE == strpos($value['value'], '/shop_customers/')) {
+                $d = mailerDependency::resolve();
+                $result = $d->call(__METHOD__, $recipients[$key]);
+                if (!$result['call'] || !$recipients[$key]) {
+                    unset($recipients[$key]);
+                }
             }
+
         }
         return $recipients;
     }

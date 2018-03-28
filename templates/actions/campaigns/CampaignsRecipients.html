@@ -31,55 +31,50 @@
 
         <p style="margin-top:1.5em">[`To specify recipients for your campaign, select the desired contact groups provided by the Contacts application or enter additional email addresses.`]</p>
 
-{if $you_need_contacts}
-        <p style="margin-top:1.5em" class="hint">[`You must have access to Contacts app.`]</p>
-{/if}
+
         <div class="recipients-groups">
             <div class="recipients-group" id="recipients-group-all-contacts">
-                {*
-                 * Checkbox to select all contacts.
-                 * Only available to admin in contacts app.
-                 *}
+
                 <div>
-                {if $is_contacts_admin}
-                    {if $all_contacts_selected_id}
-                    <input type="hidden" name="remove_ids[]" value="{$all_contacts_selected_id}">
+                    {*
+                     * Checkbox to select all contacts.
+                     *}
+                    {if $has_check_all_contacts_rights}
+                        {if $all_contacts_selected_id}
+                            <input type="hidden" name="remove_ids[]" value="{$all_contacts_selected_id}">
+                        {/if}
+                        <label{if $all_contacts_selected_id} class="highlighted"{/if}>
+                            <input type="checkbox" name="add_values[]" value="/"{if $all_contacts_selected_id} checked{/if}>
+                            [`All contacts`] ({$contacts_count})
+                        </label>
+                    {else}
+                        <label class="{if $all_contacts_selected_id}highlighted{/if}">
+                            <input type="checkbox" {if $all_contacts_selected_id}checked{/if} disabled>
+                            [`All contacts`] ({$contacts_count})
+                        </label>
                     {/if}
-                    <label{if $all_contacts_selected_id} class="highlighted"{/if}>
-                        <input type="checkbox" name="add_values[]" value="/"{if $all_contacts_selected_id} checked{/if}>
-                        [`All contacts`] ({$contacts_count})
-                    </label>
-                {*elseif $all_contacts_selected_id*}
-                {* When user is not admin, show disabled 'All contacts' checkbox that user can not uncheck. *}
-                {else}
-                <label class="{if $all_contacts_selected_id}highlighted{/if}">
-                    <input type="checkbox" {if $all_contacts_selected_id}checked{/if} disabled>
-                    [`All contacts`] ({$contacts_count})
-                </label>
-                {/if}
-                {$show_more_link = false}
-                {foreach $recipients_groups as $g_id => $g}
-                    {if !empty($g.opened)}
-                    {$show_more_link = true}
-                    {/if}
-                {/foreach}
-                {if $show_more_link == false && !$all_contacts_selected_id}
-                <ul class="menu-h dropdown clickable more-recipients">
-                    <li>
-                        <a href="#" class="inline-link open-menu">
-                            <b><i>[`or`]</i></b>
-                        </a>
-                        <ul class="menu-v main-menu">
-                            {foreach $recipients_groups as $g_id => $g}
-                            {if isset($g.you_need_contacts) && $you_need_contacts}{continue}{/if}
-                            <li id="add-recipients-group-{$g_id}">
-                                <a href="#" class="open-dialog" data-open-group="{$g_id}">{$g.name}</a>
+                    {$show_more_link = false}
+                    {foreach $recipients_groups as $g_id => $g}
+                        {if !empty($g.opened)}
+                        {$show_more_link = true}
+                        {/if}
+                    {/foreach}
+                    {if $show_more_link == false && !$all_contacts_selected_id}
+                        <ul class="menu-h dropdown clickable more-recipients">
+                            <li>
+                                <a href="#" class="inline-link open-menu">
+                                    <b><i>[`or`]</i></b>
+                                </a>
+                                <ul class="menu-v main-menu">
+                                    {foreach $recipients_groups as $g_id => $g}
+                                        <li id="add-recipients-group-{$g_id}">
+                                            <a href="#" class="open-dialog" data-open-group="{$g_id}">{$g.name}</a>
+                                        </li>
+                                    {/foreach}
+                                </ul>
                             </li>
-                            {/foreach}
                         </ul>
-                    </li>
-                </ul>
-                {/if}
+                    {/if}
                 </div>
 
             </div>
@@ -117,11 +112,10 @@
                     </a>
                     <ul class="menu-v main-menu">
                         {foreach $recipients_groups as $g_id => $g}
-                        {if isset($g.you_need_contacts) && $you_need_contacts}{continue}{/if}
-                        {if empty($g.name)}{continue}{/if}{* fix *}
-                        <li id="add-recipients-group-{$g_id}">
-                            <a href="#" class="open-dialog" data-open-group="{$g_id}">{$g.name}</a>
-                        </li>
+                            {if empty($g.name)}{continue}{/if}{* fix *}
+                            <li id="add-recipients-group-{$g_id}">
+                                <a href="#" class="open-dialog" data-open-group="{$g_id}">{$g.name}</a>
+                            </li>
                         {/foreach}
                     </ul>
                 </li>
@@ -149,7 +143,6 @@
     </div>
 </form>
 {foreach $recipients_groups as $g_id => $g}
-{if isset($g.you_need_contacts) && $you_need_contacts}{continue}{/if}
 <div data-group="{$g_id}" class="recipients_group_other">
     <div class="recipients-group{if !empty($g.opened)} close{/if}" id="recipients-group-{$g_id}" data-group-content="{$g_id}" data-width="{$g.width|default:''}" data-height="{$g.height|default:''}">
         <div class="recipients-group-header">
@@ -316,7 +309,7 @@
             d.find('[type="submit"]').parent().append('<i class="icon16 loading"></i>');
 
             var params = 'campaign_id={$campaign.id}&' + d.find('form').serialize();
-            if (hash) {
+            if (hash && 'string' === typeof hash) {
                 var url_decoded_hash = hash;
                 try {
                     url_decoded_hash = decodeURIComponent(url_decoded_hash);

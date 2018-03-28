@@ -410,10 +410,6 @@ msgstr ""
 msgid "Edit hint for this field"
 msgstr ""
 
-#: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:98 /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:99
-msgid "Please enter symbols shown on the image:"
-msgstr ""
-
 #: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:116
 msgid "Send"
 msgstr ""
@@ -2085,3 +2081,6 @@ msgstr ""
 #: /wa-apps/mailer/templates/actions/backend/BackendContactTab.html:62
 msgid "No campaigns were sent to this recipient"
 msgstr ""
+
+msgid "Invalid captcha"
+msgstr "Капча введена неверно"

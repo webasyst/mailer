@@ -6,6 +6,19 @@
  */
 class mailerCampaignsRecipientsBlockCategoriesAction extends waViewAction
 {
+    /**
+     * @var mailerContactsDependency
+     */
+    protected $d;
+
+    public function preExecute()
+    {
+        $this->d = mailerDependency::resolve();
+        if (!$this->d->isContacts()) {
+            throw new waException(_w('Categories group block supported only when Contacts App is available (with not PRO plugin installed)'));
+        }
+    }
+
     public function execute()
     {
         // Fetch category names and counts
@@ -44,12 +57,8 @@ class mailerCampaignsRecipientsBlockCategoriesAction extends waViewAction
         $data = self::getChecklistOptions($rows, $this->params['selected'], $labels);
         usort($data, array($this, 'sortHelper'));
 
-        // Does user have admin access to contacts app?
-        $is_contacts_admin = wa()->getUser()->getRights('contacts', 'backend') > 1;
-
         // Disable checkboxes for categories that user does not have access rights for
-        if (!$is_contacts_admin) {
-            wa('contacts');
+        if (!$this->d->isAdmin()) {
             $rm = new contactsRightsModel();
             $allowed = $rm->getAllowedCategories();
             if ($allowed !== true) {
@@ -76,7 +85,7 @@ class mailerCampaignsRecipientsBlockCategoriesAction extends waViewAction
 
         // Additional vars for categories template
         $this->view->assign('data', $data);
-        $this->view->assign('is_contacts_admin', $is_contacts_admin);
+        $this->view->assign('is_admin', $this->d->isAdmin());
         $this->view->assign('all_selected_id', $this->params['all_selected_id']);
     }
 

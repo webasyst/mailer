@@ -26,7 +26,7 @@ class mailerFrontendSubscribeController extends waJsonController
         }
 
         if ($validate_captcha && !wa()->getCaptcha()->isValid()) {
-            $this->errors[_w('Incorrect data')][] ='captcha' ;
+            $this->errors[_w('Invalid captcha')][] ='captcha' ;
         }
 
         if ($form) {

@@ -33,7 +33,8 @@ class mailerCampaignsRecipientsStatAction extends waViewAction
         $recipients = $mrm->getByMessage($campaign_id); // id => value
 
         // Total number of unique recipients in all lists
-        $total_recipients = mailerHelper::countUniqueRecipients($campaign, $params, $recipients, $errormsg);
+        $total_recipients = $this->recalculateTotalCount($campaign, $params, $recipients, $errormsg);
+
         $form_disabled = false;
         $recipients_stats = null;
         if ($errormsg) {
@@ -52,7 +53,6 @@ class mailerCampaignsRecipientsStatAction extends waViewAction
 
         mailerHelper::assignCampaignSidebarVars($this->view, $campaign, $params, $recipients);
 
-
         $this->view->assign('errormsg', $errormsg);
         $this->view->assign('form_disabled', $form_disabled);
         $this->view->assign('contacts_count', $contacts_count);
@@ -62,5 +62,15 @@ class mailerCampaignsRecipientsStatAction extends waViewAction
         $this->view->assign('params', $params);
     }
 
+    private function recalculateTotalCount($campaign, &$params, $recipients, &$errormsg)
+    {
+        return mailerHelper::countUniqueRecipients(
+            $campaign,
+            $params,
+            $recipients,
+            $errormsg,
+            'UpdateDraftRecipientsTable'
+        );
+    }
 }
 

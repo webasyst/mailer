@@ -91,12 +91,18 @@
                             </div>
                             <div data-fld-wrapper="captcha" class="field hidden{if !empty($form.params.fields.captcha)} show-when-enabled{/if}">
                                 <span class="editable-wrapper" title="[`Edit field label`]">
-                                    <label class="editable_el editable_text">{$form.params.fields.captcha.caption|escape|default:'[`Please enter symbols shown on the image:`]'}</label>
-                                    <input type="text" class="hidden fill" name="params[fields][captcha][caption]" {if empty($form.params.fields.captcha)}disabled{/if} value="{$form.params.fields.captcha.caption|escape|default:'[`Please enter symbols shown on the image:`]'}"/>
+                                    {$_caption = ''}
+                                    {if isset($form.params.fields.captcha.caption)}
+                                        {$_caption = $form.params.fields.captcha.caption|escape}
+                                    {/if}
+                                    <label class="editable_el editable_text">{$_caption}</label>
+                                    <input type="text" class="hidden fill" name="params[fields][captcha][caption]"
+                                           {if empty($form.params.fields.captcha)}disabled{/if}
+                                           value="{$_caption}"/>
                                 </span>
                             </div>
                             <div data-fld-wrapper="captcha" class="field hidden{if !empty($form.params.fields.captcha)} show-when-enabled{/if}">
-                                {$wa->captcha(null, true, "[`Reload image`]")}
+                                {$captcha_html}
                             </div>
                             <div data-fld-wrapper="lists" class="field-group">
                                 {foreach $all_lists_list as $list}

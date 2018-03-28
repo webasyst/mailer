@@ -62,7 +62,7 @@ class mailerCampaignsPresendAction extends waViewAction
 
         $this->view->assign('errormsg', $errormsg);
         $this->view->assign('cron_command', 'php '.wa()->getConfig()->getRootPath().'/cli.php mailer send<br>php '.wa()->getConfig()->getRootPath().'/cli.php mailer check');
-        $this->view->assign('cron_ok', wa()->getSetting('last_cron_time') + 3600*2 > time());
+        $this->view->assign('cron_ok', wa()->getSetting('last_cron_time', 0) + 3600*2 > time());
         $this->view->assign('last_cron_time', wa()->getSetting('last_cron_time'));
         $this->view->assign('return_path_ok', $return_path_ok);
         $this->view->assign('unique_recipients', $params['recipients_count']);

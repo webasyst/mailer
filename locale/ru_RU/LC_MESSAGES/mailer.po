@@ -106,7 +106,7 @@ msgid "Add recipients:"
 msgstr "Добавить получателей:"
 
 msgid "Paste emails here, one email (or Name <email>) per line."
-msgstr "Скопируйте сюда список Email-адресов (или Имя <email>), по одному на строке."
+msgstr "Скопируйте сюда список email-адресов (или Имя <email>), по одному на строке."
 
 msgid "Add"
 msgstr "Добавить"
@@ -361,7 +361,7 @@ msgid "Valid file types: %s."
 msgstr "Допустимые типы файлов: %s."
 
 msgid "File size can not exceed %s MB"
-msgstr "Размер файла не должен превышать %s MB"
+msgstr "Размер файла не должен превышать %s MБ"
 
 msgid "ZipArchive class not found. Template import is not available on your server."
 msgstr "Класс ZipArchive не найден. Импорт шаблонов невозможен на этом сервере."
@@ -459,7 +459,7 @@ msgid "search by words in subject or text"
 msgstr "найти по словам в теме или тексте"
 
 msgid "Enable Google Analytics for this campaign"
-msgstr "Включить UTM-метки (для Яндекс.Метрики или Google Analytics)"
+msgstr "Включить UTM-метки (для «Яндекс.Метрики» или Google Analytics)"
 
 msgid "All contacts"
 msgstr "Все контакты"
@@ -612,7 +612,7 @@ msgid "Do not show this question any more"
 msgstr "Больше не показывать это предупреждение"
 
 msgid "NOTE: This contact will not be deleted. It will be only eliminated from all subscription lists."
-msgstr "ПРИМЕЧАНИЕ: Контакт не будет удален. Он будет только иключен из всех подписок."
+msgstr "ПРИМЕЧАНИЕ: Контакт не будет удален. Он будет только исключён из всех подписок."
 
 msgid "NOTE: This contact will not be deleted. It will be only eliminated from this subscription list."
 msgstr "ПРИМЕЧАНИЕ: Контакт не будет удален. Он будет только иключен из текущего списка подписчиков."
@@ -1284,13 +1284,13 @@ msgid "Export to file (zip)"
 msgstr "Экспорт в файл (zip)"
 
 msgid "You have no routing rules defined for Mailer application."
-msgstr "Для приложения Рассылки не настроены правила маршрутизации."
+msgstr "Для приложения «Рассылки» не настроены правила маршрутизации."
 
 msgid "Unsubscribe links in your message will not work."
 msgstr "Ссылки отписки в вашей рассылке не будут работать."
 
 msgid "To set up routing rules use %sSite application%s."
-msgstr "Для настройки правил маршрутизации используйте %sприложение Сайт%s."
+msgstr "Для настройки правил маршрутизации используйте %sприложение «Сайт»%s."
 
 msgid "Settings checking passed. Campaign is ready for sending."
 msgstr "Проверка настроек выполнена. Сообщение готово к отправке."
@@ -1610,7 +1610,7 @@ msgstr "Дата подписки"
 
 #: /wa-apps/mailer/lib/actions/files/mailerFilesUploadimage.controller.php:39
 msgid "Files with extensions %s are allowed only."
-msgstr "Разрешены только файлы с разширениями %s."
+msgstr "Разрешены только файлы с раcширениями %s."
 
 #: /wa-apps/mailer/lib/actions/campaigns/mailerCampaignsRecipientsReport.action.php:100
 msgid "<no_name>"
@@ -1722,11 +1722,6 @@ msgstr "Над полем"
 msgid "Hide"
 msgstr "Не показывать"
 
-#: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:98 /wa-apps/mailer/templates/actions/subscribe
-#: rs/SubscribersFormeditor.html:99
-msgid "Please enter symbols shown on the image:"
-msgstr "Введите символы с изображения:"
-
 #: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:126
 msgid "Form width (200-600px)"
 msgstr "Ширина формы (200—600 пикселей)"
@@ -1784,7 +1779,7 @@ msgstr "Вы уверены?"
 #: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:660
 #: /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:548
 msgid "Unsaved changes will be lost if you leave this page now."
-msgstr "Все несохраненные изменения будут потеряны, если вы сейчас покините эту страницу"
+msgstr "Все несохраненные изменения будут потеряны, если вы сейчас покинете эту страницу"
 
 #: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettingsReadOnly.html:95
 msgid "SSL"

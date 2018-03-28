@@ -6,9 +6,21 @@
  */
 class mailerCampaignsRecipientsBlockContactsProContactsListsAction extends waViewAction
 {
+    /**
+     * @var mailerContactsProDependency
+     */
+    protected $d;
+
+    public function preExecute()
+    {
+        $this->d = mailerDependency::resolve();
+        if (!$this->d->isContactsPro()) {
+            throw new waException(_w('Contacts pro lists group block supported only when Contacts App with PRO plugin are installed'));
+        }
+    }
+
     public function execute()
     {
-        // TODO: remove plugin class contactsViewModel
         $m = new contactsViewModel();
         $lists = $m->getAllViews();
 
@@ -28,9 +40,10 @@ class mailerCampaignsRecipientsBlockContactsProContactsListsAction extends waVie
             $data[$list_id]['checked'] =  true;
             $data[$list_id]['list_id'] = $id;
         }
-////        print_r($data);exit;
+
         $this->view->assign('data', $data);
         $this->view->assign('all_selected_id', $this->params['all_selected_id']);
+        $this->view->assign('is_admin', $this->d->isAdmin());
     }
 }
 

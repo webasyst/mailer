@@ -491,9 +491,11 @@
                 saveButton: saveButton,
                 iframe: true,
                 minHeight: height,
-                plugins: ['fontcolor', 'fontsize', 'fontfamily', 'vars'],
+                buttons: ['format', 'bold', 'italic', 'underline', 'deleted', 'lists', 'image',
+                    'table', 'link', 'alignment', 'horizontalrule',  'fontcolor', 'fontsize', 'fontfamily', 'vars'],
+                plugins: ['table', 'fontcolor', 'fontsize', 'fontfamily', 'vars'],
                 imageUpload: '?module=files&action=uploadimage&filelink=1',
-                uploadFields: {
+                imageUploadFields: {
                     '_csrf': csrf
                 }
             });
@@ -502,7 +504,8 @@
             textarea.data('ace').setAutoScrollEditorIntoView(false);
 //        textarea.data('ace').resize(true);
             var active_td = null;
-            $(textarea.redactor('getIframe')).contents().find('body').on('click', function (e) {
+            /*
+            $(textarea.redactor('core.iframe')).contents().find('body').on('click', function (e) {
                 if (active_td) {
                     active_td.css('outline', '');
                     active_td.css('empty-cells', '');
@@ -512,6 +515,7 @@
                     active_td.css('outline', 'rgba(0, 0, 0, 0.6) dashed 1px');
                 }
             });
+            */
 
             this.autoresizeWYSIWYG(height, textarea);
 
@@ -1423,8 +1427,215 @@
             if (title) {
                 $('title').html(title + " &mdash; Webasyst");
             }
+        },
+
+        /**
+         * @param {Object} options
+         * */
+        initStickyBlock: function(options) {
+            if ( !(options && options.$wrapper && options.$wrapper.length) ) {
+                log("Bad options for initStickyBlock");
+                return false;
+            }
+
+            var FixedBlock = ( function($) {
+
+                FixedBlock = function(options) {
+                    var that = this;
+
+                    // DOM
+                    that.$window = $(window);
+                    that.$wrapper = options["$wrapper"];
+                    that.$section = options["$section"];
+                    that.$wrapperContainer = that.$wrapper.parent();
+
+                    // VARS
+                    that.type = (options["type"] || "bottom");
+
+                    // DYNAMIC VARS
+                    that.offset = {};
+                    that.$clone = false;
+                    that.is_fixed = false;
+
+                    // INIT
+                    that.initClass();
+                };
+
+                FixedBlock.prototype.initClass = function() {
+                    var that = this,
+                        $window = that.$window,
+                        resize_timeout = 0;
+
+                    $window.on("resize", function() {
+                        clearTimeout(resize_timeout);
+                        resize_timeout = setTimeout( function() {
+                            that.resize();
+                        }, 100);
+                    });
+
+                    $window.on("scroll", watcher);
+
+                    that.$wrapper.on("resize", function() {
+                        that.resize();
+                    });
+
+                    that.$wrapper.on("watch", watcher);
+
+                    that.init();
+
+                    watcher();
+
+                    function watcher() {
+                        var is_exist = $.contains($window[0].document, that.$wrapper[0]);
+                        if (is_exist) {
+                            that.onScroll($window.scrollTop());
+                        } else {
+                            $window.off("scroll", watcher);
+                        }
+                    }
+
+                    that.$wrapper.data("block", that);
+                };
+
+                FixedBlock.prototype.init = function() {
+                    var that = this;
+
+                    if (!that.$clone) {
+                        var $clone = $("<div />");
+                        that.$wrapperContainer.append($clone);
+                        that.$clone = $clone;
+                    }
+
+                    that.$clone.hide();
+
+                    var offset = that.$wrapper.offset();
+                    that.offset = {
+                        left: offset.left,
+                        top: offset.top,
+                        width: that.$wrapper.outerWidth(),
+                        height: that.$wrapper.outerHeight()
+                    };
+                };
+
+                FixedBlock.prototype.resize = function() {
+                    var that = this;
+
+                    switch (that.type) {
+                        case "top":
+                            that.fix2top(false);
+                            break;
+                        case "bottom":
+                            that.fix2bottom(false);
+                            break;
+                    }
+
+                    var offset = that.$wrapper.offset();
+                    that.offset = {
+                        left: offset.left,
+                        top: offset.top,
+                        width: that.$wrapper.outerWidth(),
+                        height: that.$wrapper.outerHeight()
+                    };
+
+                    that.$wrapper.trigger("watch");
+                };
+
+                /**
+                 * @param {Number} scroll_top
+                 * */
+                FixedBlock.prototype.onScroll = function(scroll_top) {
+                    var that = this,
+                        window_w = that.$window.width(),
+                        window_h = that.$window.height();
+
+                    // update top for dynamic content
+                    that.offset.top = that.$wrapperContainer.offset().top;
+                    that.offset.width = that.$wrapperContainer.width();
+
+                    switch (that.type) {
+                        case "top":
+                            var bottom_case = (that.$section ? ((scroll_top + that.offset.height) < that.$section.height() + that.$section.offset().top) : true),
+                                use_top_fix = (that.offset.top < scroll_top && bottom_case);
+
+                            that.fix2top(use_top_fix);
+                            break;
+                        case "bottom":
+                            var use_bottom_fix = (that.offset.top && scroll_top + window_h < that.offset.top + that.offset.height);
+                            that.fix2bottom(use_bottom_fix);
+                            break;
+                    }
+
+                };
+
+                /**
+                 * @param {Boolean|Object} set
+                 * */
+                FixedBlock.prototype.fix2top = function(set) {
+                    var that = this,
+                        fixed_class = "is-top-fixed";
+
+                    if (set) {
+                        that.$wrapper
+                            .css({
+                                left: that.offset.left,
+                                width: that.offset.width
+                            })
+                            .addClass(fixed_class);
+
+                        that.$clone.css({
+                            height: that.offset.height
+                        }).show();
+
+                    } else {
+                        that.$wrapper.removeClass(fixed_class).removeAttr("style");
+                        that.$clone.removeAttr("style").hide();
+                    }
+
+                    that.is_fixed = !!set;
+                };
+
+                /**
+                 * @param {Boolean|Object} set
+                 * */
+                FixedBlock.prototype.fix2bottom = function(set) {
+                    var that = this,
+                        fixed_class = "is-bottom-fixed";
+
+                    if (set) {
+                        that.$wrapper
+                            .css({
+                                left: that.offset.left,
+                                width: that.offset.width
+                            })
+                            .addClass(fixed_class);
+
+                        that.$clone.css({
+                            height: that.offset.height
+                        }).show();
+
+                    } else {
+                        that.$wrapper.removeClass(fixed_class).removeAttr("style");
+                        that.$clone.removeAttr("style").hide();
+                    }
+
+                    that.is_fixed = !!set;
+                };
+
+                return FixedBlock;
+
+            })(jQuery);
+
+            return new FixedBlock(options);
         }
 
     }; // end of $.wa.mailer
+
+    function log(params) {
+        if (console && "log" in console) {
+            console.log(params);
+        } else {
+            alert(params);
+        }
+    }
 
 })(jQuery);

@@ -120,15 +120,14 @@ form#form-campaign { 1overflow: visible; }
             </div>
 
             <div class="field">
-                <p>
-                    <label>
-                        <input type="hidden" name="params[google_analytics]" value="">
-                        <label><input id="ga-enable-checkbox" type="checkbox" name="params[google_analytics]" value="1"{if !empty($params.google_analytics)} checked="checked"{/if}>
-                        [`Enable Google Analytics for this campaign`]</label>
-                    </label>
-                    <br>
-                    <span class="hint">[`UTM tags will be added to all links (URLs) containing in the campaign message. It will allow to track these links visiting in your Google Analytics reports.`]</span>
-                </p>
+                <label>
+                    <input type="hidden" name="params[google_analytics]" value="">
+                    <label><input id="ga-enable-checkbox" type="checkbox" name="params[google_analytics]" value="1"{if !empty($params.google_analytics)} checked="checked"{/if}>
+                    [`Enable Google Analytics for this campaign`]</label>
+                </label>
+                <br>
+                <span class="hint">[`UTM tags will be added to all links (URLs) containing in the campaign message. It will allow to track these links visiting in your Google Analytics reports.`]</span>
+            </div>
             </div>
             <div class="hidden" id="ga-fields">
                 <div class="field">
@@ -155,6 +154,28 @@ form#form-campaign { 1overflow: visible; }
                         <span class="hint">[`The name of your marketing campaign, e.g. your email subject.`]</span>
                     </div>
                 </div>
+            </div>
+
+            <div class="field">
+                <p>
+                    <label>
+                        <label>
+                            <input id="feedback-loop-checkbox" type="checkbox" value="1"{if !empty($params.feedback_loop)} checked="checked"{/if}>
+                            [`Enable Feedback-ID header for GMail FBL Tool`]
+                        </label>
+                    </label>
+                </p>
+
+                <div class="name">[`Feedback-ID:`]</div>
+                <div id="feedback-loop-input" class="value"{if empty($params.feedback_loop)} style="display:none;"{/if}>
+                    <input type="text" name="params[feedback_loop]" placeholder="[`campaignId:campaignType:SenderId`]" value="{ifset($params.feedback_loop)}"><br>
+                    <span class="hint">
+                        <b>[`a:b:c:SenderId`]</b>
+                        [`Where: a, b, c are optional fields that can be used to embed up to 3 Identifiers (campaign/customer/other).`]
+                        [`SenderId is a mandatory unique Identifier (5–15 characters).`]
+                    </span>
+                </div>
+                <p></p>
             </div>
 
             <div id="send-test-wrapper" class="closed shadowed">
@@ -235,6 +256,15 @@ form#form-campaign { 1overflow: visible; }
             });
         } else if (!errors) {
             ga_fields.find('input').val('');
+        }
+        var feedback_loop_inp = $('#feedback-loop-input input'),
+            feedback_loop_val = feedback_loop_inp.val().trim();
+        if (feedback_loop_val) {
+            var res = /^[^\s\:]+\:[^\s]+$/.test(feedback_loop_val);
+            if (!res) {
+                feedback_loop_inp.addClass('error').after('<span class="errormsg">[`Invalid string.`]</span>');
+                errors = true;
+            }
         }
         if (errors) {
             return false;
@@ -328,6 +358,19 @@ form#form-campaign { 1overflow: visible; }
         });
     })();
 
+    // Toggle feedback_loop
+    (function() {
+        var cbx = $('#feedback-loop-checkbox');
+        var inp = $('#feedback-loop-input');
+
+        cbx.on('click', function() {
+            inp.toggle(100);
+            if (cbx.is(':checked')) {
+                inp.find('input').val('');
+            }
+        });
+    })();
+
     {if $campaign.status == mailerMessageModel::STATUS_PENDING}
     // if campaign scheduled - open yellow box
     $('#send-main-wrapper').find('a.inline-link').trigger('click');
@@ -352,9 +395,9 @@ form#form-campaign { 1overflow: visible; }
     ga_checkbox.change(function() {
         $.wa.mailer.saveCampaign(form, form.find(':submit:last'), function() { }, true);
         if (ga_checkbox.is(':checked')) {
-            ga_fields.show();
+            ga_fields.show(100);
         } else {
-            ga_fields.hide();
+            ga_fields.hide(100);
         }
     }).change();
 

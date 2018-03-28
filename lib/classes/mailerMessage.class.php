@@ -318,6 +318,10 @@ class mailerMessage extends mailerSimpleMessage
                 $unsubscribe_link = $this->getUnsubscribeLink($row);
                 $this->setHeader($message, 'List-Unsubscribe', '<'.$unsubscribe_link.'>');
 
+                if (!empty($this->params['feedback_loop'])) {
+                    $this->setHeader($message, 'Feedback-ID', $this->params['feedback_loop']);
+                }
+
                 // Optional custom subject for test message
                 if ($subject) {
                     $message->setSubject($subject);
@@ -481,6 +485,10 @@ class mailerMessage extends mailerSimpleMessage
                     // set List-Unsubscribe
                     $unsubscribe_link = $this->getUnsubscribeLink($row);
                     $this->setHeader($message, 'List-Unsubscribe', '<'.$unsubscribe_link.'>');
+
+                    if (!empty($this->params['feedback_loop'])) {
+                        $this->setHeader($message, 'Feedback-ID', $this->params['feedback_loop']);
+                    }
 
                     // set body
                     $view->clearAllAssign();

@@ -1,6 +1,6 @@
 /* general layout */
 
-#wa { background: url('../img/grey-noisy-bg.jpg') repeat; }
+/*#wa { background: url('../img/grey-noisy-bg.jpg') repeat; }*/
 #wa-app { overflow: visible; }
 
 .m-sidebar { margin-top: 18px; }
@@ -332,7 +332,7 @@ input.m-subject {
 .m-core-header .larr {  margin-right: 5px;
     margin-top: 1px;}
 
-textarea.padded {
+div.padded {
     padding: 8px;
     -webkit-box-sizing: border-box;
        -moz-box-sizing: border-box;
@@ -343,7 +343,7 @@ textarea.padded {
        -moz-box-sizing: border-box;
             box-sizing: border-box;
 }
-textarea.preview {
+div.preview {
     background-color: white;
 }
 a.hovered { color: red !important; }
@@ -838,7 +838,7 @@ label input { margin-top: -3px; }
     margin-left: 0px;
     margin-bottom: 9px;
 }
-#hd-form-editor-form .labels-list label { 
+#hd-form-editor-form .labels-list label {
     display: block;
     margin: 0 0 6px 0;
 }
@@ -1061,7 +1061,7 @@ label input { margin-top: -3px; }
     padding: 15px 12px;
     height: 91%;
 }
-.plain-text-preview textarea {
+.plain-text-preview div {
     width: 100%;
     height: 100%;
     border: 0;
@@ -1248,3 +1248,29 @@ a.inline-link.inline-link-notop b {
 .wysiwyg-html ul.mode-toggle { margin-top: -27px; }
 
 #content .profile .image a img { border-radius: 50%; }
+
+/* Styles for sticky block, located at bottom part of page */
+
+.m-actions-section .m-actions-wrapper {
+    background: #f7f7f7 url(../img/m-envelope-stripes-h.png) repeat-x bottom left;
+}
+
+.m-actions-section .m-actions-wrapper.is-bottom-fixed {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    z-index: 10;
+    border-top: 1px solid #ddd;
+}
+
+.m-actions-section .m-actions-wrapper.is-top-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    z-index: 10;
+    border-bottom: 1px solid #ddd;
+}

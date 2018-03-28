@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * TODO: delete it latter
  * !!! No real reason for this class to be separate. Should combine it into mailerMessage eventually.
  */
 class mailerSimpleMessage
@@ -50,11 +51,7 @@ class mailerSimpleMessage
                 case 'test':
                     return mailerTestTransport::newInstance();
                 case 'default':
-                    $result = waMail::getTransportByEmail('default');
-                    if ($result instanceof Swift_MailTransport) {
-                        $result = mailerPhpMailTransport::newInstance($result->getExtraParams());
-                    }
-                    return $result;
+                    return $this->getDefaultTransport();
                 default:
                     $params = array(
                         'type' => $params['type'],
@@ -70,7 +67,16 @@ class mailerSimpleMessage
                     }
             }
         }
-        return mailerPhpMailTransport::newInstance();
+        return $this->getDefaultTransport();
+    }
+
+    protected function getDefaultTransport()
+    {
+        $result = waMail::getTransportByEmail('default');
+        if ($result instanceof Swift_MailTransport) {
+            $result = mailerPhpMailTransport::newInstance($result->getExtraParams());
+        }
+        return $result;
     }
 
     /**
