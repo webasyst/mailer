@@ -56,16 +56,20 @@ class mailerContactsDependency extends mailerDependency
         }
     }
 
+    /**
+     * @param &$recipient
+     * @return bool If recipient has catch in than expected true returned
+     */
     protected function _callHelperGetRecipients(&$recipient)
     {
-        if (!$this->hasAccess()) {
-            return;
+        if (false !== strpos($recipient['value'], '/category/')) {
+            $recipient['link'] = wa()->getAppUrl('contacts').'#'.$recipient['value'];
+            return true;
         }
 
-        if (FALSE !== strpos($recipient['value'], '/category/')) {
-            $recipient['link'] = wa()->getAppUrl('contacts').'#'.$recipient['value'];
-        } elseif (FALSE !== strpos($recipient['value'], '/locale=')) {
+        if (false !== strpos($recipient['value'], '/locale=')) {
             $recipient['link'] = wa()->getAppUrl('contacts') . '#' . $recipient['value'];
+            return true;
         }
     }
 }

@@ -4,18 +4,8 @@
  * Content block for recipients selection form.
  * Shows checklist to select contact categories.
  */
-class mailerCampaignsRecipientsBlockCategoriesAction extends waViewAction
+class mailerCampaignsRecipientsBlockCategoriesAction extends mailerDependencyViewAction
 {
-    /**
-     * @var mailerContactsDependency
-     */
-    protected $d;
-
-    public function preExecute()
-    {
-        $this->d = mailerDependency::resolve();
-    }
-
     public function execute()
     {
         // Fetch category names and counts

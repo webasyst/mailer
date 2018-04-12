@@ -7,16 +7,17 @@ class mailerCrmDependency extends mailerDependency
         return new crmContactsCollection($hash, $options);
     }
 
+    /**
+     * @param &$recipient
+     * @return bool If recipient has catch in than expected true returned
+     */
     protected function _callHelperGetRecipients(&$recipient)
     {
-        if (!$this->hasAccess()) {
-            return;
-        }
         if (false !== strpos($recipient['value'], '/crm/segment/')) {
             $recipient['short'] = _w('Segment');
             $segment_id = $this->getSegmentIdFromHash($recipient['value']);
             $recipient['link'] = wa()->getAppUrl('crm') . 'contact/segment/' . $segment_id;
-            return;
+            return true;
         }
     }
 
@@ -68,12 +69,12 @@ class mailerCrmDependency extends mailerDependency
         $recipients_groups['crm_segments']['content'] = trim($action->display());
     }
 
+    /**
+     * @param &$recipient
+     * @return bool If recipient has catch in than expected true returned
+     */
     protected function _callMailerRecipientsPrepareHandlerPrepareRecipient(&$recipient)
     {
-        if (!$this->hasAccess()) {
-            return;
-        }
-
         $hash = $recipient['value'];
 
         if (false !== strpos($hash, '/crm/segment/')) {
@@ -83,7 +84,7 @@ class mailerCrmDependency extends mailerDependency
             $recipient['count'] = $this->getCollection($hash)->count();
             $recipient['name'] = $segment['name'];
             $recipient['group'] = _w('CRM Segments');
-            return;
+            return true;
         }
     }
 

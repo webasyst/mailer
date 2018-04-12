@@ -502,20 +502,6 @@
             textarea.data('ace').setOption("minLines", null);
             textarea.data('ace').setOption("maxLines", null);
             textarea.data('ace').setAutoScrollEditorIntoView(false);
-//        textarea.data('ace').resize(true);
-            var active_td = null;
-            /*
-            $(textarea.redactor('core.iframe')).contents().find('body').on('click', function (e) {
-                if (active_td) {
-                    active_td.css('outline', '');
-                    active_td.css('empty-cells', '');
-                }
-                active_td = $(e.target).closest('td');
-                if (active_td.length) {
-                    active_td.css('outline', 'rgba(0, 0, 0, 0.6) dashed 1px');
-                }
-            });
-            */
 
             this.autoresizeWYSIWYG(height, textarea);
 

@@ -117,7 +117,7 @@
             buttons: ['format', 'bold', 'italic', 'underline', 'deleted',
                       'lists', 'image', 'table', 'link', 'alignment', 'horizontalrule',
                       'fontcolor', 'fontsize', 'fontfamily', 'vars'],
-            plugins: ['table', 'fontcolor', 'fontsize', 'fontfamily', 'vars'],
+            plugins: ['table', 'fontcolor', 'fontsize', 'fontfamily', 'alignment', 'vars'],
             saveButton: '.js-campaign-save',
             imageUpload: '?module=files&action=uploadimage&r=2',
             imageUploadFields: {
@@ -145,6 +145,7 @@
         });
 
         $textarea.data('ace').getSession().on('change', function(event) {
+            $textarea.val($textarea.data('ace').getValue());
             if (event.lines && event.lines.length > 1) {
                 var $window = $(window),
                     lift = 17 * (event.lines.length - 1);

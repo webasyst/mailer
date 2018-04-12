@@ -1,20 +1,7 @@
 <?php
 
-class mailerCampaignsRecipientsBlockContactsProSearchCountController extends waJsonController
+class mailerCampaignsRecipientsBlockContactsProSearchCountController extends mailerContactsProDependencyJsonController
 {
-    /**
-     * @var mailerContactsProDependency
-     */
-    protected $d;
-
-    public function preExecute()
-    {
-        $this->d = mailerDependency::resolve();
-        if (!$this->d->isContactsPro()) {
-            throw new waException(_w('Contacts pro search group block supported only when Contacts App with PRO plugin are installed'));
-        }
-    }
-
     public function execute()
     {
         $hash = waRequest::post('hash');

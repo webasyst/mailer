@@ -179,7 +179,7 @@ class mailerHelper
             $recipients[$key]['link'] = null;
 
             // Delegate to proper dependency proxy
-            if (FALSE == strpos($value['value'], '/shop_customers/')) {
+            if (false == strpos($value['value'], '/shop_customers/')) {
                 $d = mailerDependency::resolve();
                 $result = $d->call(__METHOD__, $recipients[$key]);
                 if (!$result['call'] || !$recipients[$key]) {

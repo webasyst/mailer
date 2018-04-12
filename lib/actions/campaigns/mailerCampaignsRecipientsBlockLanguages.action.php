@@ -4,21 +4,8 @@
  * Content block for recipients selection form.
  * Shows checklist to select contact locales.
  */
-class mailerCampaignsRecipientsBlockLanguagesAction extends waViewAction
+class mailerCampaignsRecipientsBlockLanguagesAction extends mailerContactsDependencyViewAction
 {
-    /**
-     * @var mailerContactsDependency
-     */
-    protected $d;
-
-    public function preExecute()
-    {
-        $this->d = mailerDependency::resolve();
-        if (!$this->d->isContacts()) {
-            throw new waException(_w('Languages group block supported only when Contacts App is available (with not PRO plugin installed)'));
-        }
-    }
-
     public function execute()
     {
         // Fetch category names and counts

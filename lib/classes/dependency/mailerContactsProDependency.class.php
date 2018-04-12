@@ -2,21 +2,24 @@
 
 class mailerContactsProDependency extends mailerDependency
 {
+
+    /**
+     * @param &$recipient
+     * @return bool If recipient has catch in than expected true returned
+     */
     protected function _callHelperGetRecipients(&$recipient)
     {
-        if (!$this->hasAccess()) {
-            return;
-        }
         if (false !== strpos($recipient['value'], '/contacts/view/')) {
             $recipient['short'] = _w('List');
             $recipient['link'] = wa()->getAppUrl('contacts') . '#' . $recipient['value'];
-            return;
+            return true;
         }
 
         if (false !== strpos($recipient['value'], '/contacts/prosearch/')) {
             $recipient['short'] = _w('Search');
-            $recipient['link'] = str_replace('/contacts/prosearch/', '/contacts/search/', wa()->getAppUrl('contacts') . '#' . $recipient . '/1/');
-            return;
+            $url = wa()->getAppUrl('contacts') . '#' . $recipient['value'] . '/1/';
+            $recipient['link'] = str_replace('/contacts/prosearch/', '/contacts/search/', $url);
+            return true;
         }
     }
 
@@ -95,16 +98,15 @@ class mailerContactsProDependency extends mailerDependency
         $recipients_groups['contacts_lists']['content'] = trim($action->display());
     }
 
+    /**
+     * @param &$recipient
+     * @return bool If recipient has catch in than expected true returned
+     */
     protected function _callMailerRecipientsPrepareHandlerPrepareRecipient(&$recipient)
     {
-        if (!$this->hasAccess()) {
-            return;
-        }
-
         $hash = $recipient['value'];
 
         $cc = new waContactsCollection($hash);
-        $recipient['count'] = $cc->count();
 
         if (false !== strpos($hash, '/contacts/view/')) {
             $contacts_list_id = explode('/', $hash);
@@ -113,12 +115,15 @@ class mailerContactsProDependency extends mailerDependency
             $ccm = new contactsViewModel();
             $list = $ccm->get($contacts_list_id);
             $recipient['name'] = $list['name'];
+            $recipient['count'] = $cc->count();
             $recipient['group'] = _w('Contacts Lists');
-            return;
+            return true;
         }
 
         if (false !== strpos($hash, '/contacts/prosearch')) {
+            $recipient['count'] = $cc->count();
             $recipient['group'] = _w('Prosearch');
+            return true;
         }
     }
 

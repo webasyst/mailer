@@ -17,6 +17,7 @@ abstract class mailerDependency
     public static function resolve()
     {
         if (waConfig::get('is_template')) {
+            self::logResolveError();
             return null;
         }
         if (self::tryResolveDependency('crm')) {
@@ -32,6 +33,17 @@ abstract class mailerDependency
             $d = new mailerNullDependency();
         }
         return $d;
+    }
+
+    protected static function logResolveError()
+    {
+        if (version_compare(phpversion(), '5.3.6', '<')) {
+            // php version isn't high enough
+            $trace = debug_backtrace(false);
+        } else {
+            $trace = debug_backtrace(~DEBUG_BACKTRACE_PROVIDE_OBJECT | DEBUG_BACKTRACE_IGNORE_ARGS);
+        }
+        waLog::dump($trace, 'mailer/dependency/abstract/resolve_error_trace.log');
     }
 
     public function getRights($name, $assoc = true)
@@ -174,23 +186,31 @@ abstract class mailerDependency
 
     protected function callHelperGetRecipients(&$recipient, $next_method = null)
     {
-        $unknown = false;
+        $known = true;
         if (false !== strpos($recipient['value'], '/category/')) {
             $recipient['short'] = _w('Category');
         } elseif (false !== strpos($recipient['value'], '/locale=')) {
             $recipient['short'] = _w('Language');
         } else {
-            $unknown = true;
+            $known = false;
+        }
+
+        if (!$this->hasAccess()) {
+            if (!$known) {
+                $recipient = null;
+            }
+            return;
         }
 
         $result = $this->callMethod($next_method, $recipient);
+
+        // if recipient has catch in $next_method than expected true returned
         if ($result['call']) {
-            return $result['return'];
+            $known = $result['return'] === true;
         }
 
-        if ($unknown) {
+        if (!$known) {
             $recipient = null;
-            return;
         }
     }
 
@@ -294,14 +314,22 @@ abstract class mailerDependency
             }
         }
 
+        if (!$this->hasAccess()) {
+            if (!$known) {
+                $recipient = null;
+            }
+            return;
+        }
+
         $result = $this->callMethod($next_method, $recipient);
+
+        // if recipient has catch in $next_method than expected true returned
         if ($result['call']) {
-            return $result['return'];
+            $known = $result['return'] === true;
         }
 
         if (!$known) {
             $recipient = null;
-            return;
         }
     }
 

@@ -1,21 +1,8 @@
 <?php
 
 
-class mailerCampaignsRecipientsBlockCrmSegmentsAction extends waViewAction
+class mailerCampaignsRecipientsBlockCrmSegmentsAction extends mailerCrmDependencyViewAction
 {
-    /**
-     * @var mailerCrmDependency
-     */
-    protected $d;
-
-    public function preExecute()
-    {
-        $this->d = mailerDependency::resolve();
-        if (!$this->d->isCrm()) {
-            throw new waException(_w('CRM segments group block supported only when CRM are installed'));
-        }
-    }
-
     public function execute()
     {
         $m = new crmSegmentModel();
