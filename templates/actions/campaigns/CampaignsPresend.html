@@ -41,11 +41,11 @@
         <p style="font-size:85%">
             <i class="icon16 exclamation"></i>
             {if $return_path_ok['reason'] == 1 || $return_path_ok['reason'] == 2 || $return_path_ok['reason'] == 3}
-            [`Return-path address specified above is not available.`]
+            [`Return-Path address specified above is not available.`]
             {elseif $return_path_ok['reason'] == 4}
-            {sprintf_wp('Return-path "%s" forbidden by sending server.', $return_path_ok['return-path'])}
+            {sprintf_wp('Return-Path “%s” forbidden by sending server.', $return_path_ok['return-path'])}
             {/if}
-            [`Return-path address is used to automatically process bounced emails.`]
+            [`Return-Path address is used to automatically process bounced emails.`]
         </p>
     {/if}
 

@@ -109,7 +109,7 @@ class mailerPhpMailTransport extends Swift_Transport_MailTransport
             // On Unix/Linux, mail() talks to sendmail or similar CLI utilities.
             // PHP documentation advises to use \r\n anyway, but this causes the following problem.
 
-            // Mail() itself terminates headers it adds (To:, Subject:, Return-path:) witn \n, not \r\n.
+            // Mail() itself terminates headers it adds (To:, Subject:, Return-Path:) witn \n, not \r\n.
             // This even seems logical since it talks via unix CLI and should use unix-style terminators.
 
             // However, when 'To:' field is longer than 70 chars, Swift splits it into several lines using \r\n.

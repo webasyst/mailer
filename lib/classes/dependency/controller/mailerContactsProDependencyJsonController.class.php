@@ -6,7 +6,7 @@ class mailerContactsProDependencyJsonController extends mailerDependencyJsonCont
     {
         parent::__construct($params);
         if (!$this->d->isContactsPro()) {
-            throw new waException(_w('Controller supported only when Contacts App with PRO plugin are installed'));
+            throw new waException(_w('Controller is supported only if Contacts app and PRO plugin are installed.'));
         }
     }
 }

@@ -41,7 +41,7 @@ msgstr "No unsubscribed addresses yet."
 msgid "Email addresses in this list have a permanent error returned by recipient mail servers."
 msgstr "Previous attempts to send messages to these email addresses have resulted in a permanent error returned by the recipient server."
 
-msgid "These addresses either do not exist, or can not receive your message by any reason."
+msgid "These addresses either do not exist, or cannot receive your message by any reason."
 msgstr "The corresponding mail boxes either do not exist, or cannot receive your message by any reason."
 
 msgid "Attempts to repeat sending messages to these addresses may cause banning of your sender server."
@@ -211,11 +211,11 @@ msgid "Close"
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/returnpath/ReturnpathDialog.html:2 /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:102
-msgid "Add a new Return-path"
+msgid "Add a new Return-Path"
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/returnpath/ReturnpathDialog.html:4
-msgid "Edit Return-path"
+msgid "Edit Return-Path"
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/returnpath/ReturnpathDialog.html:8
@@ -254,7 +254,7 @@ msgid "Secure (SSL)"
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/returnpath/ReturnpathDialog.html:64
-msgid "Delete this Return-path"
+msgid "Delete this Return-Path"
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/returnpath/ReturnpathDialog.html:67 /wa-apps/mailer/templates/actions/senders/SendersDialog.html:143
@@ -273,7 +273,7 @@ msgid "Error checking mail:"
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/returnpath/ReturnpathDialog.html:107
-msgid "Do you really want to delete this Return-path?"
+msgid "Do you really want to delete this Return-Path?"
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/subscribers/SubscribersListold.html:4 /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:4
@@ -315,7 +315,7 @@ msgstr ""
 
 #: /wa-apps/mailer/templates/actions/subscribers/SubscribersListold.html:69 /wa-apps/mailer/templates/actions/subscribers/SubscribersListold.html:171
 #: /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:126 /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:483
-msgid "Eliminate from subscribers"
+msgid "Remove from subscribers"
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/subscribers/SubscribersListold.html:98 /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:194
@@ -641,11 +641,11 @@ msgid "Settings checking passed. Campaign is ready for sending."
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/campaigns/CampaignsPresend.html:44
-msgid "Return-path address specified above is not available."
+msgid "Return-Path address specified above is not available."
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/campaigns/CampaignsPresend.html:48
-msgid "Return-path address is used to automatically process bounced emails."
+msgid "Return-Path address is used to automatically process bounced emails."
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/campaigns/CampaignsPresend.html:55
@@ -771,7 +771,7 @@ msgid "STARTTLS"
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettingsReadOnly.html:66 /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:81
-msgid "Return-path"
+msgid "Return-Path"
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettingsReadOnly.html:71
@@ -979,12 +979,12 @@ msgid "Add a new sender"
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:99
-msgid "add a new Return-path"
+msgid "add a new Return-Path"
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:106
 msgid ""
-"Return-path address is used to automatically process bounced emails. We recommend to create a special email address to receive bounces as it allows to obtain a true "
+"Return-Path address is used to automatically process bounced emails. We recommend to create a special email address to receive bounces as it allows to obtain a true "
 "statistics about your message delivering."
 msgstr ""
 
@@ -1126,7 +1126,7 @@ msgid "This campaign has been successfully deleted."
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/campaigns/CampaignsReport.html:41 /wa-apps/mailer/lib/actions/campaigns/mailerCampaignsArchive.action.php:135
-msgid "Error checking Return-path mailbox"
+msgid "Error checking Return-Path mailbox"
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/campaigns/CampaignsReport.html:44
@@ -1238,12 +1238,12 @@ msgstr ""
 
 #: /wa-apps/mailer/templates/actions/campaigns/CampaignsReport.html:244
 msgid ""
-"Return-path is not customized. This does not allow to track most of potential bounces from recipient mail servers. Only invalid messages bounced by your sender server have "
+"Return-Path is not customized. This does not allow to track most of potential bounces from recipient mail servers. Only invalid messages bounced by your sender server have "
 "been counted."
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/campaigns/CampaignsReport.html:250
-msgid "Opens can not be counted as your message does not contain images."
+msgid "Message viewing statistics cannot be counted as your message does not contain images."
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/campaigns/CampaignsReport.html:123
@@ -1525,7 +1525,7 @@ msgid "Author: can create their own campaigns and send them"
 msgstr ""
 
 #: /wa-apps/mailer/lib/config/mailerRightConfig.class.php:8
-msgid "Inspector: can only view all existing campaigns, but can not edit or send them"
+msgid "Inspector: can only view all existing campaigns, but cannot edit or send them"
 msgstr ""
 
 #: /wa-apps/mailer/lib/config/mailerRightConfig.class.php:21
@@ -1883,11 +1883,11 @@ msgid "NOTE: This contact will not be deleted. It will be only eliminated from t
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:489
-msgid "Eliminate from all subscribers"
+msgid "Remove from all subscribers"
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:489
-msgid "Eliminate from this subscribers list"
+msgid "Remove from this subscribers list"
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:194
@@ -1947,7 +1947,7 @@ msgid "Please enter sender's email address to use DKIM."
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/senders/SendersDialog.html:148
-msgid "You need to install openssl php extention to use DKIM"
+msgid "You need to install PHP extention openssl to use DKIM."
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/senders/SendersDialog.html:153
@@ -2084,3 +2084,91 @@ msgstr ""
 
 msgid "Invalid captcha"
 msgstr "Капча введена неверно"
+
+#: /wa-apps/mailer/templates/actions/campaigns/CampaignsStep1.html:57
+msgid "Upload image"
+msgstr ""
+
+#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:164
+msgid "Enable Feedback-ID header for GMail FBL Tool"
+msgstr ""
+
+#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:169
+msgid "Feedback-ID:"
+msgstr ""
+
+#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:174
+msgid "Where: a, b, c are optional fields that can be used to embed up to 3 Identifiers (campaign/customer/other)."
+msgstr ""
+
+#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:175
+msgid "SenderId is a mandatory unique Identifier (5–15 characters)."
+msgstr ""
+
+#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:265
+msgid "Invalid string."
+msgstr ""
+
+#: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:139
+msgid "Personal data processing"
+msgstr ""
+
+#: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:143
+msgid "Do not require consent to personal data protection policy"
+msgstr ""
+
+#: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:148
+msgid "Show only notice and link to policy"
+msgstr ""
+
+#: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:152
+msgid "Show mandatory checkbox, notice, and link"
+msgstr ""
+
+#: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:157
+msgid "Restore original text"
+msgstr ""
+
+#: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:145
+msgid "---INSERT A LINK HERE!---"
+msgstr ""
+
+#: /wa-apps/mailer/templates/forms/subscription_form_inner_script.html:79
+msgid "Please confirm your agreement"
+msgstr ""
+
+#: /wa-apps/mailer/lib/classes/mailerHelper.class.php:20
+msgid "Full name"
+msgstr ""
+
+#: /wa-apps/mailer/lib/classes/dependency/mailerCrmDependency.class.php:17
+msgid "Segment"
+msgstr ""
+
+#: /wa-apps/mailer/lib/classes/dependency/mailerCrmDependency.class.php:30
+msgid "CRM segments"
+msgstr ""
+
+#: /wa-apps/mailer/lib/classes/dependency/mailerCrmDependency.class.php:86
+msgid "CRM Segments"
+msgstr ""
+
+#: /wa-apps/mailer/lib/classes/dependency/controller/mailerContactsProDependencyJsonController.class.php:9
+msgid "Controller is supported only if Contacts app and PRO plugin are installed."
+msgstr ""
+
+#: /wa-apps/mailer/lib/classes/dependency/controller/mailerContactsProDependencyViewAction.class.php:9
+msgid "Action is supported only if Contacts app and PRO plugin are installed."
+msgstr ""
+
+#: /wa-apps/mailer/lib/classes/dependency/controller/mailerContactsDependencyViewAction.class.php:9
+msgid "Action is supported only if Contacts app is available, with no PRO plugin installed."
+msgstr ""
+
+#: /wa-apps/mailer/lib/classes/dependency/controller/mailerCrmDependencyViewAction.class.php:9
+msgid "Action is supported only if CRM app is installed."
+msgstr ""
+
+#: /wa-apps/mailer/lib/actions/campaigns/mailerCampaignsPresend.action.php:52
+msgid "Unable to prepare recipients list. Another user attempted to start sending this campaign?"
+msgstr ""

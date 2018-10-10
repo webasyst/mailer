@@ -528,7 +528,7 @@ class mailerMessage extends mailerSimpleMessage
                         $recipient_status = mailerMessageLogModel::STATUS_SENDING_ERROR;
 
                         do {
-                            waLog::log('mailer: Return-path "'.$return_path_used.'" forbidden by sending server (sender_id='.$this->data['sender_id'].'): '.$error_message);
+                            waLog::log('mailer: Return-Path "'.$return_path_used.'" forbidden by sending server (sender_id='.$this->data['sender_id'].'): '.$error_message);
 
                             if (empty($this->params['no_plus_in_rp'])) {
                                 // First suggestion: maybe sender does not like the '+' signs in return-paths

@@ -16,7 +16,7 @@ class mailerContactsLinksHandler extends waEventHandler
         foreach($links_to_check as $data) {
             list($table, $field, $role, $message) = $data;
             if ($message === true) {
-                $message = "This contact can not be merged into other contacts since it has %s link(s) in $table.$field.";
+                $message = "This contact cannot be merged into other contacts since it has %s link(s) in $table.$field.";
             }
             if (!$role) {
                 $role = $table.'.'.$field;

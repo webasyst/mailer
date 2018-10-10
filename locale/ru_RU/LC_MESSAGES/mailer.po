@@ -13,7 +13,7 @@ msgstr ""
 "%100)>=20)))?(1):2));\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 1.8.7.1\n"
 "Language: ru_RU\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\n"
@@ -596,10 +596,10 @@ msgstr "Без ограничений"
 msgid "Not specified"
 msgstr "Не указан"
 
-msgid "Eliminate from all subscribers"
+msgid "Remove from all subscribers"
 msgstr "Исключить из всех подписок"
 
-msgid "Eliminate from this subscribers list"
+msgid "Remove from this subscribers list"
 msgstr "Исключить из этого списка подписчиков"
 
 msgid "Do you really want to eliminate contact %s from all subscribers?"
@@ -621,10 +621,10 @@ msgid "Customize"
 msgstr "Настроить"
 
 msgid ""
-"Return-path address is used to automatically process bounced emails. We recommend to create a special email address to receive "
+"Return-Path address is used to automatically process bounced emails. We recommend to create a special email address to receive "
 "bounces as it allows to obtain a true statistics about your message delivering."
 msgstr ""
-"Адрес Return-path используется для автоматического получения и обработки отказов (bounces) почтовым сервером получателя. Мы "
+"Адрес Return-Path используется для автоматического получения и обработки отказов (bounces) почтовым сервером получателя. Мы "
 "рекомендуем вам создать специальный адрес для получения таких отказов, это позволит вам получать объективную статистику "
 "доставки письма в отчете о рассылке."
 
@@ -661,7 +661,7 @@ msgstr "Продолжить"
 msgid "Sending paused"
 msgstr "Рассылка остановлена"
 
-msgid "Error checking Return-path mailbox"
+msgid "Error checking Return-Path mailbox"
 msgstr "Ошибка проверки адреса Return-path"
 
 msgid "All subscribers"
@@ -679,17 +679,17 @@ msgstr "Если вы оставите это поле пустым, ответ�
 msgid "add a new sender"
 msgstr "добавить нового отправителя"
 
-msgid "add a new Return-path"
-msgstr "добавить новый Return-path"
+msgid "add a new Return-Path"
+msgstr "добавить новый Return-Path"
 
-msgid "Add a new Return-path"
-msgstr "Добавить новый Return-path"
+msgid "Add a new Return-Path"
+msgstr "Добавить новый Return-Path"
 
 msgid "Edit"
 msgstr "Редактировать"
 
-msgid "Edit Return-path"
-msgstr "Редактировать Return-path"
+msgid "Edit Return-Path"
+msgstr "Редактировать Return-Path"
 
 msgid "n/a"
 msgstr "н/д"
@@ -697,7 +697,7 @@ msgstr "н/д"
 msgid "not available"
 msgstr "нет данных"
 
-msgid "Opens can not be counted as your message does not contain images."
+msgid "Message viewing statistics cannot be counted as your message does not contain images."
 msgstr "Прочтения нельзя посчитать, потому что ваше сообщение не содержит изображений."
 
 msgid "Error sending campaign:"
@@ -714,10 +714,10 @@ msgstr ""
 "получателя."
 
 msgid ""
-"Return-path is not customized. This does not allow to track most of potential bounces from recipient mail servers. Only "
+"Return-Path is not customized. This does not allow to track most of potential bounces from recipient mail servers. Only "
 "invalid messages bounced by your sender server have been counted."
 msgstr ""
-"Return-path не настроен. Это не позволяет отследить большинство отказов от почтовых серверов получателей. Посчитаны только "
+"Return-Path не настроен. Это не позволяет отследить большинство отказов от почтовых серверов получателей. Посчитаны только "
 "адреса, отвергнутые вашим сервером отправителя."
 
 msgid "select"
@@ -750,11 +750,11 @@ msgstr "Нет записей в этом списке"
 msgid "You do not have any templates so far."
 msgstr "У вас пока нет ни одного шаблона."
 
-msgid "Delete this Return-path"
-msgstr "Удалить этот Return-path"
+msgid "Delete this Return-Path"
+msgstr "Удалить этот Return-Path"
 
-msgid "Do you really want to delete this Return-path?"
-msgstr "Вы действительно хотите удалить этот Return-path?"
+msgid "Do you really want to delete this Return-Path?"
+msgstr "Вы действительно хотите удалить этот Return-Path?"
 
 msgid "* NOTE:"
 msgstr "* ПРИМЕЧАНИЕ:"
@@ -816,7 +816,7 @@ msgstr "Превышен максимально допустимый лимит 
 msgid "Author: can create their own campaigns and send them"
 msgstr "Автор: может создавать свои рассылки и отправлять их"
 
-msgid "Inspector: can only view all existing campaigns, but can not edit or send them"
+msgid "Inspector: can only view all existing campaigns, but cannot edit or send them"
 msgstr "Инспектор: может только просматривать чужие рассылки, но не может их редактировать и отправлять"
 
 msgid "NOTE: Limited access does not allow to modify transport settings and manage subscribers."
@@ -1038,7 +1038,7 @@ msgstr ""
 "В этот список автоматически попадают те адреса, почтовый сервер которых вернул сообщение о постоянной ошибке в адресе "
 "получателя."
 
-msgid "These addresses either do not exist, or can not receive your message by any reason."
+msgid "These addresses either do not exist, or cannot receive your message by any reason."
 msgstr "Такие адреса либо не существуют, либо не могут по какой-либо причине получать от вас сообщения."
 
 msgid "Attempts to repeat sending messages to these addresses may cause banning of your sender server."
@@ -1246,14 +1246,14 @@ msgstr ""
 "Указанный адрес Return-path недоступен. Автоматическая обработка отказов (bounces) почтовым сервером получателя будет "
 "невозможна."
 
-msgid "Return-path address specified above is not available."
-msgstr "Указанный адрес Return-path недоступен."
+msgid "Return-Path address specified above is not available."
+msgstr "Указанный адрес Return-Path недоступен."
 
-msgid "Return-path address is used to automatically process bounced emails."
-msgstr "Адрес Return-path используется для автоматического получения и обработки отказов (bounces) почтовым сервером получателя."
+msgid "Return-Path address is used to automatically process bounced emails."
+msgstr "Адрес Return-Path используется для автоматического получения и обработки отказов (bounces) почтовым сервером получателя."
 
-msgid "Return-path \"%s\" forbidden by sending server."
-msgstr "Return-path \"%s\" запрещен сервером отправителя."
+msgid "Return-Path “%s” forbidden by sending server."
+msgstr "Return-Path «%s» запрещен сервером отправителя."
 
 msgid "WARNING: Amount of data in the field above can not exceed %d characters."
 msgstr "ВНИМАНИЕ: Объем данных в поле дополнительных адресов не может превышать %d символов."
@@ -1369,9 +1369,6 @@ msgstr "Название"
 
 msgid "Placeholder to show in empty field"
 msgstr "Подсказка при незаполненном поле"
-
-msgid "Set up the appearance of the web form as it should be displayed on your website."
-msgstr ""
 
 msgid "Captcha"
 msgstr "Капча"
@@ -1561,7 +1558,7 @@ msgstr ""
 
 #: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettingsReadOnly.html:25
 #: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:72
-msgid "Return-path"
+msgid "Return-Path"
 msgstr ""
 
 #: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettingsReadOnly.html:46
@@ -1590,11 +1587,11 @@ msgstr "Невозможно послать тестовые сообщения:
 
 #: /wa-apps/mailer/templates/actions/templates/TemplatesEdit.html:345
 msgid "Drag and drop an image file here (JPG, GIF, PNG)"
-msgstr ""
+msgstr "Перетащите сюда файл изображения (JPG, GIF, PNG)"
 
 #: /wa-apps/mailer/templates/actions/senders/SendersDialog.html:25
 msgid "Reply-To Email"
-msgstr ""
+msgstr "Адрес Reply-To"
 
 #: /wa-apps/mailer/templates/actions/senders/SendersDialog.html:94
 msgid "SSL/TLS"
@@ -1611,10 +1608,6 @@ msgstr "Дата подписки"
 #: /wa-apps/mailer/lib/actions/files/mailerFilesUploadimage.controller.php:39
 msgid "Files with extensions %s are allowed only."
 msgstr "Разрешены только файлы с раcширениями %s."
-
-#: /wa-apps/mailer/lib/actions/campaigns/mailerCampaignsRecipientsReport.action.php:100
-msgid "<no_name>"
-msgstr ""
 
 #: /wa-apps/mailer/lib/actions/templates/mailerTemplatesImport2.action.php:28
 msgid "Unable to open archive file."
@@ -1675,20 +1668,6 @@ msgstr "От"
 
 #: /wa-apps/mailer/templates/actions/subscribers/email_template_editor.html:34
 #: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:238
-msgid "Specified"
-msgstr "Указанный"
-
-#: /wa-apps/mailer/templates/actions/subscribers/email_template_editor.html:38
-#: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:241
-msgid ""
-"It is recommended to specify an existing email address which you do not check for new mail as the sender's address for such "
-"notifications; e.g., noreply@yourdomain.com. This will help minimize the number of redundant requests."
-msgstr ""
-
-#: /wa-apps/mailer/templates/actions/subscribers/email_template_editor.html:47
-msgid "Use source email address if request came by email"
-msgstr ""
-
 #: /wa-apps/mailer/templates/actions/subscribers/email_template_editor.html:60
 #: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:255
 msgid "Text"
@@ -1874,7 +1853,7 @@ msgstr "Отписаться от всех"
 
 #: /wa-apps/mailer/themes/default/footer.html:6
 msgid "We are using <a href=\"http://www.webasyst.com/\">Webasyst</a>"
-msgstr ""
+msgstr "Мы используем <a href=\"http://www.webasyst.com/\">Webasyst</a>"
 
 msgid "Contact lists"
 msgstr "Списки контактов"
@@ -1918,14 +1897,6 @@ msgstr "Отправить выбранным получателям"
 #: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:318
 msgid "Checking campaign settings and preparing recipient list"
 msgstr "Проверка настроек и подготовка списка получателей"
-
-#: /wa-apps/mailer/templates/actions/campaigns/CampaignsRecipients.html:158
-msgid "{$g.name}"
-msgstr ""
-
-#: /wa-apps/mailer/templates/actions/campaigns/CampaignsRecipients.html:161
-msgid "{$g.comment}"
-msgstr ""
 
 #: /wa-apps/mailer/templates/actions/campaigns/CampaignsRecipients.html:337
 msgid "Nothing found. Change search criteria"
@@ -2019,27 +1990,16 @@ msgstr "Эта переменная будет заменена на персо�
 #: /wa-apps/mailer/templates/actions/subscribers/SubscribersListold.html:69
 #: /wa-apps/mailer/templates/actions/subscribers/SubscribersListold.html:171
 #: /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:126
-msgid "Eliminate from subscribers"
-msgstr ""
-
-#: /wa-apps/mailer/templates/actions/subscribers/SubscribersListold.html:98
-msgid "NOTE: This contact will not be deleted. It will be only eliminated from the subscription list."
-msgstr ""
-
-#: /wa-apps/mailer/templates/actions/subscribers/SubscribersListold.html:97
-msgid "Do you really want to eliminate contact %s from subscribers?"
-msgid_plural "<span id=\"delete-contact-name-email\"></span>"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgid "Remove from subscribers"
+msgstr "Убрать из числа подписчиков"
 
 #: /wa-apps/mailer/templates/actions/senders/SendersDialog.html:148
-msgid "You need to install openssl php extention to use DKIM"
-msgstr ""
+msgid "You need to install PHP extention openssl to use DKIM."
+msgstr "Установите расширение PHP openssl, чтобы использовать DKIM."
 
 #: /wa-apps/mailer/templates/actions/senders/SendersDialog.html:153
 msgid "You need PHP version 5.3 or higher to use DKIM. Your current version is:"
-msgstr ""
+msgstr "Для использования DKIM нужна версия PHP 5.3 или выше. Ваша версия PHP:"
 
 #: /wa-apps/mailer/templates/actions/backend/BackendContactTab.html:2
 msgid "Subscriptions"
@@ -2131,3 +2091,55 @@ msgstr "Для использования сегментов CRM создайт�
 
 msgid "CRM segments group block supported only when CRM are installed"
 msgstr "Блок сегментов CRM поддерживается только при установленном приложении CRM"
+
+#: /wa-apps/mailer/templates/actions/campaigns/CampaignsStep1.html:57
+msgid "Upload image"
+msgstr "Загрузить изображение"
+
+#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:164
+msgid "Enable Feedback-ID header for GMail FBL Tool"
+msgstr "Включить заголовок Feedback-ID для GMail FBL Tool"
+
+#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:169
+msgid "Feedback-ID:"
+msgstr "Feedback-ID:"
+
+#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:174
+msgid "Where: a, b, c are optional fields that can be used to embed up to 3 Identifiers (campaign/customer/other)."
+msgstr "Где a, b, c — это необязательные поля для вставки до 3 идентификаторов (campaign/customer/other)."
+
+#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:175
+msgid "SenderId is a mandatory unique Identifier (5–15 characters)."
+msgstr "SenderId — это обязательный уникальный идентификатор (5–15 символов)."
+
+#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:265
+msgid "Invalid string."
+msgstr "Некорректная строка."
+
+#: /wa-apps/mailer/lib/classes/dependency/mailerCrmDependency.class.php:17
+msgid "Segment"
+msgstr "Сегмент"
+
+#: /wa-apps/mailer/lib/classes/dependency/mailerCrmDependency.class.php:86
+msgid "CRM Segments"
+msgstr "Сегменты CRM"
+
+#: /wa-apps/mailer/lib/classes/dependency/controller/mailerContactsProDependencyJsonController.class.php:9
+msgid "Controller is supported only if Contacts app and PRO plugin are installed."
+msgstr "Контроллер поддерживается, только если установлены приложение «Контакты» с плагином «PRO»."
+
+#: /wa-apps/mailer/lib/classes/dependency/controller/mailerContactsProDependencyViewAction.class.php:9
+msgid "Action is supported only if Contacts app and PRO plugin are installed."
+msgstr "Экшен поддерживается, только если установлены приложение «Контакты» и плагин «PRO»."
+
+#: /wa-apps/mailer/lib/classes/dependency/controller/mailerContactsDependencyViewAction.class.php:9
+msgid "Action is supported only if Contacts app is available, with no PRO plugin installed."
+msgstr "Экшен поддерживается, только если установлено приложение «Контакты» — без плагина «PRO»."
+
+#: /wa-apps/mailer/lib/classes/dependency/controller/mailerCrmDependencyViewAction.class.php:9
+msgid "Action is supported only if CRM app is installed."
+msgstr "Экшен поддерживается, только если установлено приложение CRM."
+
+#: /wa-apps/mailer/lib/actions/frontend/mailerFrontendSubscribe.controller.php:29
+msgid "Invalid captcha"
+msgstr "Капча введена неверно"

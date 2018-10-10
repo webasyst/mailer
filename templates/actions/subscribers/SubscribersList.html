@@ -123,7 +123,7 @@
         <td class="email-field">{$row.email|escape}</td>
         <td>{$row.datetime|wa_datetime}</td>
         <td class="min-width m-last">
-            <a href="javascript:void(0)" title="[`Eliminate from subscribers`]"><i class="icon16 delete"></i></a>
+            <a href="javascript:void(0)" title="[`Remove from subscribers`]"><i class="icon16 delete"></i></a>
             <span class="hidden name-field">{$row.name|escape}</span>
         </td>
     </tr>
@@ -486,7 +486,7 @@
         // Show confirmation dialog
         if (!dialog) {
             var buttons = $('<div> [`or`] </div>');
-            $('<input type="submit" class="button red" value="{if $list_id == 0}[`Eliminate from all subscribers`]{else}[`Eliminate from this subscribers list`]{/if}">').prependTo(buttons).click(removeSelectedSubscriber);
+            $('<input type="submit" class="button red" value="{if $list_id == 0}[`Remove from all subscribers`]{else}[`Remove from this subscribers list`]{/if}">').prependTo(buttons).click(removeSelectedSubscriber);
             $('<a href="javascript:void(0)">[`cancel`]</a>').appendTo(buttons).click(function() {
                 dialog.trigger('close');
             });

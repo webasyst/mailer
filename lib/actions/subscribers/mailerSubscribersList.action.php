@@ -60,7 +60,7 @@ class mailerSubscribersListAction extends waViewAction
         $this->view->assign('cols', array(
             'name' => _w('Name'),
             'email' => _w('Email'),
-            'datetime' => _w('Subscribe date'),
+            'datetime' => _w('Subscription date'),
         ));
     }
 

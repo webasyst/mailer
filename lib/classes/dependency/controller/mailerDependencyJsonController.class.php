@@ -9,7 +9,6 @@ class mailerDependencyJsonController extends waJsonController
 
     public function __construct($params = null)
     {
-        parent::__construct($params);
         $is_template_value = waConfig::get('is_template');
         waConfig::set('is_template', false);
         $this->d = mailerDependency::resolve();

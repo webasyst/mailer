@@ -6,7 +6,7 @@ class mailerContactsDependencyViewAction extends mailerDependencyViewAction
     {
         parent::__construct($params);
         if (!$this->d->isContacts()) {
-            throw new waException(_w('Action supported only when Contacts App is available (with not PRO plugin installed)'));
+            throw new waException(_w('Action is supported only if Contacts app is available, with no PRO plugin installed.'));
         }
     }
 }

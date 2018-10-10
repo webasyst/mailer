@@ -186,19 +186,8 @@ abstract class mailerDependency
 
     protected function callHelperGetRecipients(&$recipient, $next_method = null)
     {
-        $known = true;
-        if (false !== strpos($recipient['value'], '/category/')) {
-            $recipient['short'] = _w('Category');
-        } elseif (false !== strpos($recipient['value'], '/locale=')) {
-            $recipient['short'] = _w('Language');
-        } else {
-            $known = false;
-        }
-
         if (!$this->hasAccess()) {
-            if (!$known) {
-                $recipient = null;
-            }
+            $recipient = null;
             return;
         }
 
@@ -206,28 +195,15 @@ abstract class mailerDependency
 
         // if recipient has catch in $next_method than expected true returned
         if ($result['call']) {
-            $known = $result['return'] === true;
+            if ($result['return'] !== true) {
+                $recipient = null;
+            }
         }
 
-        if (!$known) {
-            $recipient = null;
-        }
     }
 
     protected function callMailerRecipientsFormHandlerBeforeMainLoop(&$recipients_groups, $next_method = null)
     {
-        $recipients_groups['categories'] = array(
-            'name' => _w('Categories'),
-            'content' => '',
-            'opened' => false,
-            'included_in_all_contacts' => true,
-            'comment' => _w('Categories are groups of contacts which you can freely manage in the Contacts application. In addition to manually created categories, there are also system categories created by other Webasyst applications; e.g., Shop-Script or Blog. Those categories contain contacts added by the corresponding applications: customers of the online store or authors of comments posted in the blog.'),
-
-            // not part of event interface, but used internally here
-            'selected' => array(),
-            'all_selected_id' => false
-        );
-
         $this->callMethod($next_method, $recipients_groups);
 
         // move to bottom
@@ -238,43 +214,6 @@ abstract class mailerDependency
                 $recipients_groups[$key] = $group;
             }
         }
-    }
-
-    protected function callMailerRecipientsFormHandlerMainLoop(&$params, $next_method = null)
-    {
-        $recipient = $params['recipient'];
-        $recipients_groups = &$params['recipients_groups'];
-
-        $value = $recipient['value'];
-        $r_id = $recipient['id'];
-
-        if (false !== strpos($value, '/category/')) {
-            $category_id = explode('/', $value);
-            $category_id = end($category_id);
-            if ($category_id && wa_is_int($category_id)) {
-                $recipients_groups['categories']['selected'][$r_id] = $category_id;
-                $recipients_groups['categories']['opened'] = true;
-            } else {
-                $recipients_groups['categories']['all_selected_id'] = $r_id;
-            }
-        } elseif ($value == '/') {
-            $recipients_groups['categories']['all_selected_id'] = $r_id;
-        }
-
-        $this->callMethod($next_method, $params);
-    }
-
-    protected function callMailerRecipientsFormHandlerAfterMainLoop(&$recipients_groups, $next_method = null)
-    {
-        try {
-            $action = new mailerCampaignsRecipientsBlockCategoriesAction($recipients_groups['categories']);
-            $recipients_groups['categories']['content'] = trim($action->display());
-        } catch (Exception $e) {
-            // hide categories block when nothing is selected and there are no available categories
-            unset($recipients_groups['categories']);
-        }
-
-        $this->callMethod($next_method, $recipients_groups);
     }
 
     protected function callMailerRecipientsPrepareHandlerPrepareRecipient(&$recipient, $next_method = null)
@@ -290,18 +229,6 @@ abstract class mailerDependency
             $recipient['group'] = _w('Shop customers');
         } elseif ($hash == '/') {
             $recipient['name'] = _w('All contacts');
-        } elseif (false !== strpos($hash, '/category/')) {
-            $category_id = explode('/', $hash);
-            $category_id = end($category_id);
-            if ($category_id && wa_is_int($category_id)) {
-                $recipient['name'] = $this->getCategoryName($category_id);
-                $recipient['group'] = _w('Categories');
-            }
-        } elseif (false !== strpos($hash, '/locale=')) {
-            $locale = explode('=', $hash);
-            $locale = end($locale);
-            $recipient['name'] = $this->getLocaleName($locale);
-            $recipient['group'] = _w('Languages');
         } else {
             $known = false;
         }
@@ -349,24 +276,5 @@ abstract class mailerDependency
     protected function getCollection($hash)
     {
         return new waContactsCollection($hash);
-    }
-
-    private function getCategoryName($id)
-    {
-        static $categories;
-        if ($categories === null) {
-            $ccm = new waContactCategoryModel();
-            $categories = $ccm->getNames();
-        }
-        return isset($categories[$id]) ? $categories[$id] : $id;
-    }
-
-    private function getLocaleName($locale)
-    {
-        if (!$locale) {
-            return _w('not set');
-        }
-        $info = waLocale::getInfo($locale);
-        return $info ? $info['name'] : $locale;
     }
 }

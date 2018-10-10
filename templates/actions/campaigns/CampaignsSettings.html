@@ -78,7 +78,7 @@ form#form-campaign { 1overflow: visible; }
                 </div>
             </div>
             <div class="top-padded field">
-                <div class="name">[`Return-path`]:</div>
+                <div class="name">[`Return-Path`]:</div>
                 <div class="value">
                     {if $return_paths}
                         <select id="return_path" name="data[return_path]">
@@ -96,14 +96,14 @@ form#form-campaign { 1overflow: visible; }
                         <span id="returnpath-selected" class="hidden">
                             <a href="javascript:void(0)" class="open-return-path-dialog-edit left-padded">[`Edit`]</a>
                             [`or`]
-                            <a href="javascript:void(0)" class="open-return-path-dialog-new">[`add a new Return-path`]</a>
+                            <a href="javascript:void(0)" class="open-return-path-dialog-new">[`add a new Return-Path`]</a>
                         </span>
                         <span id="no-returnpath-selected" class="hidden">
-                            <a href="javascript:void(0)" class="open-return-path-dialog-new left-padded">[`Add a new Return-path`]</a>
+                            <a href="javascript:void(0)" class="open-return-path-dialog-new left-padded">[`Add a new Return-Path`]</a>
                         </span>
                     {/if}
                     <br>
-                    <span class="hint">[`Return-path address is used to automatically process bounced emails. We recommend to create a special email address to receive bounces as it allows to obtain a true statistics about your message delivering.`]</span>
+                    <span class="hint">[`Return-Path address is used to automatically process bounced emails. We recommend to create a special email address to receive bounces as it allows to obtain a true statistics about your message delivering.`]</span>
                 </div>
             </div>
             <div class="top-padded field">
@@ -168,9 +168,9 @@ form#form-campaign { 1overflow: visible; }
 
                 <div class="name">[`Feedback-ID:`]</div>
                 <div id="feedback-loop-input" class="value"{if empty($params.feedback_loop)} style="display:none;"{/if}>
-                    <input type="text" name="params[feedback_loop]" placeholder="[`campaignId:campaignType:SenderId`]" value="{ifset($params.feedback_loop)}"><br>
+                    <input type="text" name="params[feedback_loop]" placeholder="campaignId:campaignType:SenderId" value="{ifset($params.feedback_loop)}"><br>
                     <span class="hint">
-                        <b>[`a:b:c:SenderId`]</b>
+                        <b>a:b:c:SenderId</b>
                         [`Where: a, b, c are optional fields that can be used to embed up to 3 Identifiers (campaign/customer/other).`]
                         [`SenderId is a mandatory unique Identifier (5–15 characters).`]
                     </span>

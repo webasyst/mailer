@@ -16,7 +16,7 @@ class mailerReturnpathSaveController extends waJsonController
         if ($id) {
             $old_rp = $rpm->getById($id);
             if (!$old_rp) {
-                throw new waException('Return-path not found.');
+                throw new waException('Return-Path not found.');
             }
             // Make sure user did not change email
             $data['email'] = $old_rp['email'];

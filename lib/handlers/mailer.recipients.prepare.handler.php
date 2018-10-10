@@ -64,13 +64,14 @@ class mailerMailerRecipientsPrepareHandler extends waEventHandler
             // Is it a ContactsCollection hash?
             if ($value{0} == '/') {
 
-                if ($params['action'] === 'UpdateDraftRecipientsTable') {
-                    $this->updateDraftRecipients($r, $message_id);
-                }
-
                 $this->prepareRecipient($r);
 
                 if ($r) {
+
+                    if ($params['action'] === 'UpdateDraftRecipientsTable') {
+                        $this->updateDraftRecipients($r, $message_id);
+                    }
+
                     $total_non_unique += $r['count'];
                 } else {
                     unset($recipients[$r_id]);

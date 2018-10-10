@@ -1,7 +1,7 @@
 {if empty($data.id)}
-    <h2>[`Add a new Return-path`]</h2>
+    <h2>[`Add a new Return-Path`]</h2>
 {else}
-    <h2>[`Edit Return-path`]</h2>
+    <h2>[`Edit Return-Path`]</h2>
 {/if}
 
 <p>
@@ -61,7 +61,7 @@
 </div>
 <div class="hidden buttons">
     {if $show_delete_link}
-        <a href="javascript:void(0)" class="red hint delete-link float-right">[`Delete this Return-path`]</a>
+        <a href="javascript:void(0)" class="red hint delete-link float-right">[`Delete this Return-Path`]</a>
     {/if}
 
     <input type="submit" class="button green" value="{if isset($data.id)}[`Save`]{else}[`Add`]{/if}" />
@@ -104,7 +104,7 @@
     {if $show_delete_link}
         // Delete button
         buttons.filter('.delete-link').click(function() {
-            if (!confirm("[`Do you really want to delete this Return-path?`]")) {
+            if (!confirm("[`Do you really want to delete this Return-Path?`]")) {
                 return;
             }
             $(this).attr('disabled', true).html('<i class="icon16 loading"></i>');

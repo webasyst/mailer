@@ -6,7 +6,7 @@ class mailerCrmDependencyViewAction extends mailerDependencyViewAction
     {
         parent::__construct($params);
         if (!$this->d->isCrm()) {
-            throw new waException(_w('Action supported only when CRM are installed'));
+            throw new waException(_w('Action is supported only if CRM app is installed.'));
         }
     }
 }
