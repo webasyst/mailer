@@ -112,7 +112,7 @@ class mailerContactsDependency extends mailerDependency
         }
     }
 
-    protected function _callMailerRecipientsPrepareHandlerPrepareRecipient(&$recipient, $next_method = null)
+    protected function _callMailerRecipientsPrepareHandlerPrepareRecipient(&$recipient)
     {
         $hash = $recipient['value'];
 
@@ -120,18 +120,26 @@ class mailerContactsDependency extends mailerDependency
         $recipient['count'] = 0;
         $recipient['group'] = null;
 
+        $cc = new waContactsCollection($hash);
+
         if (false !== strpos($hash, '/category/')) {
             $category_id = explode('/', $hash);
             $category_id = end($category_id);
             if ($category_id && wa_is_int($category_id)) {
                 $recipient['name'] = $this->getCategoryName($category_id);
                 $recipient['group'] = _w('Categories');
+                $recipient['count'] = $cc->count();
             }
-        } elseif (false !== strpos($hash, '/locale=')) {
+            return true;
+        }
+
+        if (false !== strpos($hash, '/locale=')) {
             $locale = explode('=', $hash);
             $locale = end($locale);
             $recipient['name'] = $this->getLocaleName($locale);
             $recipient['group'] = _w('Languages');
+            $recipient['count'] = $cc->count();
+            return true;
         }
     }
 

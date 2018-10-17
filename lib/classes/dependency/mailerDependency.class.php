@@ -1,5 +1,31 @@
 <?php
 
+/**
+ * Class resolves dependency logic OF special blocks of Mailer code
+ * Special blocks are blocks that MUST be processed differently
+ *
+ * In different places of Mailer code, especially related with mailer_recipients processing,
+ * MUST be different reaction (logic) that depends on WHAT apps (+plugin) (that work with contacts) are installed (and works)
+ *
+ * Class uses loose coupling approach - something like 'event'-handling, but NOT waEvent, just PROXY calling delegation
+ *
+ * Common scheme of work
+ *
+ * Mailer code construct object in place of depended code block
+ *
+ * $d = mailerDependency::resolve(); // NOW $d IS CONCRETE INSTANCE of dependency handler (Eg - mailerCrmDependency)
+ *
+ * Than mailer code call ->CALL method with ID OF CODE-block (You may use __METHOD__ or something like this)
+ *
+ * $d->call(__METHOD__, ...) // ... - OTHER needed params of code-block (function arguments)
+ *
+ * And $d NOW magically and loosely process DEPENDED logic
+ * Inside it may process in 2 layers:
+ *   * BASIC layer - mailerDependency
+ *   * CONCRETE layer - (mailerCrmDependency/mailerContactsProDependency/mailerContactsDependency etc)
+ *
+ * Class mailerDependency
+ */
 abstract class mailerDependency
 {
     protected static $static_cache;
@@ -14,6 +40,17 @@ abstract class mailerDependency
         }
     }
 
+    /**
+     * Resolve dependency
+     * Choose concrete dependency-handler class and construct its object
+     *
+     * In template environment ALWAYS returns NULL - Secure reasons
+     *
+     * @return mailerContactsDependency|mailerContactsProDependency|mailerCrmDependency|mailerNullDependency|mailerDependency|null
+     *
+     * Return CONCRETE class of mailerDependency TYPE or NULL in 'template' environment
+     *
+     */
     public static function resolve()
     {
         if (waConfig::get('is_template')) {
@@ -46,6 +83,13 @@ abstract class mailerDependency
         waLog::dump($trace, 'mailer/dependency/abstract/resolve_error_trace.log');
     }
 
+    /**
+     * Check rights - can WE do something if CURRENT CONCRETE DEPENDENCY handler using ( chosen by resolver - mailerDependency::resolve() )
+     *
+     * @param $name
+     * @param bool $assoc
+     * @return array|bool|int
+     */
     public function getRights($name, $assoc = true)
     {
         if (!$this->app_id) {
@@ -54,31 +98,55 @@ abstract class mailerDependency
         return wa()->getUser()->getRights($this->app_id, $name, $assoc);
     }
 
+    /**
+     * Has access to backend if we using CURRENT CONCRETE DEPENDENCY handler ( chosen by resolver - mailerDependency::resolve() )
+     * @return bool
+     */
     public function hasAccess()
     {
         return $this->getRights('backend') > 0;
     }
 
-    public function isResolved()
-    {
-        return !($this instanceof mailerNullDependency);
-    }
-
+    /**
+     * Is admin of underline app if we using CURRENT CONCRETE DEPENDENCY handler ( chosen by resolver - mailerDependency::resolve() )
+     * @return bool
+     */
     public function isAdmin()
     {
         return $this->is_admin;
     }
 
+    /**
+     * Is was resolving success anyway?
+     * @return bool
+     */
+    public function isResolved()
+    {
+        return !($this instanceof mailerNullDependency);
+    }
+
+    /**
+     * If admin of Mailer
+     * @return bool
+     */
     public function isMailerAdmin()
     {
         return wa()->getUser()->isAdmin('mailer');
     }
 
+    /**
+     * If admin of all Webasyst backend
+     * @return bool
+     */
     public function isSuperAdmin()
     {
         return wa()->getUser()->isAdmin('webasyst');
     }
 
+    /**
+     * If admin of any type
+     * @return bool
+     */
     public function hasAdminRights()
     {
         return $this->isAdmin() || $this->isSuperAdmin();
@@ -216,10 +284,22 @@ abstract class mailerDependency
         }
     }
 
+    /**
+     * Inside of this common handler it can be called concrete handler with name _callMailerRecipientsPrepareHandlerPrepareRecipient
+     *
+     * _callMailerRecipientsPrepareHandlerPrepareRecipient must be return TRUE if it consume and process own recipient
+     *
+     * @see call
+     * @see callMethod
+     *
+     * @param $recipient
+     * @param null $next_method
+     */
     protected function callMailerRecipientsPrepareHandlerPrepareRecipient(&$recipient, $next_method = null)
     {
         $known = true;
         $hash = $recipient['value'];
+        $is_all_contacts = false;
 
         $recipient['name'] = '';
         $recipient['count'] = 0;
@@ -229,6 +309,7 @@ abstract class mailerDependency
             $recipient['group'] = _w('Shop customers');
         } elseif ($hash == '/') {
             $recipient['name'] = _w('All contacts');
+            $is_all_contacts = true;
         } else {
             $known = false;
         }
@@ -239,6 +320,11 @@ abstract class mailerDependency
             if (strlen($recipient['name']) <= 0) {
                 $recipient['name'] = $cc->getTitle();
             }
+        }
+
+        // For all contacts not need to pass process to concrete dependency handler (by callMethod)
+        if ($is_all_contacts) {
+            return;
         }
 
         if (!$this->hasAccess()) {
