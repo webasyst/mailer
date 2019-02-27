@@ -104,6 +104,7 @@ class mailerMailerRecipientsPrepareHandler extends waEventHandler
             }
             unset($insert_rows);
         }
+
         $params['recipients_count_not_unique'] = $total_non_unique;
     }
 

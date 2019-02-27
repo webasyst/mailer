@@ -83,6 +83,20 @@ class mailerHelper
         return wa()->getAppUrl('contacts');
     }
 
+    public static function getReturnPathDaysToDie($rp)
+    {
+        if ($rp && !is_array($rp)) {
+            $rpm = new mailerReturnPathModel();
+            $rp = $rpm->getById($rp);
+        }
+        if (!$rp || empty($rp['last_campaign_date'])) {
+            return 0;
+        }
+        $time = strtotime($rp['last_campaign_date']) - (time() - mailerConfig::RETURN_PATH_CHECK_PERIOD);
+        $time = $time > 0 ? $time : 0;
+        return intval(ceil($time / (24 * 3600)));
+    }
+
     public static function isReturnPathAlive($rp)
     {
         if ($rp && !is_array($rp)) {
@@ -179,7 +193,7 @@ class mailerHelper
             $recipients[$key]['link'] = null;
 
             // Delegate to proper dependency proxy
-            if (false == strpos($value['value'], '/shop_customers/')) {
+            if (false === strpos($value['value'], '/shop_customers/')) {
                 $d = mailerDependency::resolve();
                 $result = $d->call(__METHOD__, $recipients[$key]);
                 if (!$result['call'] || !$recipients[$key]) {
@@ -232,25 +246,7 @@ class mailerHelper
         }
 
         // Make sure all contacts are created
-        $mlm = new mailerMessageLogModel();
-        $replace_values = array();
-        $replace_sql = "INSERT INTO mailer_message_log (id, contact_id) VALUES %s ON DUPLICATE KEY UPDATE contact_id=VALUES(contact_id)";
-        foreach($mlm->where('message_id=? AND contact_id=0', $campaign['id'])->query() as $row) {
-            $contact = new waContact();
-            $contact->save(array(
-                'name' => $row['name'],
-                'email' => $row['email'],
-                'create_app_id' => 'mailer',
-                'create_method' => 'recipient',
-            ));
-            $replace_values[] = sprintf('(%d,%d)', $row['id'], $contact->getId());
-            if (count($replace_values) > 50) {
-                $mlm->exec(sprintf($replace_sql, implode(',', $replace_values)));
-            }
-        }
-        if ($replace_values) {
-            $mlm->exec(sprintf($replace_sql, implode(',', $replace_values)));
-        }
+        self::ensureMessageLogContactsAreExisted($campaign['id']);
 
         // Change campaign state: 'sending'
         // if only this is not scheduled campaign
@@ -276,6 +272,78 @@ class mailerHelper
             'params' => $params,
         );
         wa()->event('campaign.contacts_prepared', $evt_params);
+    }
+
+    /**
+     * @param int $campaign_id
+     * @param int $chunk_size
+     * @throws waException
+     */
+    protected static function ensureMessageLogContactsAreExisted($campaign_id, $chunk_size = 50)
+    {
+        $campaign_id = wa_is_int($campaign_id) ? intval($campaign_id) : 0;
+        if ($campaign_id <= 0) {
+            return;
+        }
+
+        $chunk_size = wa_is_int($chunk_size) ? intval($chunk_size) : 0;
+        if ($chunk_size <= 0) {
+            $chunk_size = 50;
+        }
+
+        // Make sure all contacts are created
+        $mlm = new mailerMessageLogModel();
+
+        $replace_values = array();
+        $replace_values_count = 0;
+
+        $fields = array_keys($mlm->getMetadata());
+        $fields_str = '`' . join('`, `', $fields) . '`';
+
+        $replace_sql = "INSERT INTO mailer_message_log ({$fields_str}) VALUES %s ON DUPLICATE KEY UPDATE contact_id=VALUES(contact_id)";
+
+        foreach($mlm->where('message_id=? AND contact_id=0', $campaign_id)->query() as $row) {
+
+            $contact = new waContact();
+            $contact->save(array(
+                'name' => $row['name'],
+                'email' => $row['email'],
+                'create_app_id' => 'mailer',
+                'create_method' => 'recipient',
+            ));
+
+            // PREPARE values
+
+            $values = $row;
+            $values['contact_id'] = $contact->getId();  // new contact_id
+            foreach ($values as &$value) {
+                if ($value !== null) {
+                    $value = "'" . $mlm->escape($value) . "'";
+                } else {
+                    $value = "NULL";
+                }
+            }
+            unset($value);
+
+            $values_str = '(' . join(', ', $values) . ')';
+
+            $replace_values[] = $values_str;
+            $replace_values_count++;
+
+            if ($replace_values_count >= $chunk_size) {
+
+                $insert_sql = sprintf($replace_sql, implode(',', $replace_values));
+                $mlm->exec($insert_sql);
+
+                $replace_values_count = 0;
+                $replace_values = array();
+            }
+        }
+
+        if ($replace_values_count > 0) {
+            $insert_sql = sprintf($replace_sql, implode(',', $replace_values));
+            $mlm->exec($insert_sql);
+        }
     }
 
     public static function updateDraftRecipients($message_id, $action = 'NameAndCountRecipients')

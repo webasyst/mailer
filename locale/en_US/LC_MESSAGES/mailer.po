@@ -12,7 +12,7 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Language: en_US\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.0.6\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\n"
 
@@ -2171,4 +2171,14 @@ msgstr ""
 
 #: /wa-apps/mailer/lib/actions/campaigns/mailerCampaignsPresend.action.php:52
 msgid "Unable to prepare recipients list. Another user attempted to start sending this campaign?"
+msgstr ""
+
+#: /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:147 /wa-apps/mailer/templates/actions/undeliverable/UndeliverableList.html:68
+#: /wa-apps/mailer/templates/actions/unsubscribed/UnsubscribedList.html:64
+msgid "prev"
+msgstr ""
+
+#: /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:150 /wa-apps/mailer/templates/actions/undeliverable/UndeliverableList.html:71
+#: /wa-apps/mailer/templates/actions/unsubscribed/UnsubscribedList.html:67
+msgid "next"
 msgstr ""

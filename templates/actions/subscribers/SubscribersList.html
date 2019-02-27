@@ -51,7 +51,7 @@
             </div>
 
             <input type="submit" value="[`Save`]" data="save" class="button green"/>
-            или <a href="javascript:void(0)" data="cancel">[`cancel`]</a>
+            [`or`] <a href="javascript:void(0)" data="cancel">[`cancel`]</a>
             <a href="javascript:void(0);" class="no-underline delete float-right small red" style="margin-top: 21px; display: block;" data="delete" title="[`Delete`]">[`Delete list`]</a>
         </div>
     </form>
@@ -144,10 +144,10 @@
         {/if}
         {/foreach}
         {if $current_page != 1}
-            <a href="javascript:void(0)" data-start="{$start-$records}" class="prevnext"><i class="icon10 larr"></i> пред</a>
+            <a href="javascript:void(0)" data-start="{$start-$records}" class="prevnext"><i class="icon10 larr"></i> [`prev`]</a>
         {/if}
         {if $current_page != $page}
-            <a href="javascript:void(0)" data-start="{$start+$records}" class="prevnext">след <i class="icon10 rarr"></i></a>
+            <a href="javascript:void(0)" data-start="{$start+$records}" class="prevnext">[`next`] <i class="icon10 rarr"></i></a>
         {/if}
         </span>
         {/if}

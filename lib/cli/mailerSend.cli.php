@@ -22,6 +22,8 @@ class mailerSendCli extends waCliController
         $messages = $message_model->getMessageForSend(true);
         $fire_event = false;
 
+        $cli_user = wa()->getUser();
+
         foreach ($messages as $message) {
 
             if ($message['send_datetime'] > date('Y-m-d H:i:s')) {
@@ -36,12 +38,22 @@ class mailerSendCli extends waCliController
                 $mpm = new mailerMessageParamsModel();
                 $params = $mpm->getByMessage($message['id']);
 
+                // Before call mailerHelper preparation (and update) methods set current user to author of campaign
+                // Because campaign can has recipients (for example crm segments) access to which has only author
+
+                $author_id = $message['create_contact_id'];
+                $author_user = new waAuthUser($author_id);
+
+                wa()->setUser($author_user);
+
                 if ($message['status'] != mailerMessageModel::STATUS_SENDING) {
                     // renew recipients for pending campaigns
                     mailerHelper::updateDraftRecipients($message['id'], 'UpdateDraftRecipientsTable');
                     mailerHelper::prepareRecipients($message, $params);
                     $mailer_message->status(mailerMessageModel::STATUS_SENDING);
                 }
+
+                wa()->setUser($cli_user);
 
                 $mailer_message->send();
             }

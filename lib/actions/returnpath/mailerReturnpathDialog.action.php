@@ -20,10 +20,12 @@ class mailerReturnpathDialogAction extends waViewAction
         }
 
         $return_path = $rpm->getById($id);
+
         $show_delete_link = $id && $return_path && !mailerHelper::isReturnPathAlive($return_path);
 
         $this->view->assign('data', $return_path);
         $this->view->assign('show_delete_link', $show_delete_link);
+        $this->view->assign('days_to_die', mailerHelper::getReturnPathDaysToDie($return_path));
     }
 }
 

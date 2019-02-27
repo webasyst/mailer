@@ -33,6 +33,9 @@ abstract class mailerDependency
     protected $is_admin = false;
     protected $app_id;
 
+    // set to true in case of debug
+    protected $debug = false;
+
     public function __construct()
     {
         if ($this->app_id) {
@@ -80,7 +83,7 @@ abstract class mailerDependency
         } else {
             $trace = debug_backtrace(~DEBUG_BACKTRACE_PROVIDE_OBJECT | DEBUG_BACKTRACE_IGNORE_ARGS);
         }
-        waLog::dump($trace, 'mailer/dependency/abstract/resolve_error_trace.log');
+        self::logTrace($trace, __METHOD__);
     }
 
     /**
@@ -180,6 +183,8 @@ abstract class mailerDependency
 
     public function call($name, &$params)
     {
+        $original_name = $name;
+
         // consume 'mailer' prefix
         if (substr($name, 0, 6) == 'mailer') {
             $name = substr($name, 6);
@@ -193,18 +198,27 @@ abstract class mailerDependency
         $basic_method_name = 'call' . join('', $parts);
         $concrete_method_name = '_call' . join('', $parts);
 
-        return $this->makeProxyCall($basic_method_name, $params, $concrete_method_name);
+        if ($this->debug) {
+            self::logDebug(array(
+                'original_callee' => $original_name,
+                'basic_handler' => $basic_method_name,
+                'concrete_handler' => $concrete_method_name,
+                'params' => $params
+            ), get_class($this));
+        }
+
+        return $this->makeProxyCall($basic_method_name, $params, $concrete_method_name, $original_name);
     }
 
-    private function makeProxyCall($method, &$params, $next_method)
+    private function makeProxyCall($method, &$params, $next_method, $original_name)
     {
         if (method_exists($this, $next_method)) {
-            $result = $this->callMethod($method, $params, $next_method);
+            $result = $this->callMethod($method, $params, $next_method, $original_name);
         } else {
-            $result = $this->callMethod($method, $params);
+            $result = $this->callMethod($method, $params, $original_name);
         }
         if (!$result['call']) {
-            $result = $this->callMethod($next_method, $params);
+            $result = $this->callMethod($next_method, $params, $original_name);
         }
         return $result;
     }
@@ -283,7 +297,7 @@ abstract class mailerDependency
             }
         }
     }
-
+    
     /**
      * Inside of this common handler it can be called concrete handler with name _callMailerRecipientsPrepareHandlerPrepareRecipient
      *
@@ -292,28 +306,46 @@ abstract class mailerDependency
      * @see call
      * @see callMethod
      *
+     * For debug print func_get_args()
+     *
+     *
      * @param $recipient
      * @param null $next_method
+     *
+     * @notice: In case of debugging:
+     *      In last argument - func_get_arg(func_num_args() - 1) - is always original name of original callee
+     *      Original callee - it is code that call mailerDependency manager
      */
     protected function callMailerRecipientsPrepareHandlerPrepareRecipient(&$recipient, $next_method = null)
     {
+        // Flag that represent that somebody of catchers knows about that recipient and can extract info about it
         $known = true;
+
+        // Hash of recipient
         $hash = $recipient['value'];
+
+        // If is specific recipient that holds all contacts hash
         $is_all_contacts = false;
 
+        // so reset recipient info
         $recipient['name'] = '';
         $recipient['count'] = 0;
         $recipient['group'] = null;
 
         if (false !== strpos($hash, '/shop_customers')) {
+            // Shop customer hash - this catcher (dependency level) knows about it
             $recipient['group'] = _w('Shop customers');
+            $recipient['name'] = _w('Shop customers');
         } elseif ($hash == '/') {
+            // All contacts hash - this catcher (dependency level) knows about it
             $recipient['name'] = _w('All contacts');
             $is_all_contacts = true;
         } else {
+            // This catcher doesn't know about this recipient
             $known = false;
         }
 
+        // If this catcher knows about recipient - extract info
         if ($known) {
             $cc = new waContactsCollection($hash);
             $recipient['count'] = $cc->count();
@@ -327,21 +359,34 @@ abstract class mailerDependency
             return;
         }
 
+        // This level of dependency attached to some app, and if current user has not access to this app - catcher stops asking about recipient
         if (!$this->hasAccess()) {
             if (!$known) {
+                // Don't known what recipient it is, so reset to NULL
                 $recipient = null;
             }
             return;
         }
 
+        // Catcher now can try ask "Next method" about recipient
+        // Even if we already know something about current recipient - in case if next_method knows about recipient more
         $result = $this->callMethod($next_method, $recipient);
 
-        // if recipient has catch in $next_method than expected true returned
+        // $next_method actually response something (next level in dependency chain was actually called)
         if ($result['call']) {
-            $known = $result['return'] === true;
+
+            // if recipient has catch in $next_method than expected TRUE returned
+            // TRUE means next_method know about recipient and it extract some info about it
+            if ($result['return'] === true) {
+                $known = true;
+            }
+
+            // If TRUE hasn't been returned than $known flag stay own values as it is
+
         }
 
         if (!$known) {
+            // Don't known what recipient it is, so reset to NULL
             $recipient = null;
         }
     }
@@ -363,4 +408,18 @@ abstract class mailerDependency
     {
         return new waContactsCollection($hash);
     }
+
+
+    protected static function logTrace($trace, $callee)
+    {
+        $callee = str_replace('::', '/', $callee);
+        waLog::dump($trace, "mailer/dependency/{$callee}/trace.log");
+    }
+
+    protected static function logDebug($info, $callee)
+    {
+        $callee = str_replace('::', '/', $callee);
+        waLog::dump($info, "mailer/dependency/{$callee}/debug.log");
+    }
+
 }

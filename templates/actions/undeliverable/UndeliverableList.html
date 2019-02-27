@@ -65,10 +65,10 @@
                 {/if}
                 {/foreach}
                 {if $current_page != 1}
-                    <a href="#/undeliverable/{$start-$records}/{$records}/{$order}/{$search_url_append}" class="prevnext"><i class="icon10 larr"></i> пред</a>
+                    <a href="#/undeliverable/{$start-$records}/{$records}/{$order}/{$search_url_append}" class="prevnext"><i class="icon10 larr"></i> [`prev`]</a>
                 {/if}
                 {if $current_page != $page}
-                    <a href="#/undeliverable/{$start+$records}/{$records}/{$order}/{$search_url_append}" class="prevnext">след <i class="icon10 rarr"></i></a>
+                    <a href="#/undeliverable/{$start+$records}/{$records}/{$order}/{$search_url_append}" class="prevnext">[`next`] <i class="icon10 rarr"></i></a>
                 {/if}
                 </span>
             {/if}

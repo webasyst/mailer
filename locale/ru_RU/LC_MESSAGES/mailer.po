@@ -9,11 +9,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n"
-"%100)>=20)))?(1):2));\n"
+"Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.0.6\n"
 "Language: ru_RU\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\n"
@@ -247,13 +246,11 @@ msgid "Status:"
 msgstr "Статус:"
 
 msgid ""
-"If many of your recipients addresses reside on popular mail services (e.g. @gmail.com, @yahoo.com, and etc.) then too high "
-"sending speed may cause banning of your sender server because of spam suspicion and these recipients will not receive your "
-"message."
+"If many of your recipients addresses reside on popular mail services (e.g. @gmail.com, @yahoo.com, and etc.) then too high sending speed may cause banning of your sender server because of spam suspicion and these recipients will "
+"not receive your message."
 msgstr ""
-"Если многие из адресов ваших получателей расположены на популярных почтовых сервисах (например @mail.ru, @gmail.com и т.д.), "
-"то при слишком высокой скорости рассылки ваш сервер отправителя будет заблокирован из-за подозрения на спам, и эти получатели "
-"не получат сообщение."
+"Если многие из адресов ваших получателей расположены на популярных почтовых сервисах (например @mail.ru, @gmail.com и т.д.), то при слишком высокой скорости рассылки ваш сервер отправителя будет заблокирован из-за подозрения на "
+"спам, и эти получатели не получат сообщение."
 
 msgid "Details"
 msgstr "Подробности"
@@ -369,12 +366,8 @@ msgstr "Класс ZipArchive не найден. Импорт шаблонов �
 msgid "Cancel"
 msgstr "Отмена"
 
-msgid ""
-"Archive (zip) file for template import must contain an html file in the root of archive, and all other files (e.g. images) "
-"referred from html file, in the root or in subfolders of your archive file."
-msgstr ""
-"Архивный ZIP-файл для импорта шаблона должен содержать HTML-файл в корне архива и все необходимые файлы (например, файлы "
-"изображений), на которые есть ссылки в HTML-файле, также в корне или во вложенных папках архива."
+msgid "Archive (zip) file for template import must contain an html file in the root of archive, and all other files (e.g. images) referred from html file, in the root or in subfolders of your archive file."
+msgstr "Архивный ZIP-файл для импорта шаблона должен содержать HTML-файл в корне архива и все необходимые файлы (например, файлы изображений), на которые есть ссылки в HTML-файле, также в корне или во вложенных папках архива."
 
 msgid "Archive (zip) file for template import must contain an html file in the root of archive."
 msgstr "Архивный ZIP-файл для импорта шаблона должен содержать HTML-файл в корне архива."
@@ -424,12 +417,8 @@ msgstr "Визуальный редактор"
 msgid "Plain-text"
 msgstr "Plain-text"
 
-msgid ""
-"This plain-text version of your message is automatically created from HTML version and displayed if recipients have disabled "
-"HTML view in their email programs."
-msgstr ""
-"Эта текстовая версия вашего сообщения автоматически создается из HTML-версии и отображается у получателей, если в их почтовых "
-"программах выключена опция просмотра HTML-сообщений."
+msgid "This plain-text version of your message is automatically created from HTML version and displayed if recipients have disabled HTML view in their email programs."
+msgstr "Эта текстовая версия вашего сообщения автоматически создается из HTML-версии и отображается у получателей, если в их почтовых программах выключена опция просмотра HTML-сообщений."
 
 msgid "View recipients"
 msgstr "Показать получателей"
@@ -620,13 +609,10 @@ msgstr "ПРИМЕЧАНИЕ: Контакт не будет удален. Он 
 msgid "Customize"
 msgstr "Настроить"
 
-msgid ""
-"Return-Path address is used to automatically process bounced emails. We recommend to create a special email address to receive "
-"bounces as it allows to obtain a true statistics about your message delivering."
+msgid "Return-Path address is used to automatically process bounced emails. We recommend to create a special email address to receive bounces as it allows to obtain a true statistics about your message delivering."
 msgstr ""
-"Адрес Return-Path используется для автоматического получения и обработки отказов (bounces) почтовым сервером получателя. Мы "
-"рекомендуем вам создать специальный адрес для получения таких отказов, это позволит вам получать объективную статистику "
-"доставки письма в отчете о рассылке."
+"Адрес Return-Path используется для автоматического получения и обработки отказов (bounces) почтовым сервером получателя. Мы рекомендуем вам создать специальный адрес для получения таких отказов, это позволит вам получать "
+"объективную статистику доставки письма в отчете о рассылке."
 
 msgid "Error checking mail:"
 msgstr "Ошибка проверки почты:"
@@ -706,19 +692,11 @@ msgstr "Ошибка отправки:"
 msgid "incomplete data"
 msgstr "неполные данные"
 
-msgid ""
-"Unsubscribe URL is located only in your message headers. It does not guarantee an appearance of unsubscribe link in recipient "
-"mail program."
-msgstr ""
-"Ссылка отписки содержится только в заголовках вашего письма. Это не гарантирует появление ссылки отписки в почтовой программе "
-"получателя."
+msgid "Unsubscribe URL is located only in your message headers. It does not guarantee an appearance of unsubscribe link in recipient mail program."
+msgstr "Ссылка отписки содержится только в заголовках вашего письма. Это не гарантирует появление ссылки отписки в почтовой программе получателя."
 
-msgid ""
-"Return-Path is not customized. This does not allow to track most of potential bounces from recipient mail servers. Only "
-"invalid messages bounced by your sender server have been counted."
-msgstr ""
-"Return-Path не настроен. Это не позволяет отследить большинство отказов от почтовых серверов получателей. Посчитаны только "
-"адреса, отвергнутые вашим сервером отправителя."
+msgid "Return-Path is not customized. This does not allow to track most of potential bounces from recipient mail servers. Only invalid messages bounced by your sender server have been counted."
+msgstr "Return-Path не настроен. Это не позволяет отследить большинство отказов от почтовых серверов получателей. Посчитаны только адреса, отвергнутые вашим сервером отправителя."
 
 msgid "select"
 msgstr "выбрать"
@@ -855,35 +833,29 @@ msgstr "PHP-функция mail()"
 msgid "Debug mailer"
 msgstr "Тестовый отправитель"
 
-msgid ""
-"When this option is selected messages are sent by the default transport specified in the Webasyst framework configuration."
-msgstr ""
-"При выборе этого варианта рассылки будут отправляться транспортом по умолчанию, указанным в конфигурации фреймворка Вебасист."
+msgid "When this option is selected messages are sent by the default transport specified in the Webasyst framework configuration."
+msgstr "При выборе этого варианта рассылки будут отправляться транспортом по умолчанию, указанным в конфигурации фреймворка Вебасист."
 
 msgid ""
-"Some web-hosting companies allow sending email message by means of this transport only. If it is required to specify "
-"additional parameters for the mail() function you can enter them in the provided text field. The default parameters are -f%s."
+"Some web-hosting companies allow sending email message by means of this transport only. If it is required to specify additional parameters for the mail() function you can enter them in the provided text field. The default "
+"parameters are -f%s."
 msgstr ""
-"Некоторые хостинг-провайдеры позволяют отправлять электронные сообщения только этим транспортом. Если имеется необходимость "
-"ввести дополнительные параметры, их можно указать в текстовом поле при выборе варианта «PHP-функция mail()». По умолчанию "
-"используется параметр -f%s."
+"Некоторые хостинг-провайдеры позволяют отправлять электронные сообщения только этим транспортом. Если имеется необходимость ввести дополнительные параметры, их можно указать в текстовом поле при выборе варианта «PHP-функция "
+"mail()». По умолчанию используется параметр -f%s."
 
 msgid ""
-"This is the web server's system command for sending email in UNIX-like operating systems. The \"Sendmail\" option will allow "
-"you to specify a non-standard system command for sending messages if you are an experienced server administrator."
+"This is the web server's system command for sending email in UNIX-like operating systems. The \"Sendmail\" option will allow you to specify a non-standard system command for sending messages if you are an experienced server "
+"administrator."
 msgstr ""
-"Это системная команда веб-сервера, с помощью которой выполняется отправка сообщений на UNIX-хостингах. Вариант транспорта "
-"«Sendmail» позволит вам указать нестандартную системную команду для отправки сообщений, если вы самостоятельно администрируете "
-"работу вашего веб-сервера."
+"Это системная команда веб-сервера, с помощью которой выполняется отправка сообщений на UNIX-хостингах. Вариант транспорта «Sendmail» позволит вам указать нестандартную системную команду для отправки сообщений, если вы "
+"самостоятельно администрируете работу вашего веб-сервера."
 
 msgid ""
-"Special server which is specifically used for sending email messages. You can send newsletters via any SMTP server for which "
-"you have connection credentials: host, port, user name, and password. It can be the SMTP server of your web-hosting company or "
-"that of a public mail service such as Gmail, Yahoo! Mail, Outlook.com, etc."
+"Special server which is specifically used for sending email messages. You can send newsletters via any SMTP server for which you have connection credentials: host, port, user name, and password. It can be the SMTP server of your "
+"web-hosting company or that of a public mail service such as Gmail, Yahoo! Mail, Outlook.com, etc."
 msgstr ""
-"Специальный почтовый сервер, предназначенный для отправки электронной почты. Вы можете отправлять рассылки через любой SMTP-"
-"сервер, для подключения к которому у вас есть данные: адрес сервера, номер порта, имя пользователя (логин) и пароль — это "
-"может быть SMTP-сервер вашего хостинг-провайдера или публичного почтового сервиса (Mail.ru, Gmail и т. п.)."
+"Специальный почтовый сервер, предназначенный для отправки электронной почты. Вы можете отправлять рассылки через любой SMTP-сервер, для подключения к которому у вас есть данные: адрес сервера, номер порта, имя пользователя (логин) "
+"и пароль — это может быть SMTP-сервер вашего хостинг-провайдера или публичного почтового сервиса (Mail.ru, Gmail и т. п.)."
 
 msgid "Options"
 msgstr "Параметры"
@@ -957,26 +929,14 @@ msgstr "Превышен лимит времени на подготовку с�
 msgid "Recipient list preparation is in progress."
 msgstr "Идет подготовка списка получателей."
 
-msgid ""
-"We recommend that you create a dedicated email account for this purpose, and use it merely for receiving and processing these "
-"kinds of auto notification messages."
-msgstr ""
-"Рекомендуем для этой цели завести специальный адрес, и не использовать его для иных целей, кроме получения и обработки "
-"подобных автоматических уведомлений."
+msgid "We recommend that you create a dedicated email account for this purpose, and use it merely for receiving and processing these kinds of auto notification messages."
+msgstr "Рекомендуем для этой цели завести специальный адрес, и не использовать его для иных целей, кроме получения и обработки подобных автоматических уведомлений."
 
-msgid ""
-"Specify access parameters for an existing email account that will be used to receive auto notifications from recipients’ mail "
-"servers in case of campaign delivery errors."
-msgstr ""
-"Укажите реквизиты доступа к существующему адресу электронной почты, на который будут приходить автоматические уведомления от "
-"почтовых серверов получателей в случае ошибки доставки сообщения."
+msgid "Specify access parameters for an existing email account that will be used to receive auto notifications from recipients’ mail servers in case of campaign delivery errors."
+msgstr "Укажите реквизиты доступа к существующему адресу электронной почты, на который будут приходить автоматические уведомления от почтовых серверов получателей в случае ошибки доставки сообщения."
 
-msgid ""
-"UTM tags will be added to all links (URLs) containing in the campaign message. It will allow to track these links visiting in "
-"your Google Analytics reports."
-msgstr ""
-"Ко всем адресам (URL), содержащимся в тексте рассылки, будут автоматически добавлены UTM-метки, которые позволят средствам веб-"
-"аналитики отследить открытия страниц по этим адресам."
+msgid "UTM tags will be added to all links (URLs) containing in the campaign message. It will allow to track these links visiting in your Google Analytics reports."
+msgstr "Ко всем адресам (URL), содержащимся в тексте рассылки, будут автоматически добавлены UTM-метки, которые позволят средствам веб-аналитики отследить открытия страниц по этим адресам."
 
 msgid "Send to selected recipients (%d)"
 msgstr "Отправить выбранным получателям (%d)"
@@ -1003,23 +963,17 @@ msgid "Excepted from this list are unsubscribed contacts and those having delive
 msgstr "Из них будут исключены ранее отписавшиеся и те, кто имел ошибки доставки в прошлых рассылках."
 
 msgid ""
-"We could not count the number of excepted recipients at this point, because a total number of your campaign recipients is too "
-"high. However, we will count every exception in the process of sending, and all such contacts will be placed in &ldquo;"
-"Exceptions&rdquo; list in the Sending Report."
+"We could not count the number of excepted recipients at this point, because a total number of your campaign recipients is too high. However, we will count every exception in the process of sending, and all such contacts will be "
+"placed in &ldquo;Exceptions&rdquo; list in the Sending Report."
 msgstr ""
-"В связи с тем, что количество получателей вашей рассылки велико, мы сейчас не смогли посчитать точное количество иключенных "
-"адресов. Однако все исключенные получатели будут точно определены в процессе рассылки и попадут в список &laquo;"
-"Исключения&raquo; в отчете о рассылке."
+"В связи с тем, что количество получателей вашей рассылки велико, мы сейчас не смогли посчитать точное количество иключенных адресов. Однако все исключенные получатели будут точно определены в процессе рассылки и попадут в список "
+"&laquo;Исключения&raquo; в отчете о рассылке."
 
 msgid "Send to contacts having delivering errors anyway"
 msgstr "Отправить имевшим ошибки доставки всё равно"
 
-msgid ""
-"Use this option only if the reason of delivering errors has been resolved; otherwise recipient mail servers can ban your "
-"sending server for spam."
-msgstr ""
-"Используйте эту опцию только после устранения причины недоставки сообщений. В противном случае почтовые серверы получателей "
-"могут поместить ваш сервер отправителя в &laquo;черный список&raquo;."
+msgid "Use this option only if the reason of delivering errors has been resolved; otherwise recipient mail servers can ban your sending server for spam."
+msgstr "Используйте эту опцию только после устранения причины недоставки сообщений. В противном случае почтовые серверы получателей могут поместить ваш сервер отправителя в &laquo;черный список&raquo;."
 
 msgid "Excepted from this list are:"
 msgstr "Из них будут исключены:"
@@ -1034,17 +988,13 @@ msgid "search by name or email"
 msgstr "поиск по имени или электронному адресу"
 
 msgid "Email addresses in this list have a permanent error returned by recipient mail servers."
-msgstr ""
-"В этот список автоматически попадают те адреса, почтовый сервер которых вернул сообщение о постоянной ошибке в адресе "
-"получателя."
+msgstr "В этот список автоматически попадают те адреса, почтовый сервер которых вернул сообщение о постоянной ошибке в адресе получателя."
 
 msgid "These addresses either do not exist, or cannot receive your message by any reason."
 msgstr "Такие адреса либо не существуют, либо не могут по какой-либо причине получать от вас сообщения."
 
 msgid "Attempts to repeat sending messages to these addresses may cause banning of your sender server."
-msgstr ""
-"Попытки повторных рассылок на эти адреса могут привести к тому, что ваш сервер отправителя попадет в &laquo;черный "
-"список&raquo;."
+msgstr "Попытки повторных рассылок на эти адреса могут привести к тому, что ваш сервер отправителя попадет в &laquo;черный список&raquo;."
 
 msgid "This is the reason to exclude these addresses from the lists of your campaigns recipients."
 msgstr "По этой причине данные адреса исключаются по умолчанию из списков получателей ваших рассылок."
@@ -1052,12 +1002,8 @@ msgstr "По этой причине данные адреса исключаю�
 msgid "Remove address from this list"
 msgstr "Удалить адрес из этого списка"
 
-msgid ""
-"We recommend you to remove addresses from the list of &ldquo;undeliverable&rdquo; only in case you have resolved issues with "
-"delivering errors for these email addresses."
-msgstr ""
-"Мы рекомендуем вам удалять адрес из списка &laquo;недоставляемых&raquo; только в тех случаях, когда вы устранили причину "
-"недоставки сообщений до данного адресата."
+msgid "We recommend you to remove addresses from the list of &ldquo;undeliverable&rdquo; only in case you have resolved issues with delivering errors for these email addresses."
+msgstr "Мы рекомендуем вам удалять адрес из списка &laquo;недоставляемых&raquo; только в тех случаях, когда вы устранили причину недоставки сообщений до данного адресата."
 
 msgid "No addresses match search criteria."
 msgstr "Ни один адрес не удовлетворяет условиям поиска."
@@ -1072,8 +1018,7 @@ msgid "Campaign subject"
 msgstr "Тема рассылки"
 
 msgid "We believe that you act on behalf of and for the benefit of this client, or used to unsubscribe for testing purposes."
-msgstr ""
-"Мы верим, что вы действуете от имени и во благо данного контакта, либо отписка была ранее выполнена с целью тестирования."
+msgstr "Мы верим, что вы действуете от имени и во благо данного контакта, либо отписка была ранее выполнена с целью тестирования."
 
 msgid "System Default"
 msgstr "Системный по умолчанию"
@@ -1123,92 +1068,57 @@ msgstr "У вас не настроены задания <tt>cron</tt>, кото
 msgid "Scheduled sending is unavailable (no <tt>cron</tt> jobs set up)!"
 msgstr "Отложенная рассылка невозможна (не настроены задания <tt>cron</tt>)!"
 
-msgid ""
-"Without <tt>cron</tt> jobs set up, do not close your browser window after clicking on the “Send” button to complete the email "
-"sending process."
-msgstr ""
-"<br>Внимание! Без настройки <tt>cron</tt> не закрывайте страницу после нажатия на кнопку «Отправить» до завершения отправки."
+msgid "Without <tt>cron</tt> jobs set up, do not close your browser window after clicking on the “Send” button to complete the email sending process."
+msgstr "<br>Внимание! Без настройки <tt>cron</tt> не закрывайте страницу после нажатия на кнопку «Отправить» до завершения отправки."
 
-msgid ""
-"Without <tt>cron</tt> jobs set up, do not close your browser window after clicking on the \"Send to selected recipients\" "
-"button to complete the email sending process."
-msgstr ""
-"<br>Внимание! Без настройки <tt>cron</tt> не закрывайте страницу после нажатия на кнопку «Отправить выбранным получателям» до "
-"завершения отправки."
+msgid "Without <tt>cron</tt> jobs set up, do not close your browser window after clicking on the \"Send to selected recipients\" button to complete the email sending process."
+msgstr "<br>Внимание! Без настройки <tt>cron</tt> не закрывайте страницу после нажатия на кнопку «Отправить выбранным получателям» до завершения отправки."
 
-msgid ""
-"To ensure that sending is completed without your input, please set up <tt>cron</tt> jobs (<a href=\"%s\" target=\"_blank"
-"\">view instructions</a>), with the commands specified below, in your web-hosting control panel:"
+msgid "To ensure that sending is completed without your input, please set up <tt>cron</tt> jobs (<a href=\"%s\" target=\"_blank\">view instructions</a>), with the commands specified below, in your web-hosting control panel:"
 msgstr ""
-"Для того чтобы рассылка автоматически продолжалась без вашего участия, необходимо настроить задания <tt>cron</tt> (<a href=\"%s"
-"\" target=\"_blank\">инструкция по настройке</a>) с указанными ниже командами в контрольной панели вашего хостинга:"
+"Для того чтобы рассылка автоматически продолжалась без вашего участия, необходимо настроить задания <tt>cron</tt> (<a href=\"%s\" target=\"_blank\">инструкция по настройке</a>) с указанными ниже командами в контрольной панели "
+"вашего хостинга:"
 
 msgid "http://www.webasyst.com/framework/docs/server/cron/"
 msgstr "http://www.webasyst.ru/developers/docs/tips/cron/"
 
-msgid ""
-"This list contains the email addresses of contacts who have clicked on the “unsubscribe” link in a received message. These "
-"addresses are automatically excluded from the recipient lists of all future mailings."
-msgstr ""
-"В этом списке содержатся адреса контактов, которые отписались от получения рассылок с помощью ссылки для отписки. Эти адреса "
-"автоматически исключаются из числа получателей всех последующих рассылок."
+msgid "This list contains the email addresses of contacts who have clicked on the “unsubscribe” link in a received message. These addresses are automatically excluded from the recipient lists of all future mailings."
+msgstr "В этом списке содержатся адреса контактов, которые отписались от получения рассылок с помощью ссылки для отписки. Эти адреса автоматически исключаются из числа получателей всех последующих рассылок."
 
 msgid ""
-"Subscribers are the persons who have expressly opted for receiving email messages from you by submitting their email addresses "
-"via a subscription form on your website. To collect subscribers' email addresses, publish the form displayed below on your "
-"website or blog."
+"Subscribers are the persons who have expressly opted for receiving email messages from you by submitting their email addresses via a subscription form on your website. To collect subscribers' email addresses, publish the form "
+"displayed below on your website or blog."
 msgstr ""
-"Подписчики — это те, кто добровольно изъявили желание получать от вас рассылки, отправив свои электронные адреса через форму "
-"подписки на вашем сайте. Для того чтобы у вас появились подписчики, разместите приведенный ниже код формы подписки на вашем "
-"сайте или в блоге."
+"Подписчики — это те, кто добровольно изъявили желание получать от вас рассылки, отправив свои электронные адреса через форму подписки на вашем сайте. Для того чтобы у вас появились подписчики, разместите приведенный ниже код формы "
+"подписки на вашем сайте или в блоге."
 
 msgid "Manage templates"
 msgstr "Управление шаблонами"
 
-msgid ""
-"Please choose one of these templates to create a new email campaign. If none of the templates suits your needs, click on "
-"&ldquo;Blank&rdquo; to compose a new message."
-msgstr ""
-"Воспользуйтесь одним из готовых шаблонов для создания текста рассылки. Если ни один шаблон не подошел, наберите текст "
-"сообщения с &laquo;чистого листа&raquo;."
+msgid "Please choose one of these templates to create a new email campaign. If none of the templates suits your needs, click on &ldquo;Blank&rdquo; to compose a new message."
+msgstr "Воспользуйтесь одним из готовых шаблонов для создания текста рассылки. Если ни один шаблон не подошел, наберите текст сообщения с &laquo;чистого листа&raquo;."
 
 msgid "Be sure to enter your message subject and text to proceed to recipient selection and message sending steps."
 msgstr "Введите тему и текст сообщения. После этого вы сможете перейти к выбору получателей и отправке сообщения."
 
-msgid ""
-"To specify recipients for your campaign, select the desired contact groups provided by the Contacts application or enter "
-"additional email addresses."
-msgstr ""
-"В качестве получателей рассылки могут быть указаны электронные адреса из приложения «Контакты», а также дополнительные адреса, "
-"добавленные вручную."
+msgid "To specify recipients for your campaign, select the desired contact groups provided by the Contacts application or enter additional email addresses."
+msgstr "В качестве получателей рассылки могут быть указаны электронные адреса из приложения «Контакты», а также дополнительные адреса, добавленные вручную."
 
-msgid ""
-"Your contacts may be speaking different languages. You can limit the recipient list by selecting only the desired languages."
+msgid "Your contacts may be speaking different languages. You can limit the recipient list by selecting only the desired languages."
 msgstr "Ваши контакты говорят на разных языках. Вы можете ограничить список получателей рассылки, выбрав нужные языки."
 
 msgid ""
-"Categories are groups of contacts which you can freely manage in the Contacts application. In addition to manually created "
-"categories, there are also system categories created by other Webasyst applications; e.g., Shop-Script or Blog. Those "
-"categories contain contacts added by the corresponding applications: customers of the online store or authors of comments "
-"posted in the blog."
+"Categories are groups of contacts which you can freely manage in the Contacts application. In addition to manually created categories, there are also system categories created by other Webasyst applications; e.g., Shop-Script or "
+"Blog. Those categories contain contacts added by the corresponding applications: customers of the online store or authors of comments posted in the blog."
 msgstr ""
-"Категории — это группы контактов, которые вы можете произвольным образом формировать в приложении «Контакты». Кроме "
-"произвольно созданных категорий, в «Контактах» есть специальные категории, созданные другими приложениями, например, «Магазин» "
-"или «Блог» — в этих категориях содержатся контакты, созданные в соответствующих приложениях: покупатели магазина, авторы "
-"комментариев к записям в блоге и т. п."
+"Категории — это группы контактов, которые вы можете произвольным образом формировать в приложении «Контакты». Кроме произвольно созданных категорий, в «Контактах» есть специальные категории, созданные другими приложениями, "
+"например, «Магазин» или «Блог» — в этих категориях содержатся контакты, созданные в соответствующих приложениях: покупатели магазина, авторы комментариев к записям в блоге и т. п."
 
-msgid ""
-"This option allows selecting contacts who have opted for receiving your email newsletters using a subscription form (see "
-"Subscribers section)."
-msgstr ""
-"Позволяет выбрать адреса контактов, которые сами подписались на ваши рассылки с помощью формы подписки (см. раздел Подписчики)."
+msgid "This option allows selecting contacts who have opted for receiving your email newsletters using a subscription form (see Subscribers section)."
+msgstr "Позволяет выбрать адреса контактов, которые сами подписались на ваши рассылки с помощью формы подписки (см. раздел Подписчики)."
 
-msgid ""
-"Use this field  to manually enter any additional email addresses. If such addresses are not yet contained in the Contacts "
-"application, they will be added there as new contacts once the sending of this message is completed."
-msgstr ""
-"В этом поле можно вручную указать любые электронные адреса. Если в приложении «Контакты» еще нет таких адресов, то они будут "
-"автоматически добавлены в него в виде новых контактов сразу после завершения рассылки."
+msgid "Use this field  to manually enter any additional email addresses. If such addresses are not yet contained in the Contacts application, they will be added there as new contacts once the sending of this message is completed."
+msgstr "В этом поле можно вручную указать любые электронные адреса. Если в приложении «Контакты» еще нет таких адресов, то они будут автоматически добавлены в него в виде новых контактов сразу после завершения рассылки."
 
 msgid "No one subscribed yet."
 msgstr "Пока никто не подписался."
@@ -1240,11 +1150,8 @@ msgstr "%s не доступен для записи"
 msgid "WARNING:"
 msgstr "ПРЕДУПРЕЖДЕНИЕ:"
 
-msgid ""
-"Return-path address specified above is not available. Return-path address is used to automatically process bounced emails."
-msgstr ""
-"Указанный адрес Return-path недоступен. Автоматическая обработка отказов (bounces) почтовым сервером получателя будет "
-"невозможна."
+msgid "Return-path address specified above is not available. Return-path address is used to automatically process bounced emails."
+msgstr "Указанный адрес Return-path недоступен. Автоматическая обработка отказов (bounces) почтовым сервером получателя будет невозможна."
 
 msgid "Return-Path address specified above is not available."
 msgstr "Указанный адрес Return-Path недоступен."
@@ -1270,12 +1177,8 @@ msgstr "Для создания копии ранее отправленной �
 msgid "Unsubscribe URL"
 msgstr "URL для отписки"
 
-msgid ""
-"In every outgoing message this variable will be replaced with a personal recipient link that can be used to unsubscribe from "
-"your future mailings."
-msgstr ""
-"В каждом отправляемом сообщении эта переменная будет заменена на персональную ссылку для перехода на страницу управления "
-"подписками."
+msgid "In every outgoing message this variable will be replaced with a personal recipient link that can be used to unsubscribe from your future mailings."
+msgstr "В каждом отправляемом сообщении эта переменная будет заменена на персональную ссылку для перехода на страницу управления подписками."
 
 msgid "Following variables will be replaced with recipient's contact data:"
 msgstr "Следующие переменные будут заменены персональными данными контакта получателя:"
@@ -1376,19 +1279,11 @@ msgstr "Капча"
 msgid "Button"
 msgstr "Кнопка"
 
-msgid ""
-"Subscriber lists are useful for a thematic grouping of your subscribers, e.g.: news, special offers, new product release, and "
-"etc."
-msgstr ""
-"Списки удобны для группирования подписчиков по темам, которые их заинтересуют, например: подписка на новости, специальные "
-"предложения, выпуск новых продуктов и т.д."
+msgid "Subscriber lists are useful for a thematic grouping of your subscribers, e.g.: news, special offers, new product release, and etc."
+msgstr "Списки удобны для группирования подписчиков по темам, которые их заинтересуют, например: подписка на новости, специальные предложения, выпуск новых продуктов и т.д."
 
-msgid ""
-"Forms are required to organize a subscription on your website. Create a form, publish it on your website, and visitor will be "
-"able to subscribe themselves."
-msgstr ""
-"Формы необходимы для организации подписки на вашем сайте. Создайте форму, опубликуйте ее на странице вашего сайта и посетители "
-"смогут самостоятельно подписываться на рассылки."
+msgid "Forms are required to organize a subscription on your website. Create a form, publish it on your website, and visitor will be able to subscribe themselves."
+msgstr "Формы необходимы для организации подписки на вашем сайте. Создайте форму, опубликуйте ее на странице вашего сайта и посетители смогут самостоятельно подписываться на рассылки."
 
 msgid "Publishing on external site"
 msgstr "Публикация на внешнем сайте"
@@ -1400,13 +1295,11 @@ msgid "Select at least one subscription subject"
 msgstr "Выберите хотя бы одну тему подписки"
 
 msgid ""
-"Subscribers are the persons who have expressly opted for receiving email messages from you by submitting their email addresses "
-"via a subscription form on your website. To collect subscribers' email addresses, <a href=\"javascript:void(0)\">create a "
-"form</a> and publish it on your website or blog."
+"Subscribers are the persons who have expressly opted for receiving email messages from you by submitting their email addresses via a subscription form on your website. To collect subscribers' email addresses, <a href=\"javascript:"
+"void(0)\">create a form</a> and publish it on your website or blog."
 msgstr ""
-"Подписчики — это те, кто добровольно изъявили желание получать от вас рассылки, отправив свои электронные адреса через форму "
-"подписки на вашем сайте. Для того чтобы у вас появились подписчики, <a href=\"javascript:void(0)\">создайте форму</a> и "
-"разместите ее на вашем сайте или в блоге."
+"Подписчики — это те, кто добровольно изъявили желание получать от вас рассылки, отправив свои электронные адреса через форму подписки на вашем сайте. Для того чтобы у вас появились подписчики, <a href=\"javascript:"
+"void(0)\">создайте форму</a> и разместите ее на вашем сайте или в блоге."
 
 msgid "form name"
 msgstr "название формы"
@@ -1523,15 +1416,12 @@ msgid "However, not every one of them was actually included in the mailing list 
 msgstr "Однако не всем из них было фактически отправлено ваше письмо (см. подробности в секции %s)"
 
 msgid ""
-"Excluded were previously unsubscribed and also those email addresses that have resulted in a permanent error returned by the "
-"recipient server in your past mailing campaigns. Those mail boxes either do not exist, or cannot receive your message by any "
-"reason. Further attempts to send messages to these addresses may result in blacklisting of your mail server. This is the "
-"reason to exclude these addresses from the lists of your campaigns recipients."
+"Excluded were previously unsubscribed and also those email addresses that have resulted in a permanent error returned by the recipient server in your past mailing campaigns. Those mail boxes either do not exist, or cannot receive "
+"your message by any reason. Further attempts to send messages to these addresses may result in blacklisting of your mail server. This is the reason to exclude these addresses from the lists of your campaigns recipients."
 msgstr ""
-"Из рассылки были исключены ранее отписавшиеся, а также те адреса, почтовый сервер которых вернул в прошлых рассылках сообщение "
-"о постоянной ошибке в адресе получателя. Такие адреса либо не существуют, либо не могут по какой-либо причине получать от вас "
-"сообщения. Попытки повторных рассылок на эти адреса могут привести к тому, что ваш сервер отправителя попадет в «черный "
-"список». По этой причине данные адреса исключаются по умолчанию из списков получателей ваших рассылок."
+"Из рассылки были исключены ранее отписавшиеся, а также те адреса, почтовый сервер которых вернул в прошлых рассылках сообщение о постоянной ошибке в адресе получателя. Такие адреса либо не существуют, либо не могут по какой-либо "
+"причине получать от вас сообщения. Попытки повторных рассылок на эти адреса могут привести к тому, что ваш сервер отправителя попадет в «черный список». По этой причине данные адреса исключаются по умолчанию из списков получателей "
+"ваших рассылок."
 
 msgid "Compose letter"
 msgstr "Написать письмо"
@@ -1551,33 +1441,27 @@ msgstr "Маркетинговый инструмент, которым явля
 msgid "The name of your marketing campaign, e.g. your email subject."
 msgstr "Название вашей маркетинговой кампании, напр., тема письма."
 
-#: /wa-apps/mailer/templates/actions/campaigns/CampaignsStep1ReadOnly.html:21
-#: /wa-apps/mailer/templates/actions/campaigns/CampaignsStep1.html:54
+#: /wa-apps/mailer/templates/actions/campaigns/CampaignsStep1ReadOnly.html:21 /wa-apps/mailer/templates/actions/campaigns/CampaignsStep1.html:54
 msgid "HTML"
 msgstr ""
 
-#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettingsReadOnly.html:25
-#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:72
+#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettingsReadOnly.html:25 /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:72
 msgid "Return-Path"
 msgstr ""
 
-#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettingsReadOnly.html:46
-#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettingsReadOnly.html:51
+#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettingsReadOnly.html:46 /wa-apps/mailer/templates/actions/campaigns/CampaignsSettingsReadOnly.html:51
 msgid "Google Analytics"
 msgstr ""
 
-#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettingsReadOnly.html:55
-#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:126
+#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettingsReadOnly.html:55 /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:126
 msgid "Source (utm_source):"
 msgstr "Источник (utm_source):"
 
-#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettingsReadOnly.html:59
-#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:132
+#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettingsReadOnly.html:59 /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:132
 msgid "Medium (utm_medium):"
 msgstr "Канал (utm_medium):"
 
-#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettingsReadOnly.html:63
-#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:138
+#: /wa-apps/mailer/templates/actions/campaigns/CampaignsSettingsReadOnly.html:63 /wa-apps/mailer/templates/actions/campaigns/CampaignsSettings.html:138
 msgid "Campaign (utm_campaign):"
 msgstr "Кампания (utm_campaign):"
 
@@ -1644,31 +1528,23 @@ msgstr "Обязательное поле"
 msgid "Server error"
 msgstr "Ошибка сервера"
 
-#: /wa-apps/mailer/templates/forms/subscription_form.html:35
-#: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:103
+#: /wa-apps/mailer/templates/forms/subscription_form.html:35 /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:103
 msgid "Reload image"
 msgstr "Обновить изображение"
 
-#: /wa-apps/mailer/templates/actions/unsubscribed/UnsubscribedList.html:73
-#: /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:103
-#: /wa-apps/mailer/templates/actions/undeliverable/UndeliverableList.html:77
+#: /wa-apps/mailer/templates/actions/unsubscribed/UnsubscribedList.html:73 /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:103 /wa-apps/mailer/templates/actions/undeliverable/UndeliverableList.html:77
 msgid "Show"
 msgstr "Показывать"
 
-#: /wa-apps/mailer/templates/actions/unsubscribed/UnsubscribedList.html:79
-#: /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:109
-#: /wa-apps/mailer/templates/actions/undeliverable/UndeliverableList.html:82
+#: /wa-apps/mailer/templates/actions/unsubscribed/UnsubscribedList.html:79 /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:109 /wa-apps/mailer/templates/actions/undeliverable/UndeliverableList.html:82
 msgid "records"
 msgstr "записей"
 
-#: /wa-apps/mailer/templates/actions/subscribers/email_template_editor.html:30
-#: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:234
+#: /wa-apps/mailer/templates/actions/subscribers/email_template_editor.html:30 /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:234
 msgid "From"
 msgstr "От"
 
-#: /wa-apps/mailer/templates/actions/subscribers/email_template_editor.html:34
-#: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:238
-#: /wa-apps/mailer/templates/actions/subscribers/email_template_editor.html:60
+#: /wa-apps/mailer/templates/actions/subscribers/email_template_editor.html:34 /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:238 /wa-apps/mailer/templates/actions/subscribers/email_template_editor.html:60
 #: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:255
 msgid "Text"
 msgstr "Текст"
@@ -1711,9 +1587,7 @@ msgstr "После отправки формы"
 
 #: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:192
 msgid "This setting will redirect clients to any specified URL or display any text message after the form is submitted."
-msgstr ""
-"Эта настройка позволяет после заполнения формы и отправки запроса перенаправлять клиентов на любую указанную страницу либо "
-"показывать на месте формы какое-либо сообщение."
+msgstr "Эта настройка позволяет после заполнения формы и отправки запроса перенаправлять клиентов на любую указанную страницу либо показывать на месте формы какое-либо сообщение."
 
 #: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:200
 msgid "After successfull submission:"
@@ -1742,21 +1616,14 @@ msgid "Thank you!"
 msgstr "Спасибо!"
 
 #: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:226
-msgid ""
-"Message will be sent to the subscriber's address. This message contains a special link which must be clicked to confirm the "
-"subscription."
-msgstr ""
-"Подписчику будет отправлено сообщение. В этом сообщении будет содержаться специальная ссылка, по которой необходимо перейти "
-"для подтверждения подписки."
+msgid "Message will be sent to the subscriber's address. This message contains a special link which must be clicked to confirm the subscription."
+msgstr "Подписчику будет отправлено сообщение. В этом сообщении будет содержаться специальная ссылка, по которой необходимо перейти для подтверждения подписки."
 
-#: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:644
-#: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:662
-#: /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:548
+#: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:644 /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:662 /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:548
 msgid "Are you sure?"
 msgstr "Вы уверены?"
 
-#: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:660
-#: /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:548
+#: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:660 /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:548
 msgid "Unsaved changes will be lost if you leave this page now."
 msgstr "Все несохраненные изменения будут потеряны, если вы сейчас покинете эту страницу"
 
@@ -1791,8 +1658,7 @@ msgstr "Список контактов"
 msgid "Contact list are contact lists."
 msgstr "Списки контактов - это списки контактов."
 
-#: /wa-apps/mailer/lib/handlers/contacts.search.config.handler.php:14
-#: /wa-apps/mailer/lib/handlers/contacts.search.config.handler.php:19
+#: /wa-apps/mailer/lib/handlers/contacts.search.config.handler.php:14 /wa-apps/mailer/lib/handlers/contacts.search.config.handler.php:19
 msgid "Campaign recipients"
 msgstr "Получатели рассылок"
 
@@ -1824,9 +1690,7 @@ msgstr "Имя подписчика, если используется в фор
 msgid "URL address to confirm subscription. Click on this link opens \"My subscriptions\" page in the client's Customer Portal."
 msgstr "Адрес подтверждения подписки. Щелчок по нему открывает страницу «Мои подписки» в личном кабинете подписчика."
 
-#: /wa-apps/mailer/lib/actions/frontend/mailerFrontendMySubscriptions.action.php:158
-#: /wa-apps/mailer/lib/actions/frontend/mailerFrontendUpdateSubscriptions.action.php:30
-#: /wa-apps/mailer/themes/default/my.nav.html:4
+#: /wa-apps/mailer/lib/actions/frontend/mailerFrontendMySubscriptions.action.php:158 /wa-apps/mailer/lib/actions/frontend/mailerFrontendUpdateSubscriptions.action.php:30 /wa-apps/mailer/themes/default/my.nav.html:4
 msgid "My subscriptions"
 msgstr "Мои подписки"
 
@@ -1987,9 +1851,7 @@ msgstr "Ссылка \"Открыть в браузере\""
 msgid "This variable will be replaced with a personal recipient link that can be used to view message on browser."
 msgstr "Эта переменная будет заменена на персональную ссылку для просмотра сообщения в браузере"
 
-#: /wa-apps/mailer/templates/actions/subscribers/SubscribersListold.html:69
-#: /wa-apps/mailer/templates/actions/subscribers/SubscribersListold.html:171
-#: /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:126
+#: /wa-apps/mailer/templates/actions/subscribers/SubscribersListold.html:69 /wa-apps/mailer/templates/actions/subscribers/SubscribersListold.html:171 /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:126
 msgid "Remove from subscribers"
 msgstr "Убрать из числа подписчиков"
 
@@ -2009,8 +1871,7 @@ msgstr "Подписки"
 msgid "Not included in any mailing list"
 msgstr "Не включен ни в один список рассылки"
 
-#: /wa-apps/mailer/templates/actions/backend/BackendContactTab.html:32
-#: /wa-apps/mailer/lib/handlers/contacts.profile.tab.handler.php:14
+#: /wa-apps/mailer/templates/actions/backend/BackendContactTab.html:32 /wa-apps/mailer/lib/handlers/contacts.profile.tab.handler.php:14
 msgid "Campaigns"
 msgstr "Рассылки"
 
@@ -2143,3 +2004,48 @@ msgstr "Экшен поддерживается, только если уста�
 #: /wa-apps/mailer/lib/actions/frontend/mailerFrontendSubscribe.controller.php:29
 msgid "Invalid captcha"
 msgstr "Капча введена неверно"
+
+#: /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:147 /wa-apps/mailer/templates/actions/undeliverable/UndeliverableList.html:68 /wa-apps/mailer/templates/actions/unsubscribed/UnsubscribedList.html:64
+msgid "prev"
+msgstr "пред"
+
+#: /wa-apps/mailer/templates/actions/subscribers/SubscribersList.html:150 /wa-apps/mailer/templates/actions/undeliverable/UndeliverableList.html:71 /wa-apps/mailer/templates/actions/unsubscribed/UnsubscribedList.html:67
+msgid "next"
+msgstr "след"
+
+#: /wa-apps/mailer/templates/actions/subscribers/SubscribersListold.html:98
+msgid "NOTE: This contact will not be deleted. It will be only eliminated from the subscription list."
+msgstr ""
+
+#: /wa-apps/mailer/templates/actions/subscribers/SubscribersListold.html:97
+msgid "Do you really want to eliminate contact %s from subscribers?"
+msgid_plural "<span id=\"delete-contact-name-email\"></span>"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: /wa-apps/mailer/templates/actions/subscribers/SubscribersFormeditor.html:231 /wa-apps/mailer/templates/actions/subscribers/email_template_editor.html:34
+msgid "Specified"
+msgstr ""
+
+#: /wa-apps/mailer/templates/actions/subscribers/email_template_editor.html:38
+msgid "It is recommended to specify an existing email address which you do not check for new mail as the sender's address for such notifications; e.g., noreply@yourdomain.com. This will help minimize the number of redundant requests."
+msgstr ""
+
+#: /wa-apps/mailer/templates/actions/subscribers/email_template_editor.html:47
+msgid "Use source email address if request came by email"
+msgstr ""
+
+#: /wa-apps/mailer/templates/actions/campaigns/CampaignsRecipients.html:149
+msgid "{$g.name}"
+msgstr ""
+
+#: /wa-apps/mailer/templates/actions/campaigns/CampaignsRecipients.html:152
+msgid "{$g.comment}"
+msgstr ""
+
+msgid "Return-Path address can be deleted %d day after the last campaign it was used for."
+msgid_plural "Return-Path address can be deleted %d days after the last campaign it was used for."
+msgstr[0] "Адрес Return-Path можно удалить через %d день после завершения последней рассылки, в которой он использовался."
+msgstr[1] "Адрес Return-Path можно удалить через %d дня после завершения последней рассылки, в которой он использовался."
+msgstr[2] "Адрес Return-Path можно удалить через %d дней после завершения последней рассылки, в которой он использовался."

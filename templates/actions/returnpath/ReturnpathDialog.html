@@ -62,6 +62,12 @@
 <div class="hidden buttons">
     {if $show_delete_link}
         <a href="javascript:void(0)" class="red hint delete-link float-right">[`Delete this Return-Path`]</a>
+    {elseif $data && $data.id > 0}
+
+        <div class="hint float-right" style="margin-top: 13px;">
+            {_ws('A Return-Path address can be deleted %d day after the last campaign it was used for.', 'A Return-Path address can be deleted %d days after the last campaign it was used for.', $days_to_die)}
+        </div>
+
     {/if}
 
     <input type="submit" class="button green" value="{if isset($data.id)}[`Save`]{else}[`Add`]{/if}" />
