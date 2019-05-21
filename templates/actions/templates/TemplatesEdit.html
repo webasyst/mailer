@@ -48,7 +48,11 @@
                                 <a href="/webasyst/contacts/#/contact/{$creator.id}"><img width="32" height="32" src="{$creator->getPhoto(32)}" alt=""></a>
                             </div>
                             <div class="details">
-                                <a href="/webasyst/contacts/#/contact/{$creator.id}" style="margin:0;padding:0">{$creator.name|escape}</a>
+                                {if $creator.id > 0}
+                                    <a href="/webasyst/contacts/#/contact/{$creator.id}" style="margin:0;padding:0">{$creator.name|escape}</a>
+                                {else}
+                                    <span>{$creator.name|escape}</span>
+                                {/if}
                                 {ifempty($t.create_datetime, time())|wa_date:'humandatetime'}
                             </div>
                         </div>

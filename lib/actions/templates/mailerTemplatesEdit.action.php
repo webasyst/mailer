@@ -32,6 +32,12 @@ class mailerTemplatesEditAction extends mailerTemplatesAddAction
         $file = new mailerUploadedFile('template_preview');
         $file->delete();
 
-        $this->view->assign('creator', new waContact($template['create_contact_id']));
+        $creator = new waContact($template['create_contact_id']);
+        if (!$creator->exists()) {
+            $creator = new waContact();
+            $creator['name'] = sprintf(_w('Deleted contact #%d'), $template['create_contact_id']);
+        }
+
+        $this->view->assign('creator', $creator);
     }
 }

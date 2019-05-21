@@ -114,7 +114,12 @@ class mailerHelper
 
     public static function assignCampaignSidebarVars($view, $campaign)
     {
-        $view->assign('creator', new waContact($campaign['create_contact_id']));
+        $creator = new waContact($campaign['create_contact_id']);
+        if (!$creator->exists()) {
+            $creator = new waContact();
+            $creator['name'] = sprintf(_w('Deleted contact #%d'), $campaign['create_contact_id']);
+        }
+        $view->assign('creator', $creator);
         $view->assign('message_written', trim($campaign['body']) && trim($campaign['subject']));
     }
 

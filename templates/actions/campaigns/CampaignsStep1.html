@@ -114,6 +114,7 @@
         $textarea.waEditor({
             lang: $.Redactor.opts.langs["{$lang}"] ? "{$lang}" : 'en',
             smarty_wysiwyg_msg: {_ws('WYSIWYG editor is disabled because page source contains Smarty code tags.')|json_encode},
+            modification_wysiwyg_msg: {_ws('WYSIWYG editor may change your HTML code. It is necessary for correct text formatting. Smarty code may be broken and outdated HTML tags may be replaced with modern ones. Are you sure to switch to WYSIWYG editor?')|json_encode},
             buttons: ['format', 'bold', 'italic', 'underline', 'deleted',
                       'lists', 'image', 'table', 'link', 'alignment', 'horizontalrule',
                       'fontcolor', 'fontsize', 'fontfamily', 'vars'],

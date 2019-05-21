@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 1.8.7.1\n"
 "Language: ru_RU\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\n"
@@ -1881,7 +1881,7 @@ msgstr "Статус"
 
 #: /wa-apps/mailer/lib/handlers/shop.backend_customers_list.handler.php:73
 msgid "Send newsletter in Mailer"
-msgstr "Отправить письмо в Рассылках"
+msgstr "Отправить письмо в «Рассылках»"
 
 #: /wa-apps/mailer/lib/handlers/mailer.recipients.prepare.handler.php:115
 msgid "Shop customers"

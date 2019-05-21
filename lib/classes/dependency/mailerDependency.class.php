@@ -347,7 +347,7 @@ abstract class mailerDependency
 
         // If this catcher knows about recipient - extract info
         if ($known) {
-            $cc = new waContactsCollection($hash);
+            $cc = $this->getCollection($hash);
             $recipient['count'] = $cc->count();
             if (strlen($recipient['name']) <= 0) {
                 $recipient['name'] = $cc->getTitle();
@@ -406,7 +406,9 @@ abstract class mailerDependency
 
     protected function getCollection($hash)
     {
-        return new waContactsCollection($hash);
+        return new waContactsCollection($hash, array(
+            'transform_phone_prefix' => 'all_domains'
+        ));
     }
 
 
