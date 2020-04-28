@@ -170,7 +170,7 @@ class mailerCampaignsReportAction extends waViewAction
             }
 
             $value = $row['value'];
-            if (strlen($value) && $value{0} == '/') {
+            if (strlen($value) && $value[0] == '/') {
                 $row['href'] = wa()->getAppUrl('contacts').'#'.$value;
             } else if (wa_is_int($value)) {
                 $row['href'] = '#/subscribers/';
@@ -186,13 +186,13 @@ class mailerCampaignsReportAction extends waViewAction
     public static function getRecipietnsGroupSort($row)
     {
         $value = (string) ifset($row['value'], '');
-        if (strlen($value) <= 0 || $value{0} == '/') {
+        if (strlen($value) <= 0 || $value[0] == '/') {
             return 1;
         }
         if (wa_is_int($value)) {
             return 2;
         }
-        if ($value{0} != '@') {
+        if ($value[0] != '@') {
             return 3;
         }
         return 4;

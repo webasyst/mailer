@@ -173,7 +173,7 @@ class mailerHelper
             }
 
             // Skip list types supported by plugins
-            if ($value['value']{0} == '@') {
+            if ($value['value'][0] == '@') {
                 continue;
             }
 
@@ -185,7 +185,7 @@ class mailerHelper
             }
 
             // Is it a list of emails?
-            if ($value['value']{0} != '/') {
+            if ($value['value'][0] != '/') {
                 $recipients[$key]['dialog'] = true;
                 continue;
             }

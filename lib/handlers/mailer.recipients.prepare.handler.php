@@ -27,7 +27,7 @@ class mailerMailerRecipientsPrepareHandler extends waEventHandler
             }
 
             // Skip list types supported by plugins
-            if ($value{0} == '@') {
+            if ($value[0] == '@') {
                 continue;
             }
 
@@ -62,7 +62,7 @@ class mailerMailerRecipientsPrepareHandler extends waEventHandler
             }
 
             // Is it a ContactsCollection hash?
-            if ($value{0} == '/') {
+            if ($value[0] == '/') {
 
                 $this->prepareRecipient($r);
 

@@ -18,7 +18,7 @@ foreach($mlm->where('name IS NULL')->limit(0)->query() as $row) {
     }
 
     $value = $row['value'];
-    if ($row['name'] || !strlen($value) || $value{0} == '@') {
+    if ($row['name'] || !strlen($value) || $value[0] == '@') {
         continue;
     }
 
@@ -29,7 +29,7 @@ foreach($mlm->where('name IS NULL')->limit(0)->query() as $row) {
     }
 
     // Is it a ContactsCollection hash?
-    if ($value{0} == '/') {
+    if ($value[0] == '/') {
         if (FALSE !== strpos($value, '/category/')) {
             $category_id = explode('/', $value);
             $category_id = end($category_id);

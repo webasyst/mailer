@@ -8,7 +8,7 @@ return array(
     ),
     'frontend' => true,
     'plugins' => true,
-    'version'=>'1.0.20',
+    'version'=>'1.0.21',
     'critical'=>'1.0.0',
     'vendor' => 'webasyst',
     'license' => 'Webasyst',

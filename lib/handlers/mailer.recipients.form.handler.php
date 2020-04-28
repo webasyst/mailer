@@ -57,7 +57,7 @@ class mailerMailerRecipientsFormHandler extends waEventHandler
             }
 
             // Skip list types supported by plugins
-            if ($value{0} == '@') {
+            if ($value[0] == '@') {
                 continue;
             }
 
@@ -69,7 +69,7 @@ class mailerMailerRecipientsFormHandler extends waEventHandler
             }
 
             // Is it a list of emails?
-            if ($value{0} != '/') {
+            if ($value[0] != '/') {
                 // Parse and count emails in this list
                 // to count total number of emails
                 $flat_list = array();
