@@ -49,7 +49,7 @@
     save_button.append(
         $('<input type="submit" class="button green" value="'+$_('Save')+'">').click(function() {
             $(this).parent().append('<i class="icon16 loading"></i>');
-            $.post('?module=unsubscribed&action=delete', { email: '{$data.email}', list_id: '{$data.list_id}' }, function() {
+            $.post('?module=unsubscribed&action=delete', { email: {$data.email|json_encode}, list_id: {$data.list_id|json_encode} }, function() {
                 dialog.trigger('close');
                 $.wa.mailer.redispatch();
             });
