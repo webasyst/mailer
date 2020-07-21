@@ -395,6 +395,24 @@
             }
         },
 
+        designThemesAction: function (params) {
+            if ($('#wa-design-container').length) {
+                waDesignLoad();
+            } else {
+                $("#content").load('?module=design', function () {
+                    waDesignLoad();
+                });
+            }
+        },
+
+        pluginsAction: function(params) {
+            if (!$('#wa-plugins-container').length) {
+                this.load("?module=plugins");
+            } else {
+                this.dispatch('#/plugins/' + params);
+            }
+        },
+
         //
         // Helper functions
         //
