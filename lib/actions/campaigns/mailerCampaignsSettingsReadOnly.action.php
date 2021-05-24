@@ -38,9 +38,17 @@ class mailerCampaignsSettingsReadOnlyAction extends waViewAction
         $msp = new mailerSenderParamsModel();
         $sender_params = $msp->getBySender($sender['id']);
 
-        // if we save sender_params in campaigns_params table
-        if (isset($params['sender_params'])) {
-            $sender_params = unserialize($params['sender_params']);
+        // if we save sender params in campaigns_params table
+        $params_changed = false;
+        foreach (['reply_to', 'type', 'server', 'port'] as $sender_param) {
+            $saved_sender_param = 'sender_' . $sender_param;
+            if (isset($params[$saved_sender_param])) {
+                if ($params_changed == false) {
+                    $sender_params = array();
+                    $params_changed = true;
+                }
+                $sender_params[$sender_param] = $params[$saved_sender_param];
+            }
         }
 
         $mrp = new mailerReturnPathModel();

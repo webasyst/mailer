@@ -116,10 +116,6 @@ class mailerContactsDependency extends mailerDependency
     {
         $hash = $recipient['value'];
 
-        $recipient['name'] = '';
-        $recipient['count'] = 0;
-        $recipient['group'] = null;
-
         $cc = new waContactsCollection($hash);
 
         if (false !== strpos($hash, '/category/')) {

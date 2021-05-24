@@ -78,7 +78,11 @@ class mailerCampaignsSaveController extends waJsonController
         // Save message params
         $new_params = waRequest::post('params');
         unset($sender_params['dkim_pub_key'], $sender_params['dkim_pvt_key']);
-        $new_params['sender_params'] = serialize($sender_params);
+        foreach (['reply_to', 'type', 'server', 'port'] as $sender_param) {
+            if (isset($sender_params[$sender_param])) {
+                $new_params['sender_' . $sender_param] = $sender_params[$sender_param];
+            }
+        }
         $delete_old_params = waRequest::post('delete_old_params');
         if ($new_params === null || !is_array($new_params)) {
             $new_params = array();

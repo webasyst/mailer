@@ -235,7 +235,7 @@ class mailerTemplatesImport2Action extends waViewAction
 
     private static function sortFiles($a, $b)
     {
-        return mb_strlen($a) < mb_strlen($b);
+        return mb_strlen($a) < mb_strlen($b) ? 1 : -1;
     }
 }
 
