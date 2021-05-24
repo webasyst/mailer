@@ -504,37 +504,37 @@ form#form-campaign { 1overflow: visible; }
                 url: url
             });
         });
+    {/if}
 
-        // schedule sending
-        form.on('click', '.open-schedule-dialog', function() {
-            var url = '?module=schedule&action=dialog',
-                id = form.find('[name=id]').val();
-            if (parseInt(id,10)) {
-                url += '&id='+id;
-                $('.dialog').remove();
-                $().waDialog({
-                    height: 200,
-                    width: 300,
-                    url: url
-                });
-            }
-        });
-        form.on('click', '.cancel-schedule', function() {
-            var url = '?module=schedule&action=delete';
-            var mess_id = form.find('[name=id]').val();
-            // it make sense if only we saved campaign
-            if (confirm("[`Cancel schedule`]?") === true && parseInt(mess_id,10)) {
-                $.post(url, { id: mess_id }, function(data){
-                    if (data.status === 'ok') {
-                        // reload yellow box
-                        $('#send-main-wrapper').find('.validation-content').html('<i class="icon16 loading"></i>').load('?module=campaigns&action=presend&campaign_id='+data.data);
-                        // renew sidebar
-                        $.wa.mailer.reloadSidebar();
-                    }
-                }, "json");
-            }
-        });
-        {/if}
+    // schedule sending
+    form.on('click', '.open-schedule-dialog', function() {
+        var url = '?module=schedule&action=dialog',
+            id = form.find('[name=id]').val();
+        if (parseInt(id,10)) {
+            url += '&id='+id;
+            $('.dialog').remove();
+            $().waDialog({
+                height: 200,
+                width: 300,
+                url: url
+            });
+        }
+    });
+    form.on('click', '.cancel-schedule', function() {
+        var url = '?module=schedule&action=delete';
+        var mess_id = form.find('[name=id]').val();
+        // it make sense if only we saved campaign
+        if (confirm("[`Cancel schedule`]?") === true && parseInt(mess_id,10)) {
+            $.post(url, { id: mess_id }, function(data){
+                if (data.status === 'ok') {
+                    // reload yellow box
+                    $('#send-main-wrapper').find('.validation-content').html('<i class="icon16 loading"></i>').load('?module=campaigns&action=presend&campaign_id='+data.data);
+                    // renew sidebar
+                    $.wa.mailer.reloadSidebar();
+                }
+            }, "json");
+        }
+    });
 
     // Save settings when user changes selects
     form.find('select').change(function() {

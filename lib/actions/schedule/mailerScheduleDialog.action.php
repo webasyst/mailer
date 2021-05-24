@@ -24,11 +24,15 @@ class mailerScheduleDialogAction extends waViewAction
             $schedule_min = date('i', $schedule_date);
         }
 
-        $this->view->assign('cron_ok', wa()->getSetting('last_cron_time') + 3600*2 > time());
+        $last_cron_time = wa()->getSetting('last_cron_time', 0);
+        $last_cron_time = wa_is_int($last_cron_time) && $last_cron_time >= 0 ? $last_cron_time : 0;
+
+
+        $this->view->assign('cron_ok', $last_cron_time + 3600*2 > time());
         $this->view->assign('schedule_date', $schedule_date_server);
         $this->view->assign('schedule_hour', $schedule_hour);
         $this->view->assign('schedule_min', $schedule_min);
         $this->view->assign('campaign', $campaign);
-        $this->view->assign('last_cron_time', wa()->getSetting('last_cron_time'));
+        $this->view->assign('last_cron_time', $last_cron_time);
     }
 }

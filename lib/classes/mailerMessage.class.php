@@ -40,6 +40,14 @@ class mailerMessage extends mailerSimpleMessage
         $params_model = new mailerMessageParamsModel();
         $this->params = $params_model->getByMessage($this->id);
 
+        if ($this->data['return_path']) {
+            $rpm = new mailerReturnPathModel();
+            $return_path_settings = $rpm->getByEmail($this->data['return_path']);
+            if (!array_key_exists('no_plus_in_rp', $this->params)) {
+                $this->params['no_plus_in_rp'] = $return_path_settings['no_plus'];
+            }
+        }
+
         // init messageLogModel
         $this->log_model = new mailerMessageLogModel();
         $this->contact_fields = array();
@@ -462,6 +470,7 @@ class mailerMessage extends mailerSimpleMessage
                     } else {
                         $message->setTo($row['email']);
                     }
+
                     // set Returh-Path
                     $return_path_used = '';
                     $this->setHeader($message, 'X-Log-ID', $row_id);

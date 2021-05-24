@@ -1896,3 +1896,12 @@ msgstr[2] "Адрес Return-Path можно удалить через %d дне
 
 msgid "Deleted contact #%d"
 msgstr "Удалённый контакт №%d"
+
+msgid "Plugins"
+msgstr "Плагины"
+
+msgid "Sub-addressing"
+msgstr "Субадресация"
+
+msgid "Disable if your mail server does not support sub-addressing in email addresses, i.e. addresses containing the “+” character."
+msgstr "Отключите, если ваш почтовый сервер не поддерживает субадресацию, т. е. использование email-адресов с символом «+»."

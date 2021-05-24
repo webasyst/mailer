@@ -54,6 +54,15 @@
                 <input type="checkbox" name="data[ssl]" value="1"{if $data.ssl} checked="checked"{/if}>
             </div>
         </div>
+        <div class="field">
+            <div class="name">[`Sub-addressing`]</div>
+            <div class="value">
+                <input type="hidden" name="data[no_plus]" value="1">
+                <input type="checkbox" name="data[no_plus]" value="0" {if !$data.no_plus} checked="checked"{/if}>
+
+                <br><span class="hint">[`Disable if your mail server does not support sub-addressing in email addresses, i.e. addresses containing the “+” character.`]</span>
+            </div>
+        </div>
         <div class="hidden field">
             <em class="errormsg"></em>
         </div>

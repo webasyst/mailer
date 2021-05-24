@@ -42,7 +42,7 @@ class mailerSendCli extends waCliController
                 // Because campaign can has recipients (for example crm segments) access to which has only author
 
                 $author_id = $message['create_contact_id'];
-                $author_user = new waAuthUser($author_id);
+                $author_user = new mailerCliAuthUser($author_id);
 
                 wa()->setUser($author_user);
 

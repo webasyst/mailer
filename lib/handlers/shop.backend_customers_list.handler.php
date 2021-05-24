@@ -4,14 +4,15 @@ class mailerShopBackend_customers_listHandler extends waEventHandler
 {
     public function execute(&$params)
     {
-        if (isset($params['hash'])) {
+        $user_rights = wa()->getUser()->getRights('mailer');
+        $can_create_mail = !empty($user_rights) && ($user_rights['backend'] >= 2 || isset($user_rights['author']));
+        if (isset($params['hash']) && $can_create_mail) {
             $hash = $params['hash'];
             $hash_ar = explode('/', $hash, 2);
             if (!empty($hash_ar[1])) {
                 $hash_ar[1] = str_replace('/', 'ESCAPED_SLASH', $hash_ar[1]);
             }
             $hash = implode('/', $hash_ar);
-            $col_hash = '';
             if (strpos($hash, 'search/') === 0) {
                 $col_hash = str_replace('search/', 'shop_customers/', $hash);
             } else if (preg_match('/^([a-z_0-9]*)\//', $hash, $match)) {
