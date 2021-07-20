@@ -51,7 +51,8 @@ class mailerCampaignsReportAction extends waViewAction
         $message_start = $lm->getMessageStart($campaign_id);
 
         // Recipients stats for pie graph
-        $stats = $this->getStats($campaign_id);
+        $stats_by_message = $this->getStatsByMessage($campaign_id);
+        $stats = $this->calcResultStats($stats_by_message);
 
         // set $campaign['duration'] and $campaign['estimated_finish_datetime']
         $this->updateCampaignTimes($campaign, $params, $stats);
@@ -86,6 +87,19 @@ class mailerCampaignsReportAction extends waViewAction
             $check_return_path = false;
         }
 
+        /**
+         * @event campaign.report
+         *
+         * This plugin hook is UI hook for render UI blocks in report page
+         *
+         * @param int $params['id'] mailer_message.id - campaign id
+         * @return array[string][string]string - UI html blocks indexed by place ('bottom', 'top')
+         */
+        $params = array(
+            'id' => $campaign_id
+        );
+        $event_campaign_report = wa()->event('campaign.report', $params);
+
         $this->view->assign('recipient_criterias', mailerHelper::getRecipients($campaign['id']));
         $this->view->assign('allow_return_path_edit', $allow_return_path_edit);
         $this->view->assign('check_return_path', $check_return_path);
@@ -95,17 +109,29 @@ class mailerCampaignsReportAction extends waViewAction
         $this->view->assign('campaign', $campaign);
         $this->view->assign('params', $params);
         $this->view->assign('stats', $stats);
+        $this->view->assign('stats_is_empty', empty($stats_by_message));
         $this->view->assign('message_start_date', $message_start);
         $this->view->assign('message_written', trim($campaign['body']) && trim($campaign['subject']));
+        $this->view->assign('event_campaign_report', $event_campaign_report);
 
         mailerHelper::assignCampaignSidebarVars($this->view, $campaign, $params);
     }
 
     protected function getStats($campaign_id)
     {
+        $stats_by_message = $this->getStatsByMessage($campaign_id);
+        return $this->calcResultStats($stats_by_message);
+    }
+
+    protected function getStatsByMessage($campaign_id)
+    {
         $mlm = new mailerMessageLogModel();
         $s = $mlm->getStatsByMessage(array($campaign_id));
-        $s = ifempty($s[$campaign_id], array());
+        return ifempty($s[$campaign_id], array());
+    }
+
+    protected function calcResultStats(array $s)
+    {
         $stats = array();
         $stats['recipients_num'] = 0;
         for($i = -4; $i < 6; $i++) {

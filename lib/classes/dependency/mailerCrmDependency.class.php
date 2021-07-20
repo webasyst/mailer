@@ -16,7 +16,7 @@ class mailerCrmDependency extends mailerDependency
         if (false !== strpos($recipient['value'], '/crm/segment/')) {
             $recipient['short'] = _w('Segment');
             $segment_id = $this->getSegmentIdFromHash($recipient['value']);
-            $recipient['link'] = wa()->getAppUrl('crm') . 'contact/segment/' . $segment_id;
+            $recipient['link'] = wa()->getAppUrl('crm') . 'contact/segment/' . $segment_id . '/';
             return true;
         }
     }

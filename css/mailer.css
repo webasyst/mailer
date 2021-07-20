@@ -1274,3 +1274,9 @@ a.inline-link.inline-link-notop b {
     z-index: 10;
     border-bottom: 1px solid #ddd;
 }
+
+.m-not-data-message {
+    text-align: center;
+    margin-top: 60px;
+    color: red;
+}

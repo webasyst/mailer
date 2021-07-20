@@ -53,6 +53,10 @@
 
     <h1>{ifempty($campaign.subject, "[`<no subject>`]")|escape}</h1>
 
+    <!-- plugin hook: 'campaign.report.%plugin_id%.top' -->
+    {* @event campaign.report.%plugin_id%.top *}
+    {foreach $event_campaign_report as $_}{$_.top|default:''}{/foreach}
+
     {*
      * Progressbar HTML
      *}
@@ -104,96 +108,103 @@
 
     <div class="clear-both"></div>
 
-    {*
-     * Pie diagram block.
-     *}
-    <div id="pie-graph"></div>
+    {if !$stats_is_empty}
+        {*
+         * Pie diagram block.
+         *}
+        <div id="pie-graph"></div>
 
-    {*
-     * Pie diagram legend.
-     *}
-    <div id="pie-legend" class="criteria-hidden">
-        {include file="templates/actions/campaigns/pie_diagram_legend.html"}
-    </div>
+        {*
+         * Pie diagram legend.
+         *}
+        <div id="pie-legend" class="criteria-hidden">
+            {include file="templates/actions/campaigns/pie_diagram_legend.html"}
+        </div>
+    {else}
+        <p class="m-not-data-message js-no-data-message">[`no data in mailing log`]</p>
+    {/if}
+
     <div class="clear-both"></div>
 
-    <div class="recipients-count">
-        {*if $stats.exceptions_num != 0*}
-        <div data-rel="">
-            <span class="title">[`All recipients`]: <span class="cnt">{$stats.recipients_num}</span></span>
-            {if !empty($recipient_criterias)}
-            <span class="how-were-choosen report-options">
-                <a class="inline-link small" href="#"><b>[`how were chosen`]</b></a>
-            </span>
-            <div class="options-wrapper selected-recipients-details">
-                {*
-                Recipients selection criteria block (hidden by default)
-                *}
-                <ul class="menu-v" style="max-width:500px;margin: 20px 0;">
-                    {foreach $recipient_criterias as $recipient_criteria}
-                    <li>
-                        {if isset($recipient_criteria.link)}
-                        {$recipient_criteria.short|default:''} <a href="{$recipient_criteria.link}" class="inline" target="_blank">{$recipient_criteria.name}</a>
-                        {else}
-                        {$recipient_criteria.name}
+    {if !$stats_is_empty}
+        <div class="recipients-count">
+            {*if $stats.exceptions_num != 0*}
+            <div data-rel="">
+                <span class="title">[`All recipients`]: <span class="cnt">{$stats.recipients_num}</span></span>
+                {if !empty($recipient_criterias)}
+                <span class="how-were-choosen report-options">
+                    <a class="inline-link small" href="#"><b>[`how were chosen`]</b></a>
+                </span>
+                <div class="options-wrapper selected-recipients-details">
+                    {*
+                    Recipients selection criteria block (hidden by default)
+                    *}
+                    <ul class="menu-v" style="max-width:500px;margin: 20px 0;">
+                        {foreach $recipient_criterias as $recipient_criteria}
+                        <li>
+                            {if isset($recipient_criteria.link)}
+                            {$recipient_criteria.short|default:''} <a href="{$recipient_criteria.link}" class="inline" target="_blank">{$recipient_criteria.name}</a>
+                            {else}
+                            {$recipient_criteria.name}
+                            {/if}
+                            <span class="count">{$recipient_criteria.count} <a href="#" data-remove-list-id="{$recipient_criteria.id}" class="inline right"></a></span>
+                        </li>
+                        {/foreach}
+                    </ul>
+                    <p>
+                        {_w('%s recipient have been selected for this campaign', '%s recipients have been selected for this campaign', $stats.recipients_num)}.
+                        {if $stats.exceptions_num > 0}
+                        {sprintf_wp('However, not every one of them was actually included in the mailing list (see %s for details)', '<a href="#" rel="status=-3,-4" class="show-recipients-link inline-link inline-link-notop"><b>[`Exceptions`]</b></a>')}.
                         {/if}
-                        <span class="count">{$recipient_criteria.count} <a href="#" data-remove-list-id="{$recipient_criteria.id}" class="inline right"></a></span>
-                    </li>
-                    {/foreach}
-                </ul>
-                <p>
-                    {_w('%s recipient have been selected for this campaign', '%s recipients have been selected for this campaign', $stats.recipients_num)}.
-                    {if $stats.exceptions_num > 0}
-                    {sprintf_wp('However, not every one of them was actually included in the mailing list (see %s for details)', '<a href="#" rel="status=-3,-4" class="show-recipients-link inline-link inline-link-notop"><b>[`Exceptions`]</b></a>')}.
-                    {/if}
-                </p>
+                    </p>
+                </div>
+                {/if}
             </div>
-            {/if}
-        </div>
-        {*/if*}
-        <div data-rel="status=2,3,4"><span class="title">[`Read`]: <span class="cnt">{$stats.opened_num}</span></span></div>
-        <div data-rel="status=5"><span class="title">[`Unsubscribed`]: <span class="cnt">{$stats.unsubscribed_num}</span></span></div>
-        <div data-rel="status=-1,-2"><span class="title">[`Bounced`]: <span class="cnt">{$stats.bounced_num}</span></span></div>
-        <div data-rel="status=1"><span class="title">[`Unknown`]: <span class="cnt">{$stats.unknown_num}</span></span></div>
-        {*if $stats.exceptions_num != 0*}
-        <div data-rel="status=-3,-4">
-            <span class="title">[`Exceptions`]: <span class="cnt">{$stats.exceptions_num}</span></span>
-            <p>[`Excluded were previously unsubscribed and also those email addresses that have resulted in a permanent error returned by the recipient server in your past mailing campaigns. Those mail boxes either do not exist, or cannot receive your message by any reason. Further attempts to send messages to these addresses may result in blacklisting of your mail server. This is the reason to exclude these addresses from the lists of your campaigns recipients.`]</p>
-        </div>
-        {*/if*}
-        <div data-rel="status=-2,-1,1,2,3,4,5"><span class="title">[`Sent `]: <span class="cnt">{$stats.actualy_sent_num}</span></span></div>
-        <div data-rel="search"><span class="title"></span></div>
-    </div>
-
-    <div class="m-graph">
-        <div class="m-graph-title">
-            [`Number of recipients`]
-            <a href="#" class="inline-link inline-link-notop" data-quantum="1"><b>[`per minute`]</b></a>
-            <span data-quantum-separator>/</span>
-            <a href="#" class="inline-link inline-link-notop" data-quantum="60"><b>[`per hour`]</b></a>
-            <i class="icon16 loading" style="display: none; margin-left:5px;"></i>
-        </div>
-        <div class="m-graph-charts">
-            <div class="m-graph-chart" id="graph-wrapper-all"></div>
-        </div>
-        <div class="m-graph-times"> [`Shown`]:
-            <a class="inline-link inline-link-notop hidden" href="#" data-time="24"><b>[`24h`]</b></a>
-            <a class="inline-link inline-link-notop hidden" href="#" data-time="48"><b>[`48h`]</b></a>
-            <a class="inline-link inline-link-notop active" href="#" data-time="0"><b>[`All history`]</b></a>
-            <span class="choosen-time">
-                <span class="choose">[`or select a required period on the chart`]</span>
-                <span class="choosen hidden" id="shown-hours"></span>
-            </span>
-            <div class="recipients-period-count hidden"></div>
+            {*/if*}
+            <div data-rel="status=2,3,4"><span class="title">[`Read`]: <span class="cnt">{$stats.opened_num}</span></span></div>
+            <div data-rel="status=5"><span class="title">[`Unsubscribed`]: <span class="cnt">{$stats.unsubscribed_num}</span></span></div>
+            <div data-rel="status=-1,-2"><span class="title">[`Bounced`]: <span class="cnt">{$stats.bounced_num}</span></span></div>
+            <div data-rel="status=1"><span class="title">[`Unknown`]: <span class="cnt">{$stats.unknown_num}</span></span></div>
+            {*if $stats.exceptions_num != 0*}
+            <div data-rel="status=-3,-4">
+                <span class="title">[`Exceptions`]: <span class="cnt">{$stats.exceptions_num}</span></span>
+                <p>[`Excluded were previously unsubscribed and also those email addresses that have resulted in a permanent error returned by the recipient server in your past mailing campaigns. Those mail boxes either do not exist, or cannot receive your message by any reason. Further attempts to send messages to these addresses may result in blacklisting of your mail server. This is the reason to exclude these addresses from the lists of your campaigns recipients.`]</p>
+            </div>
+            {*/if*}
+            <div data-rel="status=-2,-1,1,2,3,4,5"><span class="title">[`Sent `]: <span class="cnt">{$stats.actualy_sent_num}</span></span></div>
+            <div data-rel="search"><span class="title"></span></div>
         </div>
 
-        <div class="m-graph-quantum">
-            <input type="hidden" id="intervalstart"/>
-            <input type="hidden" id="intervalend"/>
-            <input type="hidden" id="quantum"/>
-            <input type="hidden" id="time"/>
+        <div class="m-graph">
+            <div class="m-graph-title">
+                [`Number of recipients`]
+                <a href="#" class="inline-link inline-link-notop" data-quantum="1"><b>[`per minute`]</b></a>
+                <span data-quantum-separator>/</span>
+                <a href="#" class="inline-link inline-link-notop" data-quantum="60"><b>[`per hour`]</b></a>
+                <i class="icon16 loading" style="display: none; margin-left:5px;"></i>
+            </div>
+            <div class="m-graph-charts">
+                <div class="m-graph-chart" id="graph-wrapper-all"></div>
+            </div>
+            <div class="m-graph-times"> [`Shown`]:
+                <a class="inline-link inline-link-notop hidden" href="#" data-time="24"><b>[`24h`]</b></a>
+                <a class="inline-link inline-link-notop hidden" href="#" data-time="48"><b>[`48h`]</b></a>
+                <a class="inline-link inline-link-notop active" href="#" data-time="0"><b>[`All history`]</b></a>
+                <span class="choosen-time">
+                    <span class="choose">[`or select a required period on the chart`]</span>
+                    <span class="choosen hidden" id="shown-hours"></span>
+                </span>
+                <div class="recipients-period-count hidden"></div>
+            </div>
+
+            <div class="m-graph-quantum">
+                <input type="hidden" id="intervalstart"/>
+                <input type="hidden" id="intervalend"/>
+                <input type="hidden" id="quantum"/>
+                <input type="hidden" id="time"/>
+            </div>
         </div>
-    </div>
+    {/if}
     <div class="clear-both"></div>
 
     {*
@@ -218,6 +229,11 @@
             [`* NOTE:`] [`Message viewing statistics cannot be counted as your message does not contain images.`]
         </div>
     {/if}
+
+    <!-- plugin hook: 'campaign.report.%plugin_id%.bottom' -->
+    {* @event campaign.report.%plugin_id%.bottom *}
+    {foreach $event_campaign_report as $_}{$_.bottom|default:''}{/foreach}
+
 </div>
 <div class="clear-both"></div>
 
@@ -488,13 +504,15 @@
         $.wa.mailer.reloadSidebar();
     }
 
-    // Pie chart
-    $.wa.mailer.drawReportPie('{$wa_app_static_url}', [
-        parseInt('{$stats.opened_percent}'),
-        parseInt('{$stats.unsubscribed_percent}'),
-        parseInt('{$stats.bounced_percent}'),
-        parseInt('{$stats.unknown_percent}')
-    ]);
+    {if !$stats_is_empty}
+        // Pie chart
+        $.wa.mailer.drawReportPie('{$wa_app_static_url}', [
+            parseInt('{$stats.opened_percent}'),
+            parseInt('{$stats.unsubscribed_percent}'),
+            parseInt('{$stats.bounced_percent}'),
+            parseInt('{$stats.unknown_percent}')
+        ]);
+    {/if}
 
     // click on graph date periods (update graph and recipient list)
     $('[data-time]').on('click', function(e){

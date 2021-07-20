@@ -138,12 +138,26 @@ class mailerCampaignsArchiveAction extends waViewAction
             unset($m);
         }
 
+        /**
+         * @event campaign.archive
+         *
+         * This plugin hook for extend messages in archive page and for render UI blocks
+         *
+         * @param array &$params['messages'] list of messages, each message suppose to be extended
+         * @return array[string][string]string - UI html blocks indexed by place ('bottom', 'top')
+         */
+        $params = [
+            'messages' => &$messages
+        ];
+        $event_campaign_archive = wa()->event('campaign.archive', $params);
+
         mailerHelper::assignPagination($this->view, $start, $limit, $total_rows);
         $this->view->assign('order', $order);
         $this->view->assign('search', $search_parts ? $search : '');
         $this->view->assign('sending_count', $sending_count);
         $this->view->assign('search_url_append', $search ? $search.'/' : '');
         $this->view->assign('messages', $messages);
+        $this->view->assign('event_campaign_archive', $event_campaign_archive);
     }
 
     public static function formatListDate($dt)

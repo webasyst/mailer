@@ -5,6 +5,10 @@
     <h1>[`Sent`]</h1>
 </div>
 
+<!-- plugin hook: 'campaign.archive.%plugin_id%.top' -->
+{* @event campaign.archive.%plugin_id%.top *}
+{foreach $event_campaign_archive as $_}{$_.top|default:''}{/foreach}
+
 {if $messages}
     {if !empty($search)}
         <ul class="zebra" id="search-results">
@@ -69,24 +73,24 @@
                         {/if}
                     </td>
                     <td>{$m.from_email}</td>
-                    <td class="align-right">
+                    <td class="align-right m-recipients-num-cell">
                         {if $m.status == mailerMessageModel::STATUS_SENT}
                             {$m.recipients_num}
                         {else}
                             {$m.processed_num}/{$m.recipients_num}
                         {/if}
                     </td>
-                    <td class="align-right">
+                    <td class="align-right m-opened-num-cell">
                         {if $m.opened_count_available}
                             {$m.opened_num}
                         {else}
                             [`n/a`]
                         {/if}
                     </td>
-                    <td class="align-right">
+                    <td class="align-right m-bounced-num-cell">
                         {$m.bounced_num}{if !$m.return_path}<span class="asterisk-hang-right">*</span>{/if}
                     </td>
-                    <td class="align-right m-last">
+                    <td class="align-right m-last m-unsubscribed-num-cell">
                         {$m.unsubscribed_num}{if !$m.has_unsubscribe_link}<span class="asterisk-hang-right">*</span>{/if}
                     </td>
                 </tr>
@@ -115,6 +119,10 @@
         {/if}
     </div>
 {/if}
+
+<!-- plugin hook: 'campaign.archive.%plugin_id%.bottom' -->
+{* @event campaign.archive.%plugin_id%.bottom *}
+{foreach $event_campaign_archive as $_}{$_.bottom|default:''}{/foreach}
 
 <div class="clear"></div>
 

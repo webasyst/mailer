@@ -194,7 +194,7 @@
             buttons.find('.show-when-empty').show();
 
             // Autocomplete
-            var text_input = wrapper.find('input:text');
+            var text_input = wrapper.find('input:text').focus();
             var contact_data = null;
             text_input.autocomplete({
                 source: '?module=unsubscribed&action=autocomplete',

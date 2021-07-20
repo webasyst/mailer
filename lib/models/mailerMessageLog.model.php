@@ -441,4 +441,39 @@ class mailerMessageLogModel extends waModel
         return '';
     }
 
+    public static function getStatuses()
+    {
+        return [
+            self::STATUS_PREVIOUSLY_UNAVAILABLE => [
+                'name' => _w('Previously unavailable')
+            ],
+            self::STATUS_PREVIOUSLY_UNSUBSCRIBED => [
+                'name' => _w('Previously unsubscribed')
+            ],
+            self::STATUS_NOT_DELIVERED => [
+                'name' => _w('Undelivered')
+            ],
+            self::STATUS_SENDING_ERROR => [
+                'name' => _w('Sending error')
+            ],
+            self::STATUS_AWAITING => [
+                'name' => _w('Waiting for sending')
+            ],
+            self::STATUS_SENT => [
+                'name' => _w('Sent')
+            ],
+            self::STATUS_DELIVERED => [
+                'name' => _w('Delivered')
+            ],
+            self::STATUS_VIEWED => [
+                'name' => _w('Opened')
+            ],
+            self::STATUS_CLICKED => [
+                'name' => _w('Clicked')
+            ],
+            self::STATUS_UNSUBSCRIBED => [
+                'name' => _w('Unsubscribed')
+            ]
+        ];
+    }
 }

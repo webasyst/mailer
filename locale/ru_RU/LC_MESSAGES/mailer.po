@@ -122,7 +122,7 @@ msgid "Opened"
 msgstr "Прочитано"
 
 msgid "Clicked"
-msgstr "Клики"
+msgstr "Переходы"
 
 msgid "Bounced"
 msgstr "Отказы"
@@ -1905,3 +1905,24 @@ msgstr "Субадресация"
 
 msgid "Disable if your mail server does not support sub-addressing in email addresses, i.e. addresses containing the “+” character."
 msgstr "Отключите, если ваш почтовый сервер не поддерживает субадресацию, т. е. использование email-адресов с символом «+»."
+
+msgid "no data in mailing log"
+msgstr "нет данных в логе рассылки"
+
+msgid "Previously unavailable"
+msgstr "Ранее недоступные"
+
+msgid "Previously unsubscribed"
+msgstr "Ранее отписавшиеся"
+
+msgid "Undelivered"
+msgstr "Не доставлено"
+
+msgid "Sending error"
+msgstr "Ошибка отправки"
+
+msgid "Waiting for sending"
+msgstr "Ожидание отправки"
+
+msgid "Delivered"
+msgstr "Доставлено"

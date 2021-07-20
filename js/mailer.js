@@ -406,7 +406,7 @@
         },
 
         pluginsAction: function(params) {
-            if (!$('#wa-plugins-container').length) {
+            if (!$('#wa-plugins-container').length || !params) {
                 this.load("?module=plugins");
             } else {
                 this.dispatch('#/plugins/' + params);
