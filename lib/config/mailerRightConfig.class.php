@@ -36,5 +36,17 @@ class mailerRightConfig extends waRightConfig
         </script>
 EOF;
     }
+
+    public function getUI20HTML($rights = array(), $inherited=null)
+    {
+        $html = parent::getUI20HTML($rights, $inherited);
+        $pre_text = _w('NOTE: Limited access does not allow to modify transport settings and manage subscribers.');
+
+        // when there's no right to see all requests then always disable creation of new requests
+        return <<<EOF
+        {$html}
+        <div class="alert"><div class="flexbox space-8"><i class="fas fa-info-circle gray"></i><span>{$pre_text}</span></div></div>
+EOF;
+    }
 }
 

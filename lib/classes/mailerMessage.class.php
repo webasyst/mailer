@@ -108,8 +108,8 @@ class mailerMessage extends mailerSimpleMessage
     {
         @list($url, $hash) = explode('#', $matches[3], 2);
 
-        // Do not add UTM to mailto: links
-        if (substr($url, 0, 7) == 'mailto:') {
+        // Do not add UTM to mailto: and tel: links
+        if (substr($url, 0, 7) == 'mailto:' || substr($url, 0, 4) == 'tel:') {
             return $matches[1].$matches[3].$matches[4];
         }
 

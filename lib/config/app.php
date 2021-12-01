@@ -8,8 +8,8 @@ return array(
     ),
     'frontend' => true,
     'plugins' => true,
-    'version' => '1.0.27',
-    'critical' => '1.0.26',
+    'version' => '1.0.28',
+    'critical' => '1.0.28',
     'vendor' => 'webasyst',
     'license' => 'Webasyst',
     'routing_params' => array(
