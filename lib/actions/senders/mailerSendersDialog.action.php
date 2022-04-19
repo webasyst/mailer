@@ -43,10 +43,10 @@ class mailerSendersDialogAction extends waViewAction
             $senders = array(
                 'default' => array(
                     'name' => _w('System Default'),
-                    'description' => _w('When this option is selected messages are sent by the default transport specified in the Webasyst framework configuration.')
+                    'description' => _w('When this option is selected messages are sent by the default transport specified in the Webasyst system settings.')
                 ),
                 'mail' => array(
-                    'name' => _w('php mail() function'),
+                    'name' => _w('PHP mail() function'),
                     'description' => _w('Some web-hosting companies allow sending email message by means of this transport only. If it is required to specify additional parameters for the mail() function you can enter them in the provided text field. The default parameters are -f%s.')
                 ),
                 'smtp' => array(
@@ -57,7 +57,7 @@ class mailerSendersDialogAction extends waViewAction
             if (function_exists('proc_open')) {
                 $senders['sendmail'] = array(
                     'name' => _w('Sendmail'),
-                    'description' => _w('This is the web server\'s system command for sending email in UNIX-like operating systems. The "Sendmail" option will allow you to specify a non-standard system command for sending messages if you are an experienced server administrator.')
+                    'description' => _w('This is the web server’s system command for sending email in UNIX-like operating systems. The “Sendmail” option will allow you to specify a non-standard system command for sending messages if you are an experienced server administrator.')
                 );
             }
             if ($debug) {

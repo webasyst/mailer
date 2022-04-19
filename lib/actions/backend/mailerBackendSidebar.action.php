@@ -55,7 +55,7 @@ class mailerBackendSidebarAction extends waViewAction
         $templates_count = $subscribers_count = $unsubscribers_count = $undeliverable_count = 0;
         if (mailerHelper::isAdmin()) {
             $tm = new mailerTemplateModel();
-            $templates_count = $tm->countAll();
+            $templates_count = $tm->countAll(($this->whichUI() === '1.3'));
 
             $sm = new mailerSubscriberModel();
             $subscribers_count = $sm->countListView('');

@@ -1,14 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="{if $wa->locale()}{$wa->locale()|substr:0:2}{else}ru{/if}">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>{$wa->appName()} &mdash; {$wa->accountName()}</title>
     {$wa->css()}
-    <link type="text/css" rel="stylesheet" href="{$wa_url}wa-content/js/fileuploader/fileuploader.css"/>
-    <link type="text/css" rel="stylesheet" href="{$wa_url}wa-content/css/jquery-ui/base/jquery.ui.autocomplete.css" />
-    <link type="text/css" rel="stylesheet" href="{$wa_app_static_url}css/mailer.css?{$wa->version()}"/>
+    <link rel="stylesheet" href="{$wa_url}wa-content/js/fileuploader/fileuploader.css">
+    <link rel="stylesheet" href="{$wa_url}wa-content/css/jquery-ui/base/jquery.ui.autocomplete.css">
+    <link rel="stylesheet" href="{$wa_url}wa-content/css/jquery-ui/base/jquery.ui.datepicker.css">
+    <link rel="stylesheet" href="{$wa_app_static_url}css/mailer.css?{$wa->version()}">
+    <link rel="stylesheet" href="{$wa_app_static_url}js/vendor/revolvapp/css/revolvapp.min.css">
 
-    <script src="{$wa_url}wa-content/js/jquery/jquery-1.8.2.min.js"></script>
+
+    <script src="{$wa_url}wa-content/js/jquery/jquery-3.6.0.min.js"></script>
+    <script src="{$wa_url}wa-content/js/jquery-wa/wa.js?v={$wa->version(true)}"></script>
+
+    <script src="{$wa_url}wa-content/js/jquery/jquery-migrate-3.3.2.min.js"></script>
     <script src="{$wa_url}wa-content/js/jquery-plugins/jquery.history.js"></script>
     <script src="{$wa_url}wa-content/js/jquery-plugins/jquery.json.js"></script>
     <script src="{$wa_url}wa-content/js/jquery-plugins/jquery.store.js"></script>
@@ -17,31 +23,27 @@
     <script src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.mouse.min.js"></script>
     <script src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.position.min.js"></script>
     <script src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.autocomplete.min.js"></script>
-    {*<script src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.autocomplete.html.js"></script>*}
     <script src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.draggable.min.js"></script>
-    <script src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.sortable.min.js"></script>
+    <script src="{$wa_url}wa-content/js/sortable/sortable.min.js"></script>
+    <script src="{$wa_url}wa-content/js/sortable/jquery-sortable.min.js"></script>
+    <script src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.touch-punch.min.js"></script>
+    <script src="{$wa_url}wa-content/js/pickr/pickr.min.js"></script>
+
     <script src="{$wa_url}wa-content/js/fileuploader/fileuploader.js"></script>
-    <script src="{$wa_url}wa-content/js/jquery-wa/wa.core.js"></script>
-    <script src="{$wa_url}wa-content/js/jquery-wa/wa.dialog.js"></script>
 
     <script src="{$wa_app_static_url}js/vendor/raphael-min.js"></script>
     <script src="{$wa_app_static_url}js/vendor/g.raphael-min.js"></script>
     <script src="{$wa_app_static_url}js/vendor/beautify-html.js"></script>
 
-    <script src="{$wa_url}wa-content/js/jquery-plugins/fileupload/jquery.fileupload.js?v{$wa->version(true)}"></script>
-
     {* ACE *}
     <script src="{$wa_url}wa-content/js/ace/ace.js?v{$wa->version(true)}"></script>
 
-    {* REDACTOR *}
-    <link type="text/css" rel="stylesheet" href="{$wa_url}wa-content/js/redactor/2/redactor.css?v{$wa->version(true)}">
-    <script src="{$wa_url}wa-content/js/redactor/2/redactor.min.js?v{$wa->version(true)}"></script>
-    {if substr($wa->locale(), 0, 2)!='en'}
-        <script src="{$wa_url}wa-content/js/redactor/2/{substr($wa->locale(), 0, 2)}.js?v{$wa->version(true)}"></script>
-    {/if}
+    <script src="{$wa_app_static_url}js/vendor/revolvapp/revolvapp.min.js"></script>
+    <script src="{$wa_app_static_url}js/vendor/revolvapp/plugins/reorder/reorder.min.js"></script>
+    <script src="{$wa_app_static_url}js/vendor/revolvapp/plugins/code/code.min.js"></script>
+    <script src="{$wa_app_static_url}js/vendor/revolvapp/plugins/variable/variable.min.js"></script>
+    <script src="{$wa_app_static_url}js/vendor/revolvapp/languages/translate.js"></script>
 
-    <script src="{$wa_app_static_url}js/redactor.vars.js"></script>
-    <script src="{$wa_url}wa-content/js/jquery-wa/editor2.js?v{$wa->version(true)}"></script>
 
     <script src="{$wa_app_static_url}js/vendor/g.pie.modified.js?v{$wa->version()}"></script>
     <script src="{$wa_app_static_url}js/mailer.js?v{$wa->version()}"></script>
@@ -49,7 +51,7 @@
 
     <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.datepicker.min.js"></script>
     {if $wa->locale() !== 'en_US'}
-        <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/i18n/jquery.ui.datepicker-{$wa->locale()}.js"></script>
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/i18n/jquery.ui.datepicker-{$wa->locale()}.js"></script>
     {/if}
 
     {*
@@ -61,16 +63,44 @@
 </head>
 <body>
     <div id="wa">
+        {* HEADER *}
         {$wa->header()}
-        <div id="wa-app">
-            <div class="sidebar left200px m-sidebar">
-                {$sidebar}
-            </div>
-            <div class="content left200px">
-                <div id="content" class="shadowed blank">
-                    {$content}
+
+        {* APP *}
+        <div class="m-app-wrapper flexbox wrap-mobile" id="wa-app">
+            {* SIDEBAR *}
+            {if !empty($sidebar)}
+                <div class="m-sidebar-wrapper sidebar flexbox overflow-visible width-adaptive-wider mobile-friendly js-app-sidebar" id="m-sidebar-wrapper">
+                    {$sidebar|default:''}
                 </div>
+            {/if}
+
+            {* CONTENT *}
+            <div class="content hide-scrollbar blank" id="content">
+                {$content}
             </div>
+            {include file="../actions/backend/skeletons/default.html"}
+            {include file="../actions/backend/skeletons/templates.html"}
+            {include file="../actions/backend/skeletons/templatesImport.html"}
+            {include file="../actions/backend/skeletons/template.html"}
+            {include file="../actions/backend/skeletons/templatesAdd.html"}
+            {include file="../actions/backend/skeletons/campaignsNew.html"}
+            {include file="../actions/backend/skeletons/campaignsLetter.html"}
+            {include file="../actions/backend/skeletons/campaignsRecipients.html"}
+            {include file="../actions/backend/skeletons/campaignsSend.html"}
+            {include file="../actions/backend/skeletons/campaignsReport.html"}
+            {include file="../actions/backend/skeletons/campaignsOptions.html"}
+            {include file="../actions/backend/skeletons/campaignsSending.html"}
+            {include file="../actions/backend/skeletons/campaignsArchive.html"}
+            {include file="../actions/backend/skeletons/unsubscribed.html"}
+            {include file="../actions/backend/skeletons/undeliverable.html"}
+            {include file="../actions/backend/skeletons/subscribers.html"}
+            {include file="../actions/backend/skeletons/subscribersList.html"}
+            {include file="../actions/backend/skeletons/subscribersold.html"}
+            {include file="../actions/backend/skeletons/spamtest.html"}
+            {include file="../actions/backend/skeletons/design.html"}
+            {include file="../actions/backend/skeletons/designThemes.html"}
+            {include file="../actions/backend/skeletons/plugins.html"}
         </div>
     </div>
 
@@ -82,14 +112,14 @@
                     <a href="javascript:void(0)" class="strong inline-link"><b><i>[`Unsubscribe URL`]</i></b></a>
                 </div>
                 <div class="value hint">
-                    [`In every outgoing message this variable will be replaced with a personal recipient link that can be used to unsubscribe from your future mailings.`]
+                    [`In every outgoing message this variable will be replaced with a unique link pointing to recipient’s personal subscription management page.`]
                 </div>
             </div>
 
             <div class="field one-var" style="margin-bottom: 20px">
                 <div class="name">
                     <span class="hidden var-code">&lt;a href=&quot;{sprintf('{$mailview_link}')}&quot;&gt;[`Open in browser`]&lt;/a&gt;</span>
-                    <a href="javascript:void(0)" class="strong inline-link"><b><i>[`Open in browser link`]</i></b></a>
+                    <a href="javascript:void(0)" class="strong inline-link"><b><i>[`“Open in browser” link`]</i></b></a>
                 </div>
                 <div class="value hint">
                     [`This variable will be replaced with a personal recipient link that can be used to view message on browser.`]
@@ -97,9 +127,8 @@
             </div>
 
             <div class="field" style="padding:0 5px 10px 1px">
-                [`Following variables will be replaced with recipient's contact data:`]
+                [`Following variables will be replaced with recipient’s contact data:`]
             </div>
-
             {foreach mailerHelper::getVars() as $var_id => $var_name}
                 <div class="field one-var">
                     <div class="name">
@@ -112,10 +141,37 @@
         </div>
     </div>
 
-    <script>$(function() {
+    <script>
+        let hash = $.wa.mailer.getHash();
+        if (hash) {
+            hash = hash.replace(/^[^#]*#\/*/, '');
+            hash = hash.split('/');
+            if (hash[0]) {
+                let actionName = "",
+                    i = 0;
+
+                for (i; i < hash.length; i++) {
+                    const h = hash[i];
+                    if (i < 2) {
+                        if (i === 0) {
+                            actionName = h;
+                        } else if (parseInt(h, 10) != h && h.indexOf('=') == -1) {
+                            actionName += h.substr(0, 1).toUpperCase() + h.substr(1);
+                        } else {
+                            break;
+                        }
+                    } else {
+                        break;
+                    }
+                }
+                $.wa.mailer.showSkeleton(actionName)
+            }
+        }
+
         $.wa.mailer.init({
-            lang: '{substr($wa->locale(), 0, 2)}'
+            lang: '{substr($wa->locale(), 0, 2)}',
+            variables: {mailerHelper::getVars()|json_encode}
         });
-    });</script>
+    </script>
 </body>
 </html>

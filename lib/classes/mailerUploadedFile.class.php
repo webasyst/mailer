@@ -117,7 +117,7 @@ class qqFileUploader
     }
 
     public function toBytes($str) {
-        $val = trim($str);
+        $val  = (int) trim($str);
         $last = strtolower($str[strlen($str)-1]);
         switch($last) {
             case 'g': $val *= 1024;
@@ -132,7 +132,7 @@ class qqFileUploader
      */
     function handleUpload($uploadDirectory){
         if (!is_writable($uploadDirectory)){
-            return array('error' => _w("Server error. Upload directory isn't writable."));
+            return array('error' => _w("Server error. Upload directory isn’t writable."));
         }
 
         if (!$this->file){
@@ -205,7 +205,7 @@ class qqUploadedFileXhr
         }
 
         if ($content_length && $realSize != $content_length) {
-            $this->error = _w('The upload was cancelled, or server error encountered');
+            $this->error = _w('The upload was canceled, or server error encountered');
             return false;
         }
 

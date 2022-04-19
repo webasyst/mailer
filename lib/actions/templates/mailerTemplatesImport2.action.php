@@ -29,7 +29,7 @@ class mailerTemplatesImport2Action extends waViewAction
         } else {
             $html_files = self::getHtmlFiles($archive);
             if (!$html_files) {
-                $error_msg = _w('Archive (zip) file for template import must contain an html file in the root of archive.');
+                $error_msg = _w('Archive (ZIP) file for template import must contain an HTML file in the root of archive.');
             }
         }
 
@@ -58,7 +58,11 @@ class mailerTemplatesImport2Action extends waViewAction
         // Show result to user.
         if ($template_id) {
             // Redirect to template editor
-            echo '<script>window.location.hash = "#/template/'.$template_id.'/"; $(".dialog").trigger("close"); $.wa.mailer.reloadSidebar(); </script>';
+            if ($this->whichUI() == '1.3') {
+                echo '<script>window.location.hash = "#/template/'.$template_id.'/"; $(".dialog").trigger("close"); $.wa.mailer.reloadSidebar(); </script>';
+            }else{
+                echo '<script>window.location.hash = "#/template/'.$template_id.'/"; $(".dialog").data("dialog").close(); $.wa.mailer.reloadSidebar(); </script>';
+            }
             exit;
         } else if ($error_msg) {
             // Show error
@@ -102,16 +106,24 @@ class mailerTemplatesImport2Action extends waViewAction
             return null;
         }
 
+        $re_tmpl_name = str_replace(['.html','.htm'],'.txt',$archive->getNameIndex($import_index));
+        $re_html = $archive->getFromName($re_tmpl_name);
+        if (!$re_html) {
+            $re_html = '';
+        }
+
         // Remove UTF bit order mask, if present
         if (substr($html, 0, 3) === pack("CCC", 0xef, 0xbb, 0xbf)) {
             $html = substr($html, 3);
+            $re_html = substr($re_html, 3);
         }
 
         // Template contents to save to DB
         $data = array();
         $data['name'] = '';
         $data['body'] = _w('Error importing template.');
-        $data['subject'] = self::stripExt(basename($archive->getNameIndex($import_index)));
+        $data['rebody'] = _w('Error importing template.');
+        $data['subject'] = _w(self::stripExt(basename($archive->getNameIndex($import_index))));
         $data['is_template'] = 1;
         $data['create_datetime'] = date("Y-m-d H:i:s");
         $data['create_contact_id'] = wa()->getUser()->getId();
@@ -175,6 +187,7 @@ class mailerTemplatesImport2Action extends waViewAction
         // Finally save the template HTML
         $tm->updateById($template_id, array(
             'body' => $html,
+            'rebody' => $re_html,
         ));
 
         return $template_id;

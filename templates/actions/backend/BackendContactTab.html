@@ -29,8 +29,8 @@
                 {/foreach}
                 {foreach $unsubscribe_emails as $item}
                     <tr>
-                        <td><span class="errormsg">[`Unsubscribed `] {if !empty($item.list)}{$item.list.name|escape}{/if}</span></td>
-                        <td><span class="errormsg">{$item.email|escape}</span></td>
+                        <td><span class="state-error-hint">[`Unsubscribed `] {if !empty($item.list)}{$item.list.name|escape}{/if}</span></td>
+                        <td><span class="state-error-hint">{$item.email|escape}</span></td>
                         <td>{$item.datetime|wa_datetime}</td>
                     </tr>
                 {/foreach}

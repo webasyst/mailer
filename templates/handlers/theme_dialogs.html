@@ -1,53 +1,71 @@
-<style>
-    #design-actions a.disabled { color: grey; }
-</style>
-<div class="dialog width500px height150px" id="wa-theme-reset-dialog">
-    <div class="dialog-background"> </div>
-    <div class="dialog-window">
-        <form>
-            <div class="dialog-content">
-                <div class="dialog-content-indent">
-                    <h1>[s`Revert to original`]</h1>
-                    <p><i class="icon10 exclamation"></i> [s`This will reset all customizations you applied to this design theme. Are you sure?`]</p>
-                    {if $theme.parent_theme && $theme.parent_theme.type == waTheme::OVERRIDDEN}
-                    <label>
-                        <input type="checkbox" name="parent" value="1"> {sprintf("[s`Drop all customizations and revert parent theme <strong>%s</strong> to the original version too`]", $theme.parent_theme_id)}
-                    </label>
-                    {/if}
-                </div>
-                <div class="clear"></div>
-            </div>
-            <div class="dialog-buttons">
-                <div class="dialog-buttons-gradient">
-                    <input type="hidden" name="theme" value="{$theme.app_id|escape}:{$theme.id|escape}">
-                    <input type="submit" class="button red" value="[s`Revert to original`]">
-                    [s`or`] <a href="#/design/themes/" class="cancel">[s`cancel`]</a>
-                </div>
-            </div>
-        </form>
-    </div>
+<div class="dialog" id="wa-theme-reset-dialog">
+    <div class="dialog-background"></div>
+    <form class="dialog-body">
+        <h3 class="dialog-header">[s`Revert to original`]</h3>
+        <div class="dialog-content">
+            <p><i class="fas fa-exclamation-triangle text-orange"></i> [s`This will reset all customizations you applied to this design theme. Are you sure?`]</p>
+            {if $theme.parent_theme && $theme.parent_theme.type == waTheme::OVERRIDDEN}
+                <label>
+                    <span class="wa-checkbox">
+                        <input type="checkbox" name="parent" value="1">
+                        <span>
+                            <span class="icon">
+                                <i class="fas fa-check"></i>
+                            </span>
+                        </span>
+                    </span>
+                    {sprintf("[s`Drop all customizations and revert parent theme <strong>%s</strong> to the original version too`]", $theme.parent_theme_id)}
+                </label>
+            {/if}
+        </div>
+        <div class="dialog-footer">
+            <button type="submit" class="button red">[s`Revert to original`]</button>
+            <a href="#/design/themes/" class="js-close-dialog light-gray">[`Cancel`]</a>
+        </div>
+        <input type="hidden" name="theme" value="{$theme.app_id|escape}:{$theme.id|escape}">
+    </form>
 </div>
 
 <script>
 $(function() {
     $(".theme-reset").on('click', function () {
         if (!$(this).hasClass('disabled'))  {
-            $('#wa-theme-reset-dialog').waDialog({
-                disableButtonsOnSubmit: true,
-                onSubmit: function () {
-                    $.post("?module=design&action=themeReset", $(this).serialize(), function (response) {
-                        if (response.status == 'ok') {
-                            if(response.data.redirect) {
-                                location.href = location.href.replace(/(\?|#).*$/,'') + response.data.redirect;
-                                location.reload();
+            const $wrapper = $('#wa-theme-reset-dialog').clone();
+            $.waDialog({
+                $wrapper,
+                onOpen($dialog) {
+                    const $form = $dialog.find('form'),
+                        $submit_btn = $dialog.find('[type="submit"]');
+
+                    $submit_btn.on('click', function (event) {
+                        event.preventDefault();
+                        $.wa.mailer.buttonLoader({
+                            $button: $submit_btn,
+                            status: 'loader'
+                        });
+                        $.post("?module=design&action=themeReset", $form.serialize(), response => {
+                            if (response.status === 'ok') {
+                                $.wa.mailer.buttonLoader({
+                                    $button: $submit_btn,
+                                    status: 'success',
+                                    callback() {
+                                        if(response.data.redirect) {
+                                            location.href = location.href.replace(/(\?|#).*$/,'') + response.data.redirect;
+                                            location.reload();
+                                        } else {
+                                            location.reload();
+                                        }
+                                    }
+                                });
                             } else {
-                                location.reload();
+                                $.wa.mailer.buttonLoader({
+                                    $button: $submit_btn,
+                                    status: 'failed'
+                                });
+                                alert(response.errors);
                             }
-                        } else {
-                            alert(response.errors);
-                        }
-                    }, "json");
-                    return false;
+                        }, "json");
+                    })
                 }
             });
         }

@@ -1,86 +1,83 @@
-<div class="fields" id="unsibscriber-info-fields">
-    <div class="field">
-        <div class="name">[`Email`]</div>
-        <div class="email-field value">{$data.email|escape}</div>
-    </div>
-    <div class="field">
-        <div class="name">[`Linked to contact`]</div>
-        <div class="name-field value">
-            {if $data.linked_contacts}
-                {foreach $data.linked_contacts as $contact_id => $contact_name}
-                    <a href="{mailerHelper::getContactsAppUrl()}#/contact/{$contact_id}/">{$contact_name|escape}</a>{if !$contact_name@last},{/if}
-                {/foreach}
-            {else}
-                [`not set `]
-            {/if}
+<div class="dialog" id="unsubscribed_info_dialog">
+    <div class="dialog-background"></div>
+    <div class="dialog-body">
+        <div class="dialog-content fields" id="unsubscribed-info-fields">
+            <div class="field">
+                <div class="name custom-pt-0">[`Email`]</div>
+                <div class="email-field value small">{$data.email|escape}</div>
+            </div>
+            <div class="field">
+                <div class="name custom-pt-0">[`Linked to contact`]</div>
+                <div class="value small">
+                    {if $data.linked_contacts}
+                        {foreach $data.linked_contacts as $contact_id => $contact_name}
+                            <a class="js-close-dialog" href="{mailerHelper::getContactsAppUrl()}#/contact/{$contact_id}/">{$contact_name|escape}</a>{if !$contact_name@last},{/if}
+                        {/foreach}
+                    {else}
+                        [`not set `]
+                    {/if}
+                </div>
+            </div>
+            <div class="field">
+                <div class="name custom-pt-0">[`Unsubscribe date`]</div>
+                <div class="value small">{$data.datetime_formatted}</div>
+            </div>
+            <div class="field custom-mt-32">
+                <div class="value">
+                    {if $data.message_id}
+                        {sprintf_wp('Self unsubscribed from %s.', "<a class='semibold' target='_blank' href='#/campaigns/report/{$data.message_id}/'>{$data.campaign_name|escape} ({$data.message_id}) <i class='fas fa-external-link-alt custom-ml-4 small'></i></a>")}
+                    {else}
+                        [`Unsubscribed by administrator.`]
+                    {/if}
+                </div>
+            </div>
+            <div class="field">
+                <div class="value">
+                    <div class="switch-with-text">
+                        <span class="switch middle smaller shift-3 js-resubscribe">
+                            <input type="checkbox" id="m-resubscribe-checkbox">
+                        </span>
+                        <label for="m-resubscribe-checkbox">[`Resubscribe`]</label>
+                    </div>
+                </div>
+            </div>
+            <div class="hidden warning-message field">
+                <div class="value">
+                    <span class="state-error-hint">[`Continue only if you are acting on behalf of and for the benefit of this client, or have unsubscribed before for testing purposes.`]</span>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="field">
-        <div class="name">[`Unsubscribe date`]</div>
-        <div class="date-field value">{$data.datetime_formatted}</div>
-    </div>
-    <div class="field">
-        {if $data.message_id}
-            {sprintf_wp('Self unsubscribed from %s.', "<a href='#/campaigns/report/{$data.message_id}/'>{$data.campaign_name|escape} ({$data.message_id})</a>")}
-        {else}
-            [`Unsubscribed by administrator.`]
-        {/if}
-    </div>
-    <div class="top-padded field">
-        <label><input type="checkbox"> [`Resubscribe`]</label>
-    </div>
-    <div class="hidden red warning-message top-padded field">
-        [`We believe that you act on behalf of and for the benefit of this client, or used to unsubscribe for testing purposes.`]
+        <footer class="dialog-footer flexbox middle wrap">
+            <button type="submit" class="button hidden">[`Save`]</button>
+            <button type="button" class="js-close-dialog button light-gray">[`Close`]</button>
+        </footer>
     </div>
 </div>
-
 <script>(function() { "use strict";
 
-    var fields = $('#unsibscriber-info-fields');
-    var dialog = fields.parents('.dialog');
+    const $dialog = $('#unsubscribed_info_dialog');
+    const dialog = $dialog.data('dialog');
 
-    // Dialog buttons
-    var buttons_div = dialog.find('.dialog-buttons-gradient');
-    var close_button = $('<input type="submit" class="button" value="{_w("Close")}">').appendTo(buttons_div).click(function() {
-        dialog.trigger('close');
-        return false;
-    });
-    var save_button = $('<div></div>');
-    save_button.append(
-        $('<input type="submit" class="button green" value="'+$_('Save')+'">').click(function() {
-            $(this).parent().append('<i class="icon16 loading"></i>');
-            $.post('?module=unsubscribed&action=delete', { email: {$data.email|json_encode}, list_id: {$data.list_id|json_encode} }, function() {
-                dialog.trigger('close');
+        const $submit_btn = $dialog.find('[type="submit"]');
+        const $close_btn = $dialog.find('.js-close-dialog');
+        $submit_btn.on('click', function (event) {
+            event.preventDefault();
+            $.wa.mailer.buttonLoader({
+                $button: $(this),
+                status: 'loader'
+            });
+            $.post('?module=unsubscribed&action=delete', { email: {$data.email|json_encode}, list_id: {$data.list_id|json_encode} }, () => {
                 $.wa.mailer.redispatch();
+                dialog.close();
             });
         })
-    );
-    save_button.append('<span> '+$_('or')+' </span>');
-    save_button.append(
-        $('<a href="#">'+$_('cancel')+'</a>').click(function() {
-            dialog.trigger('close');
-            return false;
-        })
-    );
-    buttons_div.append(save_button.hide());
 
-    // Close the dialog when user clicks any link
-    fields.find('a').click(function() {
-        dialog.trigger('close');
-    });
-
-    // Change buttons and show warning when checkbox is checked
-    fields.find('input:checkbox').change(function() {
-        if ($(this).is(':checked')) {
-            close_button.hide();
-            save_button.show();
-            fields.find('.warning-message').show();
-        } else {
-            close_button.show();
-            save_button.hide();
-            fields.find('.warning-message').hide();
-        }
-    });
-
+        // Change buttons and show warning when checkbox is checked
+        $(".js-resubscribe").waSwitch({
+            change: active => {
+                $close_btn.toggleClass('hidden', active);
+                $submit_btn.toggleClass('hidden', !active);
+                $dialog.find('.warning-message').toggleClass('hidden', !active);
+            }
+        });
 })();</script>
-

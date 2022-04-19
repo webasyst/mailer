@@ -51,6 +51,7 @@ return array(
         'priority' => array('smallint', 6, 'null' => 0, 'default' => '0'),
         'subject' => array('varchar', 255, 'null' => 0),
         'body' => array('mediumtext', 'null' => 0),
+        'rebody' => array('mediumtext', 'null' => 0),
         'attachments' => array('text'),
         'list_id' => array('int', 11, 'null' => 0, 'default' => '0'),
         'is_template' => array('tinyint', 1, 'null' => 0, 'default' => '0'),

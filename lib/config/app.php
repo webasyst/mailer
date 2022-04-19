@@ -2,14 +2,11 @@
 
 return array(
     'name' => 'Mailer',
-    'icon' => array(
-        48 => 'img/mailer.png',
-        96 => 'img/mailer96.png',
-    ),
+    'icon' => 'img/mailer.svg',
     'frontend' => true,
     'plugins' => true,
-    'version' => '1.0.28',
-    'critical' => '1.0.28',
+    'version' => '2.0.0',
+    'critical' => '2.0.0',
     'vendor' => 'webasyst',
     'license' => 'Webasyst',
     'routing_params' => array(
@@ -19,4 +16,5 @@ return array(
     'rights' => true,
     'my_account' => true,
     'csrf' => true,
+    'ui' => '1.3, 2.0',
 );

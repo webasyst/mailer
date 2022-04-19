@@ -3,7 +3,27 @@
 </div>
 {if $recipients}
     {if $error_classes}
-        <div class="block" style="max-width:600px;margin-left:23px;padding-left:0;">
+        <div class="dropdown js-errors-report custom-mb-16">
+            <button class="dropdown-toggle button light-gray" type="button">[`All bounces`]</button>
+            <div class="dropdown-body dd-wide">
+                <ul class="menu">
+                    {foreach $error_classes as $e}
+                        <li>
+                            <a href="javascript:void(0);"
+                               class="show-recipients-link"
+                               rel="{$e.param}"
+                               data-hide-title="false"
+                               {if $e.status > mailerMessageLogModel::STATUS_PREVIOUSLY_UNSUBSCRIBED} data-graph-id="{$e.status}"{/if}
+                               data-id="{$e@iteration}">
+                                <span>{$e.name}</span>
+                                <span class="count">{$e.count}{if $e.percent !== null} ({$e.percent}%){/if}</span>
+                            </a>
+                        </li>
+                    {/foreach}
+                </ul>
+            </div>
+
+        {*<div class="block" style="max-width:600px;margin-left:23px;padding-left:0;">
             <table class="errors-table">
                 {foreach $error_classes as $e}
                     <tr>
@@ -17,6 +37,7 @@
                     </tr>
                 {/foreach}
             </table>
+        </div>*}
         </div>
     {/if}
 
@@ -45,7 +66,7 @@
         {/foreach}
     </table>
     {if $has_more}
-        <a class="inline-link load-more-recipients" rel="{$parameters}"  data-hide-title="false" href="javascript:void(0)"><b>[`Load next 50`] ({sprintf_wp('total %s', $total_rows)})</b></a>
+        <a class="js-load-more-recipients semibold text-blue" rel="{$parameters}"  data-hide-title="false" href="javascript:void(0)">[`Load next 50`] ({sprintf_wp('total %s', $total_rows)})</a>
     {/if}
 {else}
     <p>[`No entries in this list`]</p>
@@ -67,6 +88,7 @@
                 .find('[data-rel="search"]').show()
                     .find('.title').html('{$search}: <span class="cnt">{$recipients|count}</span></span>');
     {/if}
+
     {if $total_rows && $endinterval && $startinterval}
         $('.m-graph-times').find('.recipients-period-count').removeClass('hidden').text("{_w('%s recipient appear in the period selected', '%s recipients appear in the period selected', $total_rows)}");
     {else}
@@ -74,12 +96,20 @@
     {/if}
 
     {if $period}
-        if (!$('.m-graph-times').find('a').hasClass('active')) {
+        if (!$('.m-graph-times').find('.js-time-toggle span').hasClass('selected')) {
             $('.m-graph-times')
                     .find('.choosen')
                         .removeClass('hidden').html('{$period[0]} &mdash; {$period[1]}')
                         .siblings().addClass('hidden');
         }
     {/if}
+
+    $(".js-errors-report").waDropdown({
+        hover: false,
+        items: ".menu > li > a",
+        ready(dropdown) {
+            $(window).on('wa_recipients_loaded', () => dropdown.$button.text(dropdown.$menu.find('a.disabled').text()))
+        }
+    });
 })($);</script>
 

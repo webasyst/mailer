@@ -21,7 +21,7 @@ class mailerUnsubscribedInfoAction extends waViewAction
             'list_id' => $list_id,
         ));
         if (!$data) {
-            die('<h1>'._w('Unsubscriber does not exist.').'</h1>');
+            die('<h1 class="h2">'._w('Unsubscriber does not exist.').'</h1>');
         }
 
         $data['datetime_formatted'] = mailerCampaignsArchiveAction::formatListDate($data['datetime']);

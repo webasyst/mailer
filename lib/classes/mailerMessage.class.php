@@ -343,7 +343,8 @@ class mailerMessage extends mailerSimpleMessage
                 if ($this->contact_fields) {
                     $this->assignContactData($view, ifset($contacts[$row['contact_id']], array()));
                 }
-                $body = $view->fetch('string:'.$this->data['body']);
+                $_body = str_replace(['<style', '</style>'], ['{literal}<style', '</style>{/literal}'], $this->data['body']);
+                $body = $view->fetch('string:'.$_body);
                 $message->setBody($body, 'text/html', 'utf-8');
                 $message->addPart(mailerHtml2text::convert($body), 'text/plain');
                 $message->generateId();
@@ -509,8 +510,8 @@ class mailerMessage extends mailerSimpleMessage
                     }
                     $subject = $view->fetch('string:'.$this->data['subject']);
                     $message->setSubject($subject);
-
-                    $body = $view->fetch('string:'.$this->data['body']);
+                    $_body = str_replace(['<style', '</style>'], ['{literal}<style', '</style>{/literal}'], $this->data['body']);
+                    $body = $view->fetch('string:'.$_body);
                     $message->setBody($body, 'text/html', 'utf-8');
                     $message->addPart(mailerHtml2text::convert($body), 'text/plain');
                     $message->generateId();
@@ -760,7 +761,8 @@ class mailerMessage extends mailerSimpleMessage
             $view = $this->assignContactData($view, ifset($contacts[$log['contact_id']], array()));
         }
         $message['subject'] = $view->fetch('string:'.$message['subject']);
-        $message['body'] = $view->fetch('string:'.$message['body']);
+        $_body = str_replace(['<style', '</style>'], ['{literal}<style', '</style>{/literal}'], $message['body']);
+        $message['body'] = $view->fetch('string:'.$_body);
 
         $view->assign('message', $message);
         return true;

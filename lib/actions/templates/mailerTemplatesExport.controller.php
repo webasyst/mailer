@@ -25,6 +25,7 @@ class mailerTemplatesExportController extends waJsonController
         }
 
         $temp_path = tempnam(wa()->getTempPath(), 'tmpl_export_'.$id);
+        unlink($temp_path);
 
         $archive = new ZipArchive();
         $archive->open($temp_path, ZipArchive::CREATE);
@@ -40,6 +41,12 @@ class mailerTemplatesExportController extends waJsonController
             $contents = "<html><head><title>".htmlspecialchars($tmpl['subject'])."</title></head><body>\n".$contents."\n</body></html>";
         }
         $archive->addFromString($file_name.".html", $contents);
+
+        // Add RE-HTML file with template contents
+        if (wa()->whichUI() !== '1.3') {
+            $re_contents = str_replace($url_prefix, $id.'/', $tmpl['rebody']);
+            $archive->addFromString($file_name.".txt", $re_contents);
+        }
 
         // Add images and other files
         $data_path = wa()->getDataPath('files/'.$id, true, 'mailer');

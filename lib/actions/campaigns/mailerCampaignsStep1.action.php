@@ -53,7 +53,7 @@ class mailerCampaignsStep1Action extends waViewAction
                 throw new waException('Access denied.', 403);
             }
             if (($campaign['status'] != mailerMessageModel::STATUS_DRAFT && $campaign['status'] != mailerMessageModel::STATUS_PENDING) || $access < 2) {
-                $this->setTemplate('templates/actions/campaigns/CampaignsStep1ReadOnly.html');
+                $this->setTemplate('campaigns/CampaignsStep1ReadOnly.html', true);
             }
         }
 

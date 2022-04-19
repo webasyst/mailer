@@ -1,57 +1,88 @@
-<div class="block not-padded">
-    <h1>[`Import template`]</h1>
-    <div>
-        <div id="m-ti-file-uploader"></div>
+<div class="dialog" id="import-dialog">
+    <div class="dialog-background"></div>
 
-        {if !empty($error_msg)}
-            <p class="bold red">{$error_msg}</p>
-        {/if}
+    <div class="dialog-body">
+        <h3 class="dialog-header">[`Import template`]</h3>
+        <div class="dialog-content">
+            <div id="m-ti-file-uploader"></div>
 
-        <p>[`Archive (zip) file for template import must contain an html file in the root of archive, and all other files (e.g. images) referred from html file, in the root or in subfolders of your archive file.`]</p>
-    </div>
+            {if !empty($error_msg)}
+                <p class="bold red">{$error_msg}</p>
+            {/if}
+
+            <p>[`An archive (ZIP) file for the template import must contain an HTML file in the archive root. Other files (e. g. images) referred to in the main HTML file must be located in the archive root or its subfolders.`]</p>
+        </div>
+        <footer class="dialog-footer flexbox middle wrap">
+            <a href="javascript:void(0)" class="js-close-dialog button light-gray">[`cancel`]</a>
+        </footer>
+    </div
 </div>
 
-<script>(function() {
+<script>
+    (function() {
 
-    //
-    // File uploader setup
-    //
-    var file_uploader_div = $('#m-ti-file-uploader');
-    var upload_action = '?action=upload';
-    var file_id = 'template_import';
-    new qq.FileUploader({
-        element: file_uploader_div[0],
-        action: upload_action,
-        //debug: true,
-        template: '<div class="qq-uploader">' +
-                '<div class="qq-upload-drop-area remove-when-no-dnd"><span>'+"[`Drag and drop ZIP-archive file here`]"+'</span></div>' +
-                '<div class="qq-upload-button"><span class="remove-when-no-dnd">'+"[`or`] "+'</span><a>'+"[`choose a file to upload`]"+'</a></div>' +
-                '<ul class="qq-upload-list"></ul>' +
-             '</div>',
-        onComplete: function(id, fileName, responseJSON) {
-            file_uploader_div.find('.qq-upload-list').empty();
-            if (!responseJSON.error) {
-                // POST to controller that processes the archive.
-                // It returns HTML to show in the main content block.
-                $.get('?module=templates&action=import2', {}, function(html) {
-                    // Replace dialog content
-                    $('#import-dialog .dialog-content-indent').html(html);
-                });
-            }
-        },
-        onCancel: function(id, fileName){
-            file_uploader_div.find('.qq-upload-list').empty();
-        },
-        params: {
-            _csrf: {waRequest::cookie('_csrf', '')|json_encode},
-            file_id: file_id,
-            action: 'upload'
+        //
+        // File uploader setup
+        //
+        var file_uploader_div = $('#m-ti-file-uploader');
+
+        const local = {
+            file_here: '[`Drag and drop ZIP-archive file here`]',
+            choose: '[`choose a file to upload`]',
+            or: '[`or`]',
         }
-    });
-    // When drag-and-drop file upload is not supported then hide corresponding controls
-    if (!(window.File && window.FileReader && window.FileList)) {
-        $('.remove-when-no-dnd').remove();
-    }
 
-    $.wa.mailer.setTitle();
-})();</script>
+        const file_id = 'template_import';
+        new qq.FileUploader({
+            element: file_uploader_div[0],
+            action: '?action=upload',
+            //debug: true,
+            template: `<div id="drop-area" class="box uploadbox">
+                        <div class="upload">
+                            <label class="link">
+                                <i class="fas fa-file-upload"></i>
+                                <span>${ local.choose }</span>
+                            </label>
+                            <ul class="unstyled"></ul>
+                        </div>
+                    </div>`,
+            classes: {
+                button: 'link',
+                drop: 'uploadbox',
+                dropActive: '',
+                list: 'unstyled',
+                file: 'qq-upload-file',
+                spinner: 'qq-upload-spinner',
+                size: 'qq-upload-size',
+                cancel: 'qq-upload-cancel',
+                success: 'qq-upload-success',
+                fail: 'qq-upload-fail'
+            },
+            onComplete(id, fileName, responseJSON) {
+                file_uploader_div.find('.qq-upload-list').empty();
+                if (!responseJSON.error) {
+                    // POST to controller that processes the archive.
+                    // It returns HTML to show in the main content block.
+                    $.get('?module=templates&action=import2', {}, function(html) {
+                        // Replace dialog content
+                        $('#import-dialog .dialog-content').html(html);
+                    });
+                }
+            },
+            onCancel(){
+                file_uploader_div.find('.qq-upload-list').empty();
+            },
+            params: {
+                _csrf: {waRequest::cookie('_csrf', '')|json_encode},
+                file_id,
+                action: 'upload'
+            }
+        });
+
+        $("#drop-area").waUpload({
+            is_uploadbox: true
+        })
+
+        $.wa.mailer.setTitle();
+
+    })();</script>

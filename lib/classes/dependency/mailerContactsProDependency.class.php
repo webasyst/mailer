@@ -122,7 +122,7 @@ class mailerContactsProDependency extends mailerDependency
 
         if (false !== strpos($hash, '/contacts/prosearch')) {
             $recipient['count'] = $cc->count();
-            $recipient['group'] = _w('Prosearch');
+            $recipient['group'] = _w('Contacts PRO');
             return true;
         }
     }

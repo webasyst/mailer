@@ -7,6 +7,8 @@
             lang: 'en'
         },
         init: function (options) {
+            this.waLoading = $.waLoading();
+
             if ("undefined" !== typeof($.History)) {
                 $.History.bind(function () {
                     $.wa.mailer.dispatch();
@@ -28,9 +30,6 @@
             $(window).bind('wa.dispatched', function () {
                 // Highlight current item in sidebar, if exists
                 $.wa.mailer.highlightSidebar();
-
-                // Remove all non-persistent dialogs
-                $('.dialog:not(.persistent)').empty().remove();
             });
 
             // Set up AJAX error handler
@@ -66,7 +65,7 @@
             var toggleCollapse = function () {
                 $.wa.mailer.collapseSidebarSection(this, 'toggle');
             };
-            $(".collapse-handler", $('#wa-app')).die('click').live('click', toggleCollapse);
+            $(".collapse-handler", $('#wa-app')).off('click').on('click', toggleCollapse);
             this.restoreCollapsibleStatusInSidebar();
 
             // Reload sidebar once a minute when there are campaigns currently sending
@@ -74,14 +73,15 @@
 
             // development hotkeys for redispatch and sidebar reloading
             $(document).keypress(function (e) {
-                if ((e.which == 10 || e.which == 13) && e.shiftKey) {
-                    $('#wa-app .sidebar .icon16').first().attr('class', 'icon16 loading');
+                if ((e.which == 10 || e.which == 13) && e.shitKey) {
                     $.wa.mailer.reloadSidebar();
                 }
                 if ((e.which == 10 || e.which == 13) && e.ctrlKey) {
                     $.wa.mailer.redispatch();
                 }
             });
+
+            this.mailerEditorChangeEvent = new $.Event('wa_mailer_editor_changes');
         },
 
         // if this is > 0 then this.dispatch() decrements it and ignores a call
@@ -122,7 +122,7 @@
             if (this.currentHash == hash) {
                 return;
             }
-            var old_hash = this.currentHash;
+            const old_hash = this.currentHash;
             this.currentHash = hash;
 
             var e = new $.Event('wa.before_dispatched');
@@ -138,9 +138,10 @@
             if (hash) {
                 hash = hash.split('/');
                 if (hash[0]) {
-                    var actionName = "";
-                    var attrMarker = hash.length;
-                    var i = 0;
+                    let actionName = "",
+                        attrMarker = hash.length,
+                        i = 0;
+
                     for (i; i < hash.length; i++) {
                         var h = hash[i];
                         if (i < 2) {
@@ -158,9 +159,10 @@
                         }
                     }
 
-                    var attr = hash.slice(attrMarker);
+                    const attr = hash.slice(attrMarker);
 
                     if (this[actionName + 'Action']) {
+                        this.showSkeleton(actionName);
                         this[actionName + 'Action'].apply(this, attr);
                         // save last page to return to by default later
                         $.storage.set('mailer/hash', hash.join('/'));
@@ -170,9 +172,11 @@
                         }
                     }
                 } else {
+                    this.showSkeleton('default');
                     this.defaultAction();
                 }
             } else {
+                this.showSkeleton('default');
                 this.defaultAction();
             }
 
@@ -422,11 +426,11 @@
             if (!($.wa.mailer.showLastSearchBreadcrumb.last_search_ids || {})[campaign_id]) {
                 return false;
             }
-            var div = $('#content .m-envelope-stripes-2 .m-core-header');
+            var div = $('#content .js-envelope .js-core-header');
             var a = div.find('a.last-search');
             if (!a.length) {
                 a = $('<a href="" class="no-underline">' + $_('Search results') + '</a>');
-                div.append('<i class="icon10 larr"></i>').append(a);
+                div.append('<i class="fas fa-caret-left"></i>').append(a);
             }
             a.attr('href', '#/campaigns/archive/0/!id/' + encodeURIComponent($.wa.mailer.showLastSearchBreadcrumb.last_search_string || '') + '/').show();
             return true;
@@ -434,28 +438,39 @@
 
         // Helper used across the campaign editor pages to save campaign via XHR.
         saveCampaign: function (form, button, callback, no_saved_hint) {
-            var were_disabled = button.attr('disabled');
-            button.attr('disabled', true).siblings('.process-message').remove();
-            var process_message = $('<span class="process-message"><i class="icon16 loading" style="margin:6px 0 0 .5em"></i></span>');
-            button.parent().append(process_message);
-            $.post(form.attr('action'), form.serialize(), function (r) {
-                if (!were_disabled) {
-                    button.attr('disabled', false);
-                }
+            // var were_disabled = button.attr('disabled');
+            // button.attr('disabled', true).siblings('.process-message').remove();
+            this.buttonLoader({
+                $button: button,
+                status: 'loader'
+            });
+            // var process_message = $('<span class="process-message"><i class="fas fa-spinner fa-spin loading"></i></span>');
+            // button.parent().append(process_message);
+            $.post(form.attr('action'), form.serialize(), r => {
+                // if (!were_disabled) {
+                //     button.attr('disabled', false);
+                // }
                 if (r.status == 'ok') {
-                    var message_id = r.data;
-                    form.find('input[name="id"]').val(message_id);
-                    if (no_saved_hint) {
-                        process_message.remove();
-                    } else {
-                        process_message.find('.loading').removeClass('loading').addClass('yes');
-                        process_message.append('<span> ' + $_('Saved') + '</span>');
-                        process_message.animate({opacity: 0}, 2000, function () {
-                            process_message.remove();
-                        });
-                    }
+                    this.buttonLoader({
+                        $button: button,
+                        status: 'success'
+                    });
+                    form.find('input[name="id"]').val(r.data);
+                    // if (no_saved_hint) {
+                    //     process_message.remove();
+                    // } else {
+                    //     process_message.find('.loading').removeClass('loading').addClass('yes');
+                    //     process_message.append('<span> ' + $_('Saved') + '</span>');
+                    //     process_message.animate({opacity: 0}, 2000, function () {
+                    //         process_message.remove();
+                    //     });
+                    // }
                 } else {
-                    process_message.find('.loading').removeClass('loading').addClass('exclamation');
+                    this.buttonLoader({
+                        $button: button,
+                        status: 'failed'
+                    });
+                    // process_message.find('.loading').removeClass('loading').addClass('exclamation');
                     console.log('Error saving campaign:', r);
                 }
 
@@ -505,101 +520,113 @@
             setTimeout($.wa.mailer.updateSendingSidebar, 60000);
         },
 
-        /** Initialize Redactor.js in template editor page and in step 1 page. */
-        initWYSIWYG: function (textarea, saveButton, height, csrf, lang) {
-            if (!RedactorPlugins) var RedactorPlugins = {};
+        /** Initialize revolvapp in template editor page and in step 1 page. */
+        initRevolv: function ($editor, $template, $textarea, options) {
+            const that = this;
 
-            textarea.waEditor({
-                lang: lang,
-                saveButton: saveButton,
-                iframe: true,
-                minHeight: height,
-                buttons: ['format', 'bold', 'italic', 'underline', 'deleted', 'lists', 'image',
-                    'table', 'link', 'alignment', 'horizontalrule',  'fontcolor', 'fontsize', 'fontfamily', 'vars'],
-                plugins: ['table', 'fontcolor', 'fontsize', 'fontfamily', 'vars'],
-                imageUpload: '?module=files&action=uploadimage&filelink=1',
-                imageUploadFields: {
-                    '_csrf': csrf
-                }
+            const baseVariables = ['{$unsubscribe_link}', '{$mailview_link}'];
+            const editorVariables = baseVariables.concat(Object.keys(that.options.variables))
+
+            return Revolvapp($editor, {
+                plugins: ['reorder', 'code', 'variable'],
+                variable: {
+                    items: editorVariables,
+                    template: {
+                        start: '',
+                        end: ''
+                    }
+                },
+                editor: {
+                    path: options.revolvPath,
+                    lang: that.options.lang || 'en'
+                },
+                image: {
+                    upload: options.uploadPath,
+                    data: {
+                        '_csrf': options.csrf
+                    }
+                },
+                subscribe: {
+                    'editor.change': function() {
+                        $(window).trigger(that.mailerEditorChangeEvent);
+                        $template.html(this.app.editor.getTemplate());
+                        // content in textarea is a compiled html
+                        $textarea.val(this.app.editor.getHtml());
+                    }
+                },
             });
-            textarea.data('ace').setOption("minLines", null);
-            textarea.data('ace').setOption("maxLines", null);
-            textarea.data('ace').setAutoScrollEditorIntoView(false);
-
-            this.autoresizeWYSIWYG(height, textarea);
-
-            return textarea;
         },
 
-        resizeWYSIWYG: function (min_height, random, resizer, textarea) {
-            if ($('.wa-editor-core-wrapper').length === 0) {
-                $(window).off('resize', resizer);
-                return;
-            }
-            var $window = $(window),
-                window_h = $window.height(),
-                button_container_h = $('#editor-step-1-buttons').outerHeight(),
-                editor_offset_offset = $('.wa-editor-core-wrapper').offset(),
-                editor_offset_top = editor_offset_offset.top,
-                ace_padding_h = $('.ace').outerHeight() - $('.ace').height(),
-                editor_toolbar_h = $('.redactor_toolbar').outerHeight(),
-                editor_h = window_h - button_container_h - editor_offset_top - 5;
+        initRedactor: function($textarea, options) {
+            const $div = $('<div></div>');
 
-            if ($.wa.mailer.step1_random != random) {
-                $(window).off('resize', resizer);
-                return;
+            // Init Ace
+            const $toolbar = `<div class="m-ace-toolbar-container m-ace-toolbar-sticky">
+                                <div class="m-ace-toolbar flexbox middle space-16 semibold">
+                                    <a href="javascript:void(0)" class="text-dark-gray js-ace-upload">
+                                        <i class="fas fa-images valign-middle"></i> <span class="small desktop-and-tablet-only">${$_('Images & files upload')}</span>
+                                    </a>
+                                </div>
+                            </div>`;
+            $textarea.parent().prepend($(`<div class="ace">${$toolbar}</div>`).append($div));
+            $textarea.hide();
+            const editor = ace.edit($div[0]);
+            // Set options
+
+            setEditorTheme();
+            document.documentElement.addEventListener('wa-theme-change', setEditorTheme);
+
+            editor.commands.removeCommand('find');
+            ace.config.set("basePath", wa_url + 'wa-content/js/ace/');
+            editor.renderer.setShowGutter(true);
+
+            const session = editor.getSession();
+            session.setMode("ace/mode/smarty");
+            session.setMode("ace/mode/css");
+            session.setMode("ace/mode/javascript");
+            session.setUseWrapMode(true);
+
+            editor.setShowPrintMargin(false);
+            editor.setAutoScrollEditorIntoView(false);
+            editor.$blockScrolling = 'Infinity'
+
+            if (navigator.appVersion.indexOf('Mac') != -1) {
+                editor.setFontSize(13);
+            } else if (navigator.appVersion.indexOf('Linux') != -1) {
+                editor.setFontSize(16);
+            } else {
+                editor.setFontSize(14);
             }
-            if (editor_h > min_height) {
-                $('.wa-editor-core-wrapper, .ace').outerHeight(editor_h);
-                $('.redactor_box iframe').height(editor_h - editor_toolbar_h - 5);
-                $('.ace_editor').height(editor_h - ace_padding_h).css('max-height', editor_h - ace_padding_h);
-                if (textarea !== undefined) {
-                    textarea.data('ace').resize(true);
+
+            if ($textarea.val()?.length) {
+                session.setValue($textarea.val());
+            } else {
+                session.setValue(' ');
+            }
+
+            editor.setOption("minLines", 2);
+            editor.setOption("maxLines", 10000);
+
+            editor.focus();
+            editor.navigateTo(0, 0);
+
+
+            session.on('change', () => {
+                $textarea.val(editor.getValue());
+                $(window).trigger(this.mailerEditorChangeEvent);
+            });
+
+            $textarea.on('wa_switch_to_html', function () {
+                session.setValue($(this).val());
+            })
+
+            function setEditorTheme() {
+                if (document.documentElement.dataset.theme === 'dark') {
+                    editor.setTheme("ace/theme/monokai");
+                } else {
+                    editor.setTheme("ace/theme/eclipse");
                 }
             }
-        },
-
-        /** Resize the editor depending on window height */
-        autoresizeWYSIWYG: function (min_h, textarea) {
-            var min_h = min_h + $('#wa-app .m-editor .block.double-padded:last').outerHeight(),
-                resizeTimer = null,
-                r = Math.random();
-
-            $.wa.mailer.step1_random = r;
-
-            var resizer = function () {
-                clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(function () {
-                    $.wa.mailer.resizeWYSIWYG(min_h, r, resizer, textarea);
-                }, 100);
-            };
-
-            $(window).on('resize', resizer);
-
-            setTimeout(function () {
-                $.wa.mailer.resizeWYSIWYG(min_h, r, null, textarea);
-            }, 300);
-//
-//        var statusbar = workzone.siblings('.statusbar');
-//        var r = Math.random();
-//        $.wa.mailer.step1_random = r;
-//        var resizeEditor = function() {
-//            // Unbind self if user left current page
-//            var buttons = $('#editor-step-1-buttons');
-//            if ($.wa.mailer.step1_random != r) {
-//                $(window).unbind('resize', resizeEditor);
-//                return;
-//            }
-//
-//            // Calculate and update editor height
-//            var new_workzone_height = $(window).height() - workzone.offset().top - (statusbar.outerHeight() || statusbar_height || 0) - buttons.outerHeight() - 5;
-//            new_workzone_height = Math.max(300, new_workzone_height);
-//            workzone.height(new_workzone_height).find('iframe').height(new_workzone_height);
-//            workzone.find('textarea').height(new_workzone_height - 12);
-//            workzone.find('.CodeMirror-scroll').height(new_workzone_height);
-//        };
-//        $(window).resize(resizeEditor);
-//        setTimeout(resizeEditor, 1);
         },
 
         style_html: function (v) {
@@ -641,10 +668,10 @@
 
             // When campaign is paused, everything is simple.
             if (campaign_paused) {
-                $('#progressbar-text').text('' + Math.round(current_value) + '%');
-                $('#progressbar-status').css('width', '' + Math.round(current_value) + '%');
+                $('.js-progressbar-text').text('' + Math.round(current_value) + '%');
+                $('.js-progressbar-status').css('width', '' + Math.round(current_value) + '%');
                 $.storage.set('mailer/campaign/' + campaign_id + '/value', current_value);
-                $('#campaign-sending-time-left').parent().hide();
+                $('.js-campaign-sending-time-left').parent().hide();
                 return;
             }
 
@@ -661,8 +688,8 @@
             }
 
             // Animate progressbar
-            var progressbar_text = $('#progressbar-text').text('' + Math.round(set_value) + '%');
-            $('#progressbar-status').width('' + set_value + '%').animate({
+            var progressbar_text = $('.js-progressbar-text').text('' + Math.round(set_value) + '%');
+            $('.js-progressbar-status').width('' + set_value + '%').animate({
                 width: '' + current_value + '%'
             }, {
                 easing: 'linear',
@@ -719,7 +746,7 @@
                     if (old && old.campaign_id == campaign_id) {
                         // When old estimate differs from reality too much (more than 20%), then reset the estimate
                         if (old.seconds_left > 10 && ((old.seconds_left * 1.2 < seconds_left) || (seconds_left * 1.2 < old.seconds_left))) {
-                            $('#campaign-sending-time-left').html('<i class="icon16 loading"></i>');
+                            $('.js-campaign-sending-time-left').html('<i class="fas fa-spinner fa-spin loading"></i>');
                             $.wa.mailer.campaign_countdown = null;
                             return;
                         }
@@ -742,7 +769,7 @@
                         current_time_ms: current_time_ms,
                         seconds_left: seconds_left
                     };
-                    $('#campaign-sending-time-left').html(formatTime(Math.floor(seconds_left))).parent().show();
+                    $('.js-campaign-sending-time-left').html(formatTime(Math.floor(seconds_left))).parent().show();
                 }
             };
             updateDuration();
@@ -791,9 +818,9 @@
             $.storage.del('mailer/campaign/' + campaign_id + '/time');
             $.storage.del('mailer/campaign/' + campaign_id + '/value');
 
-            var progressbar_text = $('#progressbar-text');
+            var progressbar_text = $('.js-progressbar-text');
             if ($('#report-wrapper .progressbar').length > 0) {
-                $('#progressbar-status').animate({
+                $('.js-progressbar-status').animate({
                     width: '100%'
                 }, {
                     easing: 'linear',
@@ -822,13 +849,10 @@
                 120, 120, 100, // center_x, center_y, radius
                 stats, {
                     colors: [
-                        'green',
-                        'blue',
-                        'red',
-//                    'url('+app_static_url+'img/strokegreen.png)',
-//                    'url('+app_static_url+'img/strokered.png)',
-//                    'white',
-                        '#ccc'
+                        '#22d13d',
+                        '#555',
+                        '#ed2509',
+                        '#aaa'
                     ],
                     no_sort: true,
                     minPercent: -1,
@@ -870,22 +894,26 @@
 
         /** Load HTML content from url and put it into main #content div */
         load: function (url, callback, params) {
-            this.showLoading();
+            const that = this;
             params = params || null;
 
-            var r = Math.random();
+            this.waLoading.animate(2000, 96, false);
+            const r = Math.random();
             $.wa.mailer.random = r;
             $.get(url, params, function (result) {
                 if ($.wa.mailer.random != r) {
                     // too late: user clicked something else.
                     return;
                 }
-                $("#content").addClass('shadowed').addClass('blank').html(result);
-                $.wa.mailer.hideLoading();
+                $("#content").html(result);
+                that.waLoading.done();
+
                 $('html, body').animate({scrollTop: 0}, 200);
                 if (callback) {
                     callback.call(this);
                 }
+
+                $(window).trigger($.Event('wa_loaded'));
             });
         },
 
@@ -893,18 +921,24 @@
         showLoading: function () {
             var h1 = $('h1:visible').first();
             if (h1.size() <= 0) {
-                $('#c-core-content .block').first().prepend('<i class="icon16 loading"></i>');
+                $('#c-core-content .block').first().prepend('<i class="fas fa-spinner fa-spin loading"></i>');
                 return;
             }
             if (h1.find('.loading').show().size() > 0) {
                 return;
             }
-            h1.append('<i class="icon16 loading"></i>');
+            h1.append('<i class="fas fa-spinner fa-spin loading"></i>');
         },
 
         /** Hide all loading indicators in h1 headers */
         hideLoading: function () {
             $('h1 .loading').hide();
+        },
+
+        showSkeleton(actionName) {
+            const $content = $('#content');
+            $content.empty();
+            $(`[data-skeleton="${actionName}"]`).clone().show().appendTo($content)
         },
 
         /** Add .selected css class to li with <a> whose href attribute matches current hash.
@@ -918,10 +952,10 @@
             var index = 0;
 
             if (!sidebar) {
-                sidebar = $('#wa-app > .sidebar');
+                sidebar = $('#wa-app > .js-app-sidebar');
             }
 
-            sidebar.find('li a').each(function (k, v) {
+            sidebar.find('li a, .bricks a').each(function (k, v) {
                 v = $(v);
                 index = k;
                 if (!v.attr('href')) {
@@ -954,11 +988,13 @@
                 // Only highlight items that are outside of dropdown menus
                 if (match.parents('ul.dropdown').size() <= 0) {
                     var p = match.parent();
-                    while (p.size() > 0 && p[0].tagName.toLowerCase() != 'li') {
+                    while (p.size() > 0 && p[0].tagName?.toLowerCase() != 'li') {
                         p = p.parent();
                     }
                     if (p.size() > 0) {
                         p.addClass('selected');
+                    }else{
+                        match.addClass('selected');
                     }
                 }
             }
@@ -975,39 +1011,40 @@
         /** Collapse/uncollapse section in sidebar. */
         collapseSidebarSection: function (el, action) {
             if (!action) {
-                action = 'coollapse';
+                action = 'collapse';
             }
             el = $(el);
             if (el.size() <= 0) {
                 return;
             }
 
-            var arr = el.find('.darr, .rarr');
+            let arr = el.find('.caret svg');
             if (arr.size() <= 0) {
-                arr = $('<i class="icon16 darr">');
-                el.prepend(arr);
-            }
-            var newStatus;
-            var id = el.attr('id');
-            var oldStatus = arr.hasClass('darr') ? 'shown' : 'hidden';
+                arr = $('<span class="caret"><i class="fas fa-caret-down"></i></span>');
 
-            var hide = function () {
+                el.find('span:first').prepend(arr);
+            }
+            let newStatus;
+            const id = el.attr('id');
+            const oldStatus = arr.hasClass('fa-rotate-270') ? 'hidden' : 'shown';
+
+            const hide = () => {
                 el.nextAll('.collapsible, .collapsible1').first().hide();
-                arr.removeClass('darr').addClass('rarr');
+                arr.addClass('fa-rotate-270');
                 newStatus = 'hidden';
             };
-            var show = function () {
-                var $collapsible = el.nextAll('.collapsible, .collapsible1').first();
+            const show = () => {
+                const $collapsible = el.nextAll('.collapsible, .collapsible1').first();
                 $collapsible.show();
                 $collapsible.find('[data-list="hidden"]').hide();
                 $collapsible.find('[data-list="shown"]').show();
-                arr.removeClass('rarr').addClass('darr');
+                arr.removeClass('fa-rotate-270');
                 newStatus = 'shown';
             };
 
             switch (action) {
                 case 'toggle':
-                    if (oldStatus == 'shown') {
+                    if (oldStatus === 'shown') {
                         hide();
                     } else {
                         show();
@@ -1016,7 +1053,7 @@
                 case 'restore':
                     if (id) {
                         var status = $.storage.get('mailer/collapsible/' + id);
-                        if (status == 'hidden') {
+                        if (status === 'hidden') {
                             hide();
                         } else {
                             show();
@@ -1090,36 +1127,6 @@
             }
 
             return hash;
-        },
-
-
-        /** Helper to initialize iButtons */
-        iButton: function ($checkboxes, options) {
-            options = options || {};
-            return $checkboxes.each(function () {
-                var cb = $(this);
-                var id = cb.attr('id');
-                if (!id) {
-                    do {
-                        id = 'cb' + Date.now() + '-' + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-                    } while (document.getElementById(id));
-                    cb.attr('id', id);
-                }
-                if (!options.inside_labels) {
-                    $($.parseHTML(
-                        '<ul class="menu-h ibutton-wrapper">' +
-                        '<li><label class="gray" for="' + id + '">' + (options.labelOff || '') + '</label></li>' +
-                        '<li class="ibutton-li"></li>' +
-                        '<li><label for="' + id + '">' + (options.labelOn || '') + '</label></li>' +
-                        '</ul>'
-                    )).insertAfter(cb).find('.ibutton-li').append(cb);
-                }
-            }).iButton($.extend({
-                className: 'mini'
-            }, options, options.inside_labels ? {} : {
-                labelOn: "",
-                labelOff: ""
-            }));
         },
 
         /** Helper to insert text into textarea */
@@ -1376,14 +1383,14 @@
             var recipient_lists_wrapper = $('#recipient-lists-wrapper'),
                 report_wrapper = $('#report-wrapper');
 
-            recipient_lists_wrapper.append('<i class="icon16 loading" style="margin:0 0 0 27px;"></i>');
+            recipient_lists_wrapper.append('<i class="fas fa-spinner fa-spin loading"></i>');
             $.get('?module=campaigns&action=recipientsReport&campaign_id=' + campaign_id, params, function (r) {
                 var active_link_rel = [
                     report_wrapper.find('.show-recipients-link.disabled:first').attr('rel'),
                     recipient_lists_wrapper.find('.show-recipients-link.disabled:first').attr('rel')
                 ];
 
-                recipient_lists_wrapper.children('.loading').remove();
+                recipient_lists_wrapper.find('.loading').remove();
                 if (typeof callback_before == 'function') {
                     callback_before();
                 }
@@ -1416,20 +1423,20 @@
                     existing_table.find('tr:last').after(container.find('tr'));
                     container.find('table').remove();
                 }
+
+                $(window).trigger('wa_recipients_loaded')
             });
         },
 
         setTitle: function (title) {
-            var $h1 = $('#wa-app .content h1:first');
+            const $h1 = $('#wa-app .content h1:not(:empty):first');
             if ((typeof title === 'undefined' || !title.length) && $h1.length > 0) {
                 var $h1_input = $h1.find('input');
                 if ($h1_input.length > 0) {
                     title = $h1_input.val().trim();
                 }
                 else {
-                    title = $h1.contents().filter(function () {
-                        return this.nodeType == 3 && this.nodeValue.trim().length > 0;
-                    })[0].nodeValue.trim()
+                    title = $h1.text().trim()
                 }
             }
 
@@ -1438,205 +1445,288 @@
             }
         },
 
-        /**
-         * @param {Object} options
-         * */
-        initStickyBlock: function(options) {
-            if ( !(options && options.$wrapper && options.$wrapper.length) ) {
-                log("Bad options for initStickyBlock");
-                return false;
+        isCtrlS: function (event) {
+            if (event.which == 19) { // Mac users
+                return true;
+            }
+            if (event.which == 115 && event.ctrlKey) {
+                return true;
+            }
+            if (String.fromCharCode(event.which).toLowerCase() == 's' && event.ctrlKey) { // for chrome
+                return true;
+            }
+            return false;
+        },
+
+        setEditor: function($form, options) {
+            const $revolv = $form.find('.js-editor-revolv');
+            const $revolvTemplate = $form.find('.js-revolv-body');
+            const $redactorWrap = $form.find('.js-editor-redactor');
+            const $redactor = $form.find('.js-redactor-body');
+            const $switchContainer = $form.find('.js-switch-redactor-container');
+            const $switchItem = $switchContainer.find('.js-switch-redactor');
+            const $aboutRevolvapp = options.aboutRevolvapp;
+
+            const revolv = this.initRevolv($revolv, $revolvTemplate, $redactor, {
+                revolvPath: options.revolvPath,
+                uploadPath: options.uploadPath,
+                csrf: options.csrf
+            });
+
+            this.initRedactor($redactor, {
+                uploadPath: options.uploadPath,
+                csrf: options.csrf
+            });
+
+            let currentEditor;
+
+            if (sessionStorage.getItem('wa_mailer_editor')) {
+                currentEditor = sessionStorage.getItem('wa_mailer_editor');
             }
 
-            var FixedBlock = ( function($) {
+            if (options.oldStyle) {
+                currentEditor = 'ace'
+            }else{
+                currentEditor = 'revolv';
+            }
 
-                FixedBlock = function(options) {
-                    var that = this;
+            if (currentEditor === 'revolv') {
+                $redactorWrap.css({
+                    visibility: 'hidden',
+                    height: '1px',
+                    overflow: 'hidden'
+                });
 
-                    // DOM
-                    that.$window = $(window);
-                    that.$wrapper = options["$wrapper"];
-                    that.$section = options["$section"];
-                    that.$wrapperContainer = that.$wrapper.parent();
+                if (!$redactor.val()) {
+                    $redactor.val(revolv?.app.editor.getHtml());
+                }
+            } else if (currentEditor === 'ace') {
+                $revolv.hide();
+            }
 
-                    // VARS
-                    that.type = (options["type"] || "bottom");
+            $aboutRevolvapp?.toggleClass('hidden', (currentEditor === 'ace'))
 
-                    // DYNAMIC VARS
-                    that.offset = {};
-                    that.$clone = false;
-                    that.is_fixed = false;
+            $switchItem.each((index, item) => {
+                if (!currentEditor) {
+                    if ($(item).data('editor') === 'ace') {
+                        $(item).closest('li').removeClass('hidden');
+                    }
+                    return;
+                }
 
-                    // INIT
-                    that.initClass();
-                };
+                if ($(item).data('editor') !== currentEditor) {
+                    $(item).closest('li').removeClass('hidden');
+                }
 
-                FixedBlock.prototype.initClass = function() {
-                    var that = this,
-                        $window = that.$window,
-                        resize_timeout = 0;
-
-                    $window.on("resize", function() {
-                        clearTimeout(resize_timeout);
-                        resize_timeout = setTimeout( function() {
-                            that.resize();
-                        }, 100);
+                if (options.oldStyle && $(item).data('editor') === 'ace') {
+                    $revolv.hide();
+                    $redactorWrap.css({
+                        visibility: 'visible',
+                        height: 'auto',
+                        overflow: 'unset'
                     });
+                    $(item).closest('li').addClass('hidden').siblings().removeClass('hidden');
+                }
+            });
 
-                    $window.on("scroll", watcher);
+            $switchItem.on('click', function(event) {
+                event.preventDefault();
+                const redactorView = $(this).data('editor');
+                const $this = $(this);
 
-                    that.$wrapper.on("resize", function() {
-                        that.resize();
-                    });
-
-                    that.$wrapper.on("watch", watcher);
-
-                    that.init();
-
-                    watcher();
-
-                    function watcher() {
-                        var is_exist = $.contains($window[0].document, that.$wrapper[0]);
-                        if (is_exist) {
-                            that.onScroll($window.scrollTop());
-                        } else {
-                            $window.off("scroll", watcher);
+                if (redactorView === 'ace') {
+                    $.waDialog.confirm({
+                        title: '<i class="fas fa-exclamation-triangle text-orange"></i> ' + $.wa.locale['to_advanced_title'],
+                        text: '<p>' + $.wa.locale['to_advanced'] + '</p>',
+                        success_button_title: $.wa.locale['change'],
+                        success_button_class: 'orange',
+                        cancel_button_title: $.wa.locale['cancel'],
+                        cancel_button_class: 'light-gray',
+                        onSuccess() {
+                            $revolv.hide();
+                            $redactorWrap.css({
+                                visibility: 'visible',
+                                height: 'auto',
+                                overflow: 'unset'
+                            });
+                            $this.closest('li').addClass('hidden').siblings().removeClass('hidden');
+                            $redactor.trigger('wa_switch_to_html')
+                            $aboutRevolvapp?.toggleClass('hidden', true)
+                            sessionStorage.setItem('wa_mailer_editor', 'ace');
                         }
+                    });
+                } else {
+                    $.waDialog.confirm({
+                        title: '<i class="fas fa-exclamation-triangle text-red"></i> ' + $.wa.locale['to_base_title'] + ' <i class="fas fa-exclamation-triangle text-red"></i>',
+                        text: '<p>' + $.wa.locale['to_base'] + '</p>',
+                        success_button_title: $.wa.locale['change'],
+                        success_button_class: 'red',
+                        cancel_button_title: $.wa.locale['cancel'],
+                        cancel_button_class: 'light-gray',
+                        onSuccess() {
+                            $revolv.show();
+                            revolv.app.editor.adjustHeight();
+                            $redactorWrap.css({
+                                visibility: 'hidden',
+                                height: '1px',
+                                overflow: 'hidden'
+                            });
+                            $this.closest('li').addClass('hidden').siblings().removeClass('hidden');
+                            if (options.oldStyle) {
+                                revolv.app.editor.setTemplate(options.defaultTemplate);
+                            }
+
+                            $aboutRevolvapp?.toggleClass('hidden', false)
+                            sessionStorage.setItem('wa_mailer_editor', 'revolv');
+                        }
+                    });
+                }
+            });
+        },
+        /**
+         *
+         * @param params
+         */
+        buttonLoader(params) {
+            if(!params.$button && !params.status) return;
+
+            const $button = params.$button,
+                tag_name = $button.prop('tagName'),
+                icons = {
+                    spinner: '<i class="fas fa-spinner fa-spin custom-ml-4 js-loader"></i>',
+                    success: '<i class="fas fa-check-circle custom-ml-4 js-success"></i>',
+                    failed: '<i class="fas fa-times-circle custom-ml-4 js-failed"></i>'
+                },
+                time_out = 1500,
+                status = params.status,
+                removeOtherIcons =  params.removeOtherIcons ?? false,
+                alert =  params.alert ?? false,
+                callback =  (typeof params.callback === 'function') ? params.callback : null;
+
+            if (status === 'loader') {
+                $button.attr('disabled', true);
+                if (tag_name === 'INPUT') {
+                    $button.after(icons.spinner);
+                }else{
+                    if (removeOtherIcons) {
+                        $button.find('svg').toggleClass('hidden', true);
                     }
+                    $button.append(icons.spinner);
+                }
+            }else{
+                if (tag_name === 'INPUT') {
+                    $button.next('.js-loader').remove()
+                }else{
+                    $button.find('.js-loader').remove()
+                }
 
-                    that.$wrapper.data("block", that);
-                };
-
-                FixedBlock.prototype.init = function() {
-                    var that = this;
-
-                    if (!that.$clone) {
-                        var $clone = $("<div />");
-                        that.$wrapperContainer.append($clone);
-                        that.$clone = $clone;
+                if (tag_name === 'INPUT') {
+                    const result = icons[status].replace(new RegExp(`js-${status}`), `${(status === 'success') ? '$& text-green' : '$& text-red'}`);
+                    $button.after(result);
+                    setTimeout(() => $button.next(`.js-${status}`).remove(), time_out)
+                }else{
+                    $button.append(icons[status]);
+                    setTimeout(() => $button.find(`.js-${status}`).remove(), time_out)
+                    if (removeOtherIcons) {
+                        setTimeout(() => $button.find('svg').toggleClass('hidden', false), time_out);
                     }
+                }
 
-                    that.$clone.hide();
+                if (alert) {
+                    this.alertNotification({
+                        isCloseable: false,
+                        alertClass: `${(status === 'success') ? 'success' : 'danger'}`,
+                        alertContent: `${icons[status]} ${(status === 'success') ? $_('Saved') : $_('Error')}`,
+                        alertTimeout: time_out
+                    })
+                }
 
-                    var offset = that.$wrapper.offset();
-                    that.offset = {
-                        left: offset.left,
-                        top: offset.top,
-                        width: that.$wrapper.outerWidth(),
-                        height: that.$wrapper.outerHeight()
-                    };
-                };
+               setTimeout(() => {
+                   $button.attr('disabled', false)
+                   if (callback) {
+                       callback();
+                   }
+               }, time_out);
+            }
 
-                FixedBlock.prototype.resize = function() {
-                    var that = this;
+        },
 
-                    switch (that.type) {
-                        case "top":
-                            that.fix2top(false);
-                            break;
-                        case "bottom":
-                            that.fix2bottom(false);
-                            break;
+        alertNotification(params) {
+            const $appendTo = document.querySelector(params.appendTo) ?? document.body,
+                isCloseable = params.isCloseable ?? true,
+                customClass = params.customClass ?? '',
+                alertTimeout = params.alertTimeout ?? false;
+            let $alertWrapper = $appendTo.querySelector('#t-notifications');
+
+            // Create notification
+            const $alert = document.createElement('div');
+            $alert.classList.add('alert', params.alertClass ?? 'info');
+            $alert.innerHTML = params.alertContent ?? '';
+
+            if(isCloseable){
+                const closeClass = params.alertCloseClass ?? 'js-alert-error-close',
+                    $alertClose = document.createElement('a');
+
+                $alertClose.classList.add('alert-close', closeClass);
+                $alertClose.setAttribute('href', 'javascript:void(0)');
+                $alertClose.innerHTML = '<i class="fas fa-times"></i>';
+                $alert.insertAdjacentElement('afterbegin', $alertClose);
+                // Event listener for close notification
+                $alertClose.addEventListener('click', function() {
+                    this.closest('.alert').remove();
+                });
+            }
+
+            if(!$alertWrapper) {
+                // Create notification wrapper
+                $alertWrapper = document.createElement('div');
+                $alertWrapper.className = 'alert-fixed-box';
+                if (customClass) {
+                    if (typeof customClass === 'string') {
+                        $alertWrapper.classList.add(customClass);
+                    }else{
+                        $alertWrapper.classList.add(...customClass);
                     }
+                }
 
-                    var offset = that.$wrapper.offset();
-                    that.offset = {
-                        left: offset.left,
-                        top: offset.top,
-                        width: that.$wrapper.outerWidth(),
-                        height: that.$wrapper.outerHeight()
-                    };
+                //hack for auto width
+                if($alertWrapper.classList.contains('width-auto')) {
+                    $alertWrapper.style.width = 'auto'
+                }
 
-                    that.$wrapper.trigger("watch");
-                };
+                $alertWrapper.id = 'm-notifications';
+                $appendTo.append($alertWrapper);
+            }
 
-                /**
-                 * @param {Number} scroll_top
-                 * */
-                FixedBlock.prototype.onScroll = function(scroll_top) {
-                    var that = this,
-                        window_w = that.$window.width(),
-                        window_h = that.$window.height();
+            $alertWrapper.append($alert);
 
-                    // update top for dynamic content
-                    that.offset.top = that.$wrapperContainer.offset().top;
-                    that.offset.width = that.$wrapperContainer.width();
+            if(alertTimeout) {
+                setTimeout(() => $alert.remove(), alertTimeout)
+            }
+        },
 
-                    switch (that.type) {
-                        case "top":
-                            var bottom_case = (that.$section ? ((scroll_top + that.offset.height) < that.$section.height() + that.$section.offset().top) : true),
-                                use_top_fix = (that.offset.top < scroll_top && bottom_case);
+        copyToClipboard(text) {
+            const $textarea = document.createElement("textarea");
+            $textarea.value = text;
 
-                            that.fix2top(use_top_fix);
-                            break;
-                        case "bottom":
-                            var use_bottom_fix = (that.offset.top && scroll_top + window_h < that.offset.top + that.offset.height);
-                            that.fix2bottom(use_bottom_fix);
-                            break;
-                    }
+            $textarea.style.top = "0";
+            $textarea.style.left = "0";
+            $textarea.style.position = "fixed";
+            $textarea.style.zIndex = "-1";
 
-                };
+            document.body.appendChild($textarea);
+            $textarea.focus();
+            $textarea.select();
 
-                /**
-                 * @param {Boolean|Object} set
-                 * */
-                FixedBlock.prototype.fix2top = function(set) {
-                    var that = this,
-                        fixed_class = "is-top-fixed";
-
-                    if (set) {
-                        that.$wrapper
-                            .css({
-                                left: that.offset.left,
-                                width: that.offset.width
-                            })
-                            .addClass(fixed_class);
-
-                        that.$clone.css({
-                            height: that.offset.height
-                        }).show();
-
-                    } else {
-                        that.$wrapper.removeClass(fixed_class).removeAttr("style");
-                        that.$clone.removeAttr("style").hide();
-                    }
-
-                    that.is_fixed = !!set;
-                };
-
-                /**
-                 * @param {Boolean|Object} set
-                 * */
-                FixedBlock.prototype.fix2bottom = function(set) {
-                    var that = this,
-                        fixed_class = "is-bottom-fixed";
-
-                    if (set) {
-                        that.$wrapper
-                            .css({
-                                left: that.offset.left,
-                                width: that.offset.width
-                            })
-                            .addClass(fixed_class);
-
-                        that.$clone.css({
-                            height: that.offset.height
-                        }).show();
-
-                    } else {
-                        that.$wrapper.removeClass(fixed_class).removeAttr("style");
-                        that.$clone.removeAttr("style").hide();
-                    }
-
-                    that.is_fixed = !!set;
-                };
-
-                return FixedBlock;
-
-            })(jQuery);
-
-            return new FixedBlock(options);
+            try {
+                return document.execCommand('copy');
+            } catch (error) {
+                console.error(error);
+                return false;
+            } finally {
+                document.body.removeChild($textarea);
+            }
         }
-
     }; // end of $.wa.mailer
 
     function log(params) {

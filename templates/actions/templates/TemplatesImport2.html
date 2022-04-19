@@ -1,13 +1,18 @@
 <div class="block triple-padded">
-    <h1>[`Import template`]</h1>
+    <h3>[`Import template`]</h3>
 
-    <p>[`Please select html file to import:`]</p>
+    <p>[`Please select an HTML file to import:`]</p>
     <ul id="import-index-selector" class="zebra">
         {foreach $html_files as $i => $filename}
-            <li><label>
-                <input type="radio" name="import_index" value="{$i|escape}">
-                {$filename|escape}
-            </label></li>
+            <li>
+                <label>
+                    <span class="wa-radio">
+                        <input type="radio" name="import_index" value="{$i|escape}">
+                        <span></span>
+                    </span>
+                    {$filename|escape}
+                </label>
+            </li>
         {/foreach}
     </ul>
 </div>

@@ -13,7 +13,7 @@ class mailerCampaignsSaveController extends waJsonController
         $mm = new mailerMessageModel();
         if ($message_id) {
             $campaign = $mm->getById($message_id);
-            if (!$campaign || $campaign['status'] > 0 && $campaign['status'] != mailerMessageModel::STATUS_PENDING ) {
+            if (!$campaign || ($campaign['status'] > 0 && $campaign['status'] !== mailerMessageModel::STATUS_PENDING)) {
                 $this->response = $message_id;
                 return;
             }
@@ -61,7 +61,7 @@ class mailerCampaignsSaveController extends waJsonController
         } else {
             $data['create_datetime'] = date("Y-m-d H:i:s");
             $data['create_contact_id'] = $this->getUser()->getId();
-            foreach(array('subject','body','name','from_name','from_email','reply_to','return_path') as $fld) {
+            foreach(array('subject','body','rebody','name','from_name','from_email','reply_to','return_path') as $fld) {
                 if (empty($data[$fld])) {
                     $data[$fld] = '';
                 }

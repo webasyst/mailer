@@ -14,7 +14,7 @@ class mailerCampaignsStep0Action extends waViewAction
 
         // List of templates
         $tm = new mailerTemplateModel();
-        $templates = $tm->getTemplates();
+        $templates = $tm->getTemplates(($this->whichUI() === '1.3'));
 
         if (!$templates) {
             // When there are no templates, open next step immidiately,
@@ -28,8 +28,7 @@ class mailerCampaignsStep0Action extends waViewAction
             }
             $v['image'] = mailerHelper::getTemplatePreviewUrl($v['id']);
             if (!$v['image']) {
-                $v['preview_content'] = preg_replace('~.*<body[^>]*>~si', '', $v['body']);
-                $v['preview_content'] = preg_replace('~</body.*~si', '', $v['preview_content']);
+                $v['preview_content'] = $v['body'];
             }
         }
         unset($v);

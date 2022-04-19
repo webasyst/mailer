@@ -3,6 +3,9 @@
 if (!class_exists('Emogrifier')) {
     include_once(dirname(__FILE__).'/emogrifier/emogrifier.php');
 }
+if (!class_exists('CssConcatenator')) {
+    include_once(dirname(__FILE__).'/emogrifier/CssConcatenator.php');
+}
 
 /**
  * Wrapper around Emogrifier to allow waAutoload.

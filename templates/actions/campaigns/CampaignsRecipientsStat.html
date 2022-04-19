@@ -1,8 +1,8 @@
 {if $errormsg}
-    <p><em class="errormsg">{$errormsg}</em></p>
+    <p><em class="state-error-hint">{$errormsg}</em></p>
     <a href="javascript:$.wa.mailer.redispatch()">[`reload`]</a>
 {elseif $form_disabled}
-    <p><em>[`Recipient list preparation is in progress.`] <i class="icon16 loading"></i></em></p>
+    <p><em>[`Recipient list preparation is in progress.`] <i class="fas fa-spinner fa-spin loading"></i></em></p>
 {else}
     <div id="total-recipients-block">
         <p>[`Total`] <span class="total_count"></span></p>
@@ -62,7 +62,7 @@
 
         // Helper to load next 50 recipients
         var loadNext50 = function(params, callback_before, callback_after) {
-            recipient_lists_wrapper.append('<i class="icon16 loading" style="margin:0 0 0 27px;"></i>');
+            recipient_lists_wrapper.append('<i class="fas fa-spinner fa-spin loading" style="margin:0 0 0 27px;"></i>');
             $.get('?module=campaigns&action=recipientsPreview&campaign_id={$campaign.id}', params, function(r) {
                 recipient_lists_wrapper.children('.loading').remove();
                 if (typeof callback_before == 'function') {
@@ -87,15 +87,15 @@
             recipient_lists_wrapper.empty();
             var type = a.attr('rel');
             loadNext50('start=0'+(type ? ('&type='+type) : ''), null, function() {
-                recipient_lists_wrapper.prepend($('<h3></h3>').text(a.text()));
+                //recipient_lists_wrapper.prepend($('<h3></h3>').text(a.text()));
             });
             total_recipients_block.find('.recipients-list-preview-link').removeClass('disabled');
             a.addClass('disabled');
         });
 
         // Links to load more recipients under already-loaded list
-        recipient_lists_wrapper.on('click', '.load-more-recipients', function() {
-            var self = $(this);
+        recipient_lists_wrapper.on('click', '.js-load-more-recipients', function() {
+            const self = $(this);
             loadNext50(self.attr('rel'));
             self.remove();
         });
@@ -113,9 +113,7 @@
                 $.wa.mailer.showRecipientsInRightSidebar(total_recipients);
                 if (total_recipients > 0) {
                     total_recipients_block.find('.total_count').html(
-                            '<a href="javascript:void(0)" class="recipients-list-preview-link inline-link"><b style="top: 0;">' +
-                            total_recipients_formatted +
-                            '</b></a>'
+                            '<a href="javascript:void(0)" class="recipients-list-preview-link bold text-black">' + total_recipients_formatted + '</a>'
                     ).find('a').trigger('click');
                 } else {
                     total_recipients_block.find('span').text("[`0 recipients`]");

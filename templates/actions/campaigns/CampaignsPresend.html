@@ -1,7 +1,7 @@
 {if $errormsg}
-    <p style="margin-bottom: 0">
+    <p>
         {foreach $errormsg as $e}
-            <em class="errormsg">{$e}</em>
+            <em class="state-error-hint">{$e}</em>
         {/foreach}
     </p>
 {else}
@@ -10,27 +10,25 @@
 
     {if $warnings}
         {if !empty($cron_ok) || $warnings > 1}
-            <p><h3>[`WARNING:`]</h3></p>
+            <h4 class="custom-mb-8">[`Warning`]</h4>
         {/if}
     {else}
-        <p>[`Settings checking passed. Campaign is ready for sending.`]</p>
+        <p class="small">[`Settings checking passed. Campaign is ready for sending.`]</p>
     {/if}
 
     {if empty($cron_ok)}
-        <div id="m-cron-notice">
-            {if $warnings <= 1}
-                <p><h3>[`WARNING:`]</h3></p>
-            {/if}
-
-            <p>
-                {if $warnings > 1}<i class="icon16 exclamation"></i>{/if}
-                [`No <tt>cron</tt> jobs, required for long or scheduled automated mailings, have been set up for your account.`]
-                <strong>[`Without <tt>cron</tt> jobs set up, do not close your browser window after clicking on the "Send to selected recipients" button to complete the email sending process.`]</strong>
+        {if $warnings <= 1}
+            <h4 class="custom-mb-8">[`Warning`]</h4>
+        {/if}
+        <div class="small">
+            <p class="custom-mt-8">
+                [`No <tt>cron</tt> jobs, required for long mailings, have been set up for your account.`]
+                <strong>[`Without <tt>cron</tt> jobs set up, do not close your browser window after clicking on the “Send to selected recipients” button to complete the email sending process.`]</strong>
             </p>
 
             <p>{sprintf_wp(
                 'To ensure that sending is completed without your input, please set up <tt>cron</tt> jobs (<a href="%s" target="_blank">view instructions</a>), with the commands specified below, in your web-hosting control panel:',
-                _w('http://www.webasyst.com/framework/docs/server/cron/')
+                _w('https://developers.webasyst.com/tips/cron/')
             )}</p>
 
             <p class="bold">{$cron_command}</p>
@@ -38,20 +36,20 @@
     {/if}
 
     {if $return_path_ok['status'] == false}
-        <p style="font-size:85%">
-            <i class="icon16 exclamation"></i>
+        <p class="small">
+            <i class="fas fa-exclamation-triangle text-orange"></i>
             {if $return_path_ok['reason'] == 1 || $return_path_ok['reason'] == 2 || $return_path_ok['reason'] == 3}
-            [`Return-Path address specified above is not available.`]
+                [`Return-Path address specified above is not available.`]
             {elseif $return_path_ok['reason'] == 4}
-            {sprintf_wp('Return-Path “%s” forbidden by sending server.', $return_path_ok['return-path'])}
+                {sprintf_wp('Return-Path “%s” forbidden by sending server.', $return_path_ok['return-path'])}
             {/if}
             [`Return-Path address is used to automatically process bounced emails.`]
         </p>
     {/if}
 
     {if empty($routing_ok)}
-        <p style="font-size:85%">
-            {if $warnings > 1}<i class="icon16 exclamation"></i>{/if}
+        <p class="small">
+            {if $warnings > 1}<i class="fas fa-exclamation-triangle"></i>{/if}
             [`You have no routing rules defined for Mailer application.`]
             [`Unsubscribe links in your message will not work.`]
             {sprintf_wp('To set up routing rules use %sSite application%s.', '<a href="../site/#/routing/" target="_blank">', '</a>')}
@@ -59,22 +57,21 @@
     {/if}
 
     {if $scheduled}
-    <p>
-        <i class="icon16 clock"></i> [`Sending is scheduled for`] <strong>{$scheduled_time|wa_datetime:'humandatetime'}</strong>
-
-        <a href="javascript:void(0)" class="cancel-schedule"><b><i>[`cancel`]</i></b></a>
-    </p>
+        <p class="custom-mb-8">
+            <i class="fas fa-clock text-blue"></i> [`Sending is scheduled for`] <strong class="custom-mr-12">{$scheduled_time|wa_datetime:'humandatetime'}</strong>
+            <button type="button" class="cancel-schedule button outlined smaller gray custom-mt-8">[`Cancel`]</button>
+        </p>
     {else}
-    <p>
-        <input id="message-send" type="submit" class="button green" value="{sprintf_wp('Send to selected recipients (%d)', $unique_recipients)}">
-        [`or`]
-        <a href="javascript:void(0)" class="inline-link"><b><i>[`cancel`]</i></b></a>
-
-        <span class="b-schedule">
-            <i class="icon16 clock" style="margin: 0 0.2em 0 0;"></i>
-            <a href="javascript:void(0);" class="no-underline open-schedule-dialog">[`Scheduled sending`]</a>
-        </span>
-    </p>
+        <p class="flexbox middle wrap">
+            <button id="message-send" type="submit" class="button small custom-mb-8">
+                <i class="fas fa-paper-plane"></i> {sprintf_wp('Send to selected recipients (%d)', $unique_recipients)}
+            </button>
+            <span>
+                <button type="button" class="button outlined open-schedule-dialog small custom-mb-8">
+                    <i class="fas fa-clock"></i> [`Scheduled sending`]
+                </button>
+                <a href="javascript:void(0)" class="button outlined gray small">[`Cancel`]</a>
+            </span>
+        </p>
     {/if}
-
 {/if}

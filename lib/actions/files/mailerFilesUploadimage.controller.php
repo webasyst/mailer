@@ -25,21 +25,27 @@ class mailerFilesUploadimageController extends waUploadJsonController
 
     public function display()
     {
+        if (waRequest::isXMLHttpRequest()) {
+            $this->getResponse()->addHeader('Content-Type', 'application/json');
+        }
         $this->getResponse()->sendHeaders();
          if (!$this->errors) {
             if (waRequest::get('filelink')) {
-                echo json_encode(array('filelink' => $this->response));
-            } elseif (waRequest::get('r') === '2') { // redactor 2
-                echo json_encode(array('url' => $this->response));
+                echo waUtils::jsonEncode(array('filelink' => $this->response));
+            } elseif (waRequest::get('fileData')) {
+                $data = array('status' => 'ok', 'data' => ['name' => $this->name, 'url' => $this->response]);
+                echo waUtils::jsonEncode($data);
+            } elseif (waRequest::get('r') === '2' || waRequest::get('r') === 'x') { // redactor 2 or Revolvapp
+                echo waUtils::jsonEncode(array('url' => $this->response));
             } else {
                 $data = array('status' => 'ok', 'data' => $this->response);
-                echo json_encode($data);
+                echo waUtils::jsonEncode($data);
             }
         } else {
             if (waRequest::get('filelink')) {
-                echo json_encode(array('error' => $this->errors));
+                echo waUtils::jsonEncode(array('error' => $this->errors));
             } else {
-                echo json_encode(array('status' => 'fail', 'errors' => $this->errors));
+                echo waUtils::jsonEncode(array('status' => 'fail', 'errors' => $this->errors));
             }
         }
     }
@@ -56,6 +62,10 @@ class mailerFilesUploadimageController extends waUploadJsonController
 
     protected function isValid($f)
     {
+        if (waRequest::request('fileData')) {
+            return parent::isValid($f);
+        }
+
         $allowed = array('jpg', 'jpeg', 'png', 'gif');
         if (!in_array(strtolower($f->extension), $allowed)) {
             $this->errors[] = sprintf(_w("Files with extensions %s are allowed only."), '*.'.implode(', *.', $allowed));

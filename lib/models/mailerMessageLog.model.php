@@ -93,7 +93,7 @@ class mailerMessageLogModel extends waModel
 
         $datetime_sql = '';
         if ($startinterval && $endinterval && $quantum) {
-            $startinterval = floor($startinterval / (60 * $quantum)) * (60 * $quantum);
+            $startinterval = floor((int)$startinterval / (60 * (int)$quantum)) * (60 * (int)$quantum);
             $startinterval = waDateTime::date('Y-m-d H:i:s', $startinterval);
             $endinterval = waDateTime::date('Y-m-d H:i:s', $endinterval);
 

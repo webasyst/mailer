@@ -1,105 +1,150 @@
+<nav class="sidebar-mobile-toggle">
+    <div class="box align-center">
+        <a href="javascript:void(0);">
+            <i class="fas fa-bars"></i>&nbsp;
+            [s`Menu`]
+        </a>
+    </div>
+</nav>
+
 {if $wa->mailer->isAuthor()}
-    <div class="block">
-        <ul class="menu-v with-icons ">
-            <li class="bottom-padded">
-                <a href="#/campaigns/new/" class="bold">
-                    <i class="icon16 envelope"></i> [`New campaign`]
-                </a>
-            </li>
-        </ul>
+    <div class="sidebar-header box custom-pt-20">
+        <a href="#/campaigns/new/" class="button full-width align-center">
+            <i class="fas fa-paper-plane fa-w-20 custom-mr-4"></i>&nbsp;<span class="s-title small">[`New campaign`]</span>
+        </a>
     </div>
 {/if}
+<div class="sidebar-body hide-scrollbar">
 
-{if $drafts}
-    <div class="block">
-        <h5 class="heading collapse-handler" id="m-sb-drafts-header">
-            <i class="icon16 darr"></i>
-            <span class="title b-all-drafts">[`Drafts`]</span>
-            <span class="count">{count($drafts)}</span>
-        </h5>
-
-        <div class="collapsible">
-            <ul class="menu-v with-icons">
-                {foreach $drafts as $d}
-                    <li {if $d@iteration > 10 && count($drafts) > 10}style="display:none" data-list="hidden"{/if}><a href="#/campaigns/letter/{$d.id}">
-                        {if $d.status == mailerMessageModel::STATUS_PENDING}<span class="count"><i class="icon16 clock"></i></span>{/if}
-                        <i class="icon16 userpic20" style="background-image: url('{if $d.pic_src}{$d.pic_src}{else}{$wa_url}wa-content/img/userpic20.jpg{/if}');"></i>{if $d.status == mailerMessageModel::STATUS_PENDING}<i>{/if}{ifempty($d.subject, "[`<no subject>`]")|escape}{if $d.status == mailerMessageModel::STATUS_PENDING}</i>{/if}
-                        <br><span class="hint">{if $d.status == mailerMessageModel::STATUS_PENDING}{waDateTime::format('datetime', $d.send_datetime)}{else}{waDateTime::format('date', $d.create_datetime)}{/if}</span>
-                    </a></li>
-                {/foreach}
-            </ul>
-            {if count($drafts) > 10}
-            <span id="b-all-drafts" class="count b-drafts-toggle" data-list="shown">
-                <a href="javascript:void(0);" class="inline-link all-drafts"><b><i>[`all drafts`]</i></b></a>
+    <div class="bricks flexbox custom-mt-12">
+        <a href="#/campaigns/archive/" class="brick sending-list-item{if !$wa->mailer->isAdmin()} full-width{/if}" id="sending-list-item">
+            <span class="icon">
+                <i class="fas fa-flag"></i>
             </span>
-            {/if}
-        </div>
-    </div>
-{/if}
-
-<div class="block">
-    <ul class="menu-v with-icons ">
-        <li id="sending-list-item"{if $sending_count} class="bold"{/if}>
-            <span class="count">
+            <span class="count js-count text-gray">
                 {if $sending_count}
-                    {$sending_count}/{$total_sent}
+                    <span class="badge blue blinked">{$sending_count}</span> {$total_sent}
                 {else}
                     {$total_sent}
                 {/if}
             </span>
-            <a href="#/campaigns/archive/"><i class="icon16 campaigns"></i>[`Sent`]</a>
-        </li>
-    </ul>
-</div>
+            <span title="[`Sent`]">[`Sent`]</span>
+        </a>
+        {if $wa->mailer->isAdmin()}
+            <a href="#/subscribers/" class="brick" id="subscribers-sb-link">
+                <span class="icon text-yellow"><i class="fas fa-users"></i></span>
+                <span class="count js-count text-gray">{$subscribers_count}</span>
+                <span title="[`Subscribers`]">[`Subscribers`]</span>
+            </a>
+        {/if}
+    </div>
 
-{if $wa->mailer->isAdmin()}
-    <div class="hr"></div>
-
-    <div class="block">
-        <ul class="menu-v with-icons ">
+    {if $wa->mailer->isAdmin()}
+        <ul class="menu custom-mt-4">
             <li id="templates-list-item">
-                <span class="count">{$templates_count}</span>
-                <a href="#/templates/"><i class="icon16 script"></i>[`Templates`]</a>
-            </li>
-            <li id="subscribers-sb-link">
-                <span class="count">{$subscribers_count}</span>
-                <a href="#/subscribers/"><i class="icon16 contact"></i>[`Subscribers`]</a>
-            </li>
-            <li id="unsubscribers-sb-link">
-                <span class="count">{$unsubscribers_count}</span>
-                <a href="#/unsubscribed/"><i class="icon16 no-bw"></i>[`Unsubscribed  `]</a>
+                <a href="#/templates/">
+                    <span class="count js-count">{$templates_count}</span>
+                    <i class="fas fa-brush text-purple"></i>
+                    <span>[`Templates`]</span>
+                </a>
             </li>
             <li id="undeliverable-sb-link">
-                <span class="count">{$undeliverable_count}</span>
-                <a href="#/undeliverable/"><i class="icon16 delete-bw"></i>[`Delivering errors`]</a>
+                <a href="#/undeliverable/">
+                    <span class="count js-count">{$undeliverable_count}</span>
+                    <i class="fas fa-ban text-red"></i>
+                    <span>[`Delivery errors`]</span>
+                </a>
             </li>
+            <li id="unsubscribers-sb-link">
+                <a href="#/unsubscribed/">
+                    <span class="count js-count">{$unsubscribers_count}</span>
+                    <i class="fas fa-running"></i>
+                    <span>[`Unsubscribed`]</span>
+                </a>
+            </li>
+        </ul>
+    {/if}
+
+    {if $drafts}
+        <header class="heading cursor-pointer" id="m-sb-drafts-header">
+            <span>
+                <span class="title b-all-drafts">[`Drafts`]</span>
+            </span>
+            <span class="count js-count">{count($drafts)}</span>
+        </header>
+
+        <div class="collapsible">
+            <ul class="menu{if count($drafts) > 10} custom-mb-0{/if}">
+                {foreach $drafts as $d}
+                    <li {if $d@iteration > 10 && count($drafts) > 10}style="display:none" data-list="hidden"{/if}>
+                        <a href="#/campaigns/letter/{$d.id}">
+                            {if $d.status == mailerMessageModel::STATUS_PENDING}
+                                <span class="count">
+                                    <i class="fas fa-clock text-blue"></i>
+                                </span>
+                            {/if}
+                            <span class="icon custom-mt-4">
+                                <i class="userpic" style="background-image: url('{if $d.pic_src}{$d.pic_src}{else}{$wa_url}wa-content/img/userpic.svg{/if}');"></i>
+                            </span>
+                            <span{if $d.status == mailerMessageModel::STATUS_PENDING} class="italic"{/if}>{ifempty($d.subject, "[`<no subject>`]")|escape}
+                                <span class="hint small flexbox custom-mt-4">
+                                    {if $d.status == mailerMessageModel::STATUS_PENDING}
+                                        {waDateTime::format('humandate', $d.send_datetime)}
+                                    {else}
+                                        {waDateTime::format('humandate', $d.create_datetime)}
+                                    {/if}
+                                </span>
+                            </span>
+                        </a>
+                    </li>
+                {/foreach}
+            </ul>
+            {if count($drafts) > 10}
+                <p id="b-all-drafts" class="count b-drafts-toggle small custom-m-0 box" data-list="shown">
+                    <a href="javascript:void(0);" class="all-drafts text-gray">[`All drafts`] ({count($drafts)})</a>
+                </p>
+            {/if}
+        </div>
+    {/if}
+</div>
+{if $wa->mailer->isAdmin()}
+    <div class="sidebar-footer shadowed">
+        <ul class="menu">
             <li class="sidebar-plugins-link">
                 <a href="#/plugins/">
-                    <i class="icon16 plugins"></i>[`Plugins`]
+                    <i class="fas fa-plug"></i>
+                    <span>[`Plugins`]</span>
                 </a>
             </li>
             {if $wa->user()->getRights($wa->app(), 'design')}
-            <li class="sidebar-design-link">
-                <a href="#/design/">
-                    <i class="icon16 palette"></i>[`Design`]
-                </a>
-            </li>
+                <li class="sidebar-design-link">
+                    <a href="#/design/">
+                        <i class="fas fa-palette"></i>
+                        <span>[`Design`]</span>
+                    </a>
+                </li>
             {/if}
         </ul>
     </div>
 {/if}
 
-<script>$(function() {
-    $.wa.mailer.sending_count = {ifempty($sending_count, 0)};
+<script>
+    $(function() {
+        $.wa.mailer.sending_count = {ifempty($sending_count, 0)};
 
-    $('#b-all-drafts').on('click', 'a', function(e){
-        e.preventDefault();
-        var $this = $(this);
-        $('#b-all-drafts').hide();
-        $this.closest('.collapsible').find('li').show();
-    })
+        $('#b-all-drafts').on('click', 'a', function(e){
+            e.preventDefault();
+            $('#b-all-drafts').hide();
+            $(this).closest('.collapsible').find('li').show();
+        })
 
-});</script>
+        const  $sidebar = $('.js-app-sidebar');
+        $sidebar.waShowSidebar();
+        $sidebar.find(' > div').on('touchstart', 'a', function(){
+            $sidebar.find('.sidebar-mobile-toggle').trigger('touchstart')
+        })
+    });
+</script>
 
 {*
  * Plugin blocks
@@ -107,4 +152,3 @@
 {foreach $plugin_blocks as $block}
     {$block.html}
 {/foreach}
-

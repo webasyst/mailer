@@ -64,7 +64,7 @@ class mailerShopBackend_customers_listHandler extends waEventHandler
         });
     };
 </script>
-<input type="button" onclick=":handler();" value=":buton_value"> <i class="icon16 loading" id=":loading_link" style="display:none;"></i>
+<input type="button" onclick=":handler();" value=":buton_value"> <i class="fas fa-spinner fa-spin loading" id=":loading_link" style="display:none;"></i>
 HTML;
                 $replace = array(
                     ':handler' => uniqid('sendToMailer'),

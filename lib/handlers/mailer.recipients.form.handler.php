@@ -22,7 +22,7 @@ class mailerMailerRecipientsFormHandler extends waEventHandler
             'content' => '',
             'opened' => false,
             'included_in_all_contacts' => true,
-            'comment' => _w('This option allows selecting contacts who have opted for receiving your email newsletters using a subscription form (see Subscribers section).'),
+            'comment' => _w('This option allows selecting contacts who have opted for receiving your email newsletters using a subscription form (see the Subscribers section).'),
 
             // not part of event interface, but used internally here
             'all_selected_id' => false,
@@ -115,11 +115,10 @@ class mailerMailerRecipientsFormHandler extends waEventHandler
         $recipients_groups['subscribers']['content'] = trim(wao(new mailerCampaignsRecipientsBlockSubscribersAction($recipients_groups['subscribers']))->display());
         $recipients_groups['flat_list']['content'] = trim(wao(new mailerCampaignsRecipientsBlockFlatListAction($recipients_groups['flat_list']))->display());
         if ($recipients_groups['flat_list']['count']) {
-            $recipients_groups['flat_list']['name'] .= '<span class="hide-when-modified"> ('.$recipients_groups['flat_list']['count'].')</span>';
+            $recipients_groups['flat_list']['name'] .= '<span class="hide-when-modified count"> ('.$recipients_groups['flat_list']['count'].')</span>';
         }
 
         $d = mailerDependency::resolve();
         $d->call(__METHOD__, $recipients_groups);
     }
 }
-

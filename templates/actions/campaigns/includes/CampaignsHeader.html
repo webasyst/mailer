@@ -1,0 +1,149 @@
+{$_params = $params|default:[]}
+{$back = $_params.back|default:[]}
+{$title = $_params.title|default:''|escape}
+{$is_campaigns_page = $_params.is_campaigns_page|default:false}
+{$has_button = $_params.has_button|default:false}
+{$has_toggle = $_params.has_toggle|default:false}
+<div class="article-description flexbox vertical">
+    {if $back}
+        <ul class="breadcrumbs custom-mb-12">
+            <li>
+                <a href="{$back.link}" class="gray js-core-header active">
+                    {$back.name|escape}
+                </a>
+            </li>
+            <li></li>
+        </ul>
+    {/if}
+    {if $title}
+        <h1 class="h3 custom-mt-0 custom-mb-16">{$title}</h1>
+    {/if}
+
+    {if !$is_campaigns_page}
+        <ul class="unstyled flexbox custom-mt-0 custom-mb-24 gray small">
+            <li class="middle custom-mr-16">
+                [`Author`]
+            </li>
+            <li class="middle custom-mr-8">
+                <a href="{if $creator.id > 0}/webasyst/contacts/#/contact/{$creator.id}{else}javascript:void(0){/if}" style="background-image: url({$creator->getPhoto(32)})" class="userpic userpic20 valign-middle">
+                </a>
+            </li>
+            <li class="middle custom-mr-16">
+                <a href="{if $creator.id > 0}/webasyst/contacts/#/contact/{$creator.id}{else}javascript:void(0){/if}" class="bold">
+                    {$creator.name|escape}
+                </a>
+            </li>
+            <li class="middle">
+                {$campaign.create_datetime|wa_date:'humandatetime'}
+            </li>
+        </ul>
+    {/if}
+
+    {if $has_toggle}
+
+    {/if}
+
+    <script>
+        (function ($) {
+            "use strict";
+
+            $.wa.mailer.highlightSidebar($('.js-editor-toolbar'));
+
+            {if $wa->mailer->writable($campaign)}
+            // Link to delete campaign
+            $("#message-delete").on('click', function (event) {
+                event.preventDefault();
+
+                {if !$campaign.is_template}
+                let confirm_text = "[`Do you really want to remove this campaign (you will not be able to undo this action)?`]";
+                {if $campaign.status && $campaign.status != mailerMessageModel::STATUS_DRAFT && !empty($contains_files)}
+                confirm_text += "\n\n" + "[`Images containing in your message will be unavailable to your recipients.`]";
+                {/if}
+
+                $.waDialog.confirm({
+                    title: "",
+                    text: confirm_text,
+                    success_button_title: '[`Delete`]',
+                    success_button_class: 'danger',
+                    cancel_button_title: '[`Cancel`]',
+                    cancel_button_class: 'light-gray',
+                    onSuccess() {
+                        $.wa.mailer.random = Math.random();
+                        const rand = $.wa.mailer.random;
+                        $.post("?module=campaigns&action=delete", { id: {$campaign.id} }, response => {
+                            if (response.status === 'ok') {
+                                if ($.wa.mailer.random == rand) {
+                                    $.storage.del('mailer/hash');
+                                    $('#content .article-body').html(
+                                        '<h1 class="h2">' +
+                                        "{ifempty($campaign.subject, '[`<no subject>`]')|escape}" +
+                                        '</h1><div class="alert success align-center"><p>' +
+                                            {if $campaign.is_template || !$campaign.status || $campaign.status == mailerMessageModel::STATUS_DRAFT}
+                                        "[`This draft has been deleted.`]" +
+                                            {else}
+                                        "[`This campaign has been successfully deleted.`]" +
+                                            {/if}
+                                        '</p></div>'
+                                    );
+                                    $('.js-actions-wrapper').hide();
+                                    $.wa.mailer.reloadSidebar();
+                                }
+                            }
+                        }, "json");
+                    },
+                    onCancel() {
+                        return false;
+                    }
+                });
+                {/if}
+            });
+            {/if}
+
+            {if mailerHelper::isAdmin()}
+            // 'Save as a template' link
+            $('.save-template-link').on('click', function () {
+                $.wa.mailer.showLoading();
+                $.post('?module=templates&action=copy&id={$campaign.id}', response => window.location.hash = '#/template/' + response.data + '/', 'json');
+            });
+            {/if}
+
+            {if mailerHelper::isAuthor()}
+            // 'Create new from this' link
+            $('.new-from-this-link').on('click', function () {
+                $.wa.mailer.showLoading();
+                $.post('?module=templates&action=copy&create_draft=1&id={$campaign.id}', response => {
+                    $.wa.mailer.reloadSidebar();
+                    window.location.hash = '#/campaigns/letter/' + response.data + '/';
+                }, 'json');
+            });
+
+            $(".js-toggle").waToggle({
+                change: function(event, target, toggle) {
+                    window.history.pushState(null, null, target.dataset.href);
+                }
+            });
+            {/if}
+
+            {if $campaign.status != {mailerMessageModel::STATUS_DRAFT} && $campaign.status != {mailerMessageModel::STATUS_PENDING}}
+            $('#right-sidebar-recipients-number').hide();
+            {elseif $wa->mailer->writable($campaign)}
+            setTimeout(function () {
+                // Get number of recipients from local storage, if cached
+                {if isset($recipients_selected)}
+                $.wa.mailer.showRecipientsInRightSidebar('{if $recipients_selected === true}1{else}{$recipients_selected}{/if}');
+                {else}
+                $.wa.mailer.showRecipientsInRightSidebar('');
+                {/if}
+
+                {if $wa->mailer->getConfigOption('max_recipients_count') && isset($recipients_selected)}
+                const max_recipients_count = {$wa->mailer->getConfigOption('max_recipients_count')};
+                const recipients_count = ('{$recipients_selected}' || '0').replace(/[^0-9]/g, '') - 0;
+                if (recipients_count > max_recipients_count) {
+                    $('#right-sidebar-recipients-number').append('<span class="red indicator" style="top:-1px;left:3px;">!</span>');
+                }
+                {/if}
+            }, 0);
+            {/if}
+        })($);
+    </script>
+</div>

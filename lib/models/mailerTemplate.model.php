@@ -7,17 +7,21 @@
  */
 class mailerTemplateModel extends mailerMessageModel
 {
-    public function getTemplates()
+    public function getTemplates($only_html = false)
     {
-        $sql = "SELECT m.id, m.name, m.subject, m.body, mp.value AS description, CAST(mps.value AS SIGNED) AS sort
+        $where = 'WHERE is_template = 1';
+        if ($only_html) {
+            $where .= ' AND m.rebody = ""';
+        }
+        $sql = "SELECT m.id, m.name, m.subject, m.body, m.rebody, mp.value AS description, CAST(mps.value AS SIGNED) AS sort
                 FROM ".$this->table." AS m
                     LEFT JOIN mailer_message_params AS mp
                         ON mp.message_id=m.id
                             AND mp.name='description'
                     LEFT JOIN mailer_message_params AS mps
                         ON mps.message_id=m.id
-                            AND mps.name='sort'
-                WHERE is_template = 1
+                            AND mps.name='sort' 
+                            $where
                 ORDER BY sort, id DESC";
         return $this->query($sql)->fetchAll();
     }
@@ -56,9 +60,9 @@ class mailerTemplateModel extends mailerMessageModel
         return $t;
     }
 
-    public function countAll()
+    public function countAll($only_html = false)
     {
-        return $this->select('count(*)')->where('is_template=1')->fetchField();
+        return $this->select('count(*)')->where($only_html ? "is_template=1 AND rebody = ''" : "is_template=1")->fetchField();
     }
 }
 

@@ -13,7 +13,7 @@
             <td>
                 <input type="hidden" name="charset" class="charset" value="">
                 <input type="submit" value="[`Subscribe`]">
-                <i class="icon16 loading" style="display:none"></i>
+                <i class="fas fa-spinner fa-spin loading" style="display:none"></i>
             </td>
         </tr>
     </table>
@@ -29,9 +29,9 @@
 
         // Validate email
         var email_input = form.find('input[name="email"]');
-        email_input.siblings('.errormsg').remove();
+        email_input.siblings('.state-error-hint').remove();
         if (!email_input.val()) {
-            email_input.addClass('error').after('<em class="errormsg">[`This field is required.`]</em>');
+            email_input.addClass('error').after('<em class="state-error-hint">[`This field is required.`]</em>');
             return false;
         } else {
             email_input.removeClass('error');

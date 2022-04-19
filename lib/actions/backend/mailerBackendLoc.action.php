@@ -12,6 +12,7 @@ class mailerBackendLocAction extends waViewAction
         // Application locale strings
         foreach(array(
             'Saved',
+            'Error',
             'Cancel',
             'Total selected:',
             'not specified yet',
@@ -24,10 +25,10 @@ class mailerBackendLocAction extends waViewAction
             '%dh',
             'cancel',
             'Search results',
-            'This plain-text version of your message is automatically created from HTML version and displayed if recipients have disabled HTML view in their email programs.',
-            'Insert variable',
+            'This plain text version of your message is automatically created from the HTML version and is displayed if recipients have disabled the HTML-viewing mode in their email programs.',
             'Close',
             'Apply',
+            'Images & files upload',
         ) as $s) {
             $strings[$s] = _w($s);
         }

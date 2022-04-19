@@ -11,7 +11,7 @@ class mailerTemplatesAction extends waViewAction
             throw new waException('Access denied.', 403);
         }
         $template_model = new mailerTemplateModel();
-        $templates = $template_model->getTemplates();
+        $templates = $template_model->getTemplates(($this->whichUI() === '1.3'));
 
         foreach($templates as &$v) {
             if (!trim($v['subject'])) {
@@ -19,8 +19,7 @@ class mailerTemplatesAction extends waViewAction
             }
             $v['image'] = mailerHelper::getTemplatePreviewUrl($v['id']);
             if (!$v['image']) {
-                $v['preview_content'] = preg_replace('~.*<body[^>]*>~si', '', $v['body']);
-                $v['preview_content'] = preg_replace('~</body.*~si', '', $v['preview_content']);
+                $v['preview_content'] = $v['body'];
             }
         }
         unset($v);

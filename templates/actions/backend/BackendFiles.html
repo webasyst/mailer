@@ -1,0 +1,264 @@
+<div class="dialog" id="files_upload">
+    <div class="dialog-background"></div>
+    <div class="dialog-body">
+        <div class="dialog-content custom-pb-0">
+            <div class="drop-area">
+                <p>[`Drag & drop an image or any other file:`]</p>
+                <div class="upload">
+                    <label class="button purple outlined rounded">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>[`Select a file`]</span>
+                        <input type="file" autocomplete="off" multiple>
+                    </label>
+                </div>
+                <div class="custom-mt-32 js-uploaded-files uploaded-files-box">
+                    {if isset($campaign_files)}
+                        {foreach $campaign_files as $file}
+                            <div class="flexbox wrap-mobile js-uploaded-file">
+                                <div class="image custom-mr-16 custom-mb-16-mobile">
+                                    {if $file.is_image}
+                                        <img src="{$file.url}" alt="{$file.name|escape}" onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.classList.remove('hidden');">
+                                        <i class="fas fa-image hidden"></i>
+                                    {else}
+                                        <i class="fas fa-file"></i>
+                                    {/if}
+                                </div>
+                                <div class="details wide align-left">
+                                    <div class="file-name semibold small break-all js-file-name">{$file.name|escape}</div>
+                                    {$code = "<a href=\"`$wa->domainUrl()``$file.url`\" download>`$file.name`</a>"}
+                                    {if $file.is_image}
+                                        {$code = "<figure><img src=\"`$wa->domainUrl()``$file.url`\"></figure>"}
+                                    {/if}
+                                    <textarea class="copy-area js-copy-area">{$code|escape}</textarea>
+                                    <div class="buttons-wrapper">
+                                        <button type="button"
+                                                class="js-copy button outlined rounded smaller"
+                                                data-copy-text="[`Copy`]"
+                                                data-copied-text="[`Copied`]"
+                                                data-error-text="[`Error`]">
+                                            <i class="fas fa-copy custom-mr-4"></i>
+                                            <i class="fas fa-check custom-mr-4 hidden"></i>
+                                            <i class="fas fa-times custom-mr-4 hidden"></i>
+                                            <span>[`Copy`]</span>
+                                        </button>
+                                        <button type="button" class="js-delete button outlined rounded smaller red">
+                                            <i class="fas fa-trash-alt custom-mr-4"></i>
+                                            [`Delete`]
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        {/foreach}
+                    {/if}
+                    <div class="js-upload-file js-uploaded-file flexbox wrap-mobile hidden">
+                        <div class="image custom-mr-16 custom-mb-16-mobile js-image">
+                            <i class="fas fa-image hidden js-is-image"></i>
+                            <i class="fas fa-file hidden js-is-file"></i>
+                        </div>
+                        <div class="details wide align-left">
+                            <div class="file-name semibold small break-all js-file-name"></div>
+                            <progress max="100" value="0"></progress>
+                            <textarea class="hidden copy-area js-copy-area"></textarea>
+                            <div class="buttons-wrapper">
+                                <button type="button" class="js-cancel button outlined rounded small gray">
+                                    <i class="fas fa-times custom-mr-4"></i>
+                                    [`Cancel the upload`]
+                                </button>
+                                <button type="button"
+                                        class="js-copy button outlined rounded small hidden"
+                                        data-copy-text="[`Copy`]"
+                                        data-copied-text="[`Copied`]"
+                                        data-error-text="[`Error`]">
+                                    <i class="fas fa-copy custom-mr-4"></i>
+                                    <i class="fas fa-check custom-mr-4 hidden"></i>
+                                    <i class="fas fa-times custom-mr-4 hidden"></i>
+                                    <span>[`Copy`]</span>
+                                </button>
+                                <button type="button" class="js-delete button outlined rounded small red hidden">
+                                    <i class="fas fa-trash-alt custom-mr-4"></i>
+                                    [`Delete`]
+                                </button>
+                            </div>
+                            <p class="state-error-hint custom-mt-0 hidden js-upload-error"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="dialog-footer">
+            <button class="js-close-dialog button light-gray">[`Close`]</button>
+        </footer>
+    </div>
+    <script>
+        (function ($) {
+            const $dialog = $('#files_upload');
+
+            // Copy to clipboard
+            $dialog.on('click', '.js-copy', function (e) {
+                e.preventDefault();
+                const $btn = $(this),
+                    copy_result = $.wa.mailer.copyToClipboard($btn.closest('.details').find('.js-copy-area').text());
+
+                    $btn
+                        .addClass(`${ copy_result ? 'green bg-green' : 'orange bg-orange' } text-white`)
+                        .find(`svg.${ copy_result ? 'fa-check' : 'fa-times' }`)
+                        .removeClass('hidden')
+                        .siblings('svg')
+                        .addClass('hidden').end().end()
+                        .find('span')
+                        .text(`${ copy_result ? $btn.data('copied-text') : $btn.data('error-text') }`);
+
+                setTimeout(()=>{
+                    $btn
+                        .removeClass('green bg-green orange bg-orange text-white')
+                        .find('svg.fa-copy')
+                        .removeClass('hidden')
+                        .siblings('svg')
+                        .addClass('hidden').end().end()
+                        .find('span')
+                        .text($btn.data('copy-text'));
+                }, 500)
+            })
+
+            // Delete file
+            $dialog.on('click', '.js-delete', function (e) {
+                e.preventDefault();
+                const $btn = $(this),
+                    $file_wrapper = $btn.closest('.js-uploaded-file'),
+                    file_name = $file_wrapper.find('.js-file-name').text();
+
+                $.waDialog.confirm({
+                    text: 'Этот файл будет удален из всех рассылок',
+                    success_button_title: '[`Delete`]',
+                    success_button_class: 'danger',
+                    cancel_button_title: '[`Cancel`]',
+                    cancel_button_class: 'light-gray',
+                    onSuccess() {
+                        $.post('?module=files&action=delete', {
+                            message_id: {$campaign_id},
+                            file_name
+                        }, function(response){
+                            if (response.status === 'ok') {
+                                $file_wrapper.remove();
+                            }
+                        })
+                    }
+                })
+            })
+
+            // Files upload
+            const $files_wrapper = $('.js-uploaded-files'),
+                $upload_file_wrapper = $('.js-upload-file')
+
+            $dialog.find('[type="file"]').on('change', function () {
+                if (this.files.length) {
+                    for (let i = 0; i < this.files.length; i++) {
+                        const $file_wrapper = $upload_file_wrapper.clone().removeClass('hidden'),
+                            $image = $file_wrapper.find('.js-image'),
+                            $file_name = $file_wrapper.find('.js-file-name'),
+                            $progress = $file_wrapper.find('progress'),
+                            $cancel_btn = $file_wrapper.find('.js-cancel'),
+                            $error = $file_wrapper.find('.js-upload-error'),
+                            file = this.files[i];
+
+                        let is_image = true;
+
+                        if (!file.type.startsWith('image/')){
+                            is_image = false
+                        }
+
+                        const img = document.createElement("img");
+                        img.file = file;
+                        img.onerror = function(){
+                            this.onerror=null;
+                            this.style.display='none';
+                            this.closest('.js-image').querySelector(`${ is_image ? '.js-is-image' : '.js-is-file' }`).classList.remove('hidden')
+                        }
+                        $image.prepend(img);
+
+                        const reader = new FileReader();
+                        const xhr = new XMLHttpRequest();
+
+                        xhr.upload.addEventListener("progress", function(e) {
+                            if (e.lengthComputable) {
+                                const percentage = Math.round((e.loaded * 100) / e.total);
+                                $progress.val(percentage)
+                            }
+                        });
+
+                        reader.onload = event => {
+                            img.src = event.target.result;
+
+                            const formData = new FormData();
+                            formData.append('message_id', {$campaign_id});
+                            formData.append('file', file);
+
+                            $.ajax({
+                                xhr: function() {
+                                    const xhr = new window.XMLHttpRequest();
+
+                                    xhr.upload.addEventListener('progress', function(event) {
+                                        if (event.lengthComputable) {
+                                            const percentage = Math.round((event.loaded * 100) / event.total);
+                                            $progress.val(percentage)
+                                        }
+                                    }, false);
+
+                                    $cancel_btn.on('click', function (event) {
+                                        event.preventDefault();
+                                        xhr.abort();
+                                        $file_wrapper.hide('normal', function () {
+                                            this.remove()
+                                        })
+                                    })
+
+                                    return xhr;
+                                },
+                                url: "?module=files&action=uploadimage&fileData=1",
+                                method: 'POST',
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                success(response) {
+                                    if (response.status === 'ok') {
+                                        let copy_area_text = `<a href="${ response.data.url }" download>${ response.data.name }</a>`;
+                                        if (is_image) {
+                                            copy_area_text = `<figure><img src="${ response.data.url }"></figure>`;
+                                        }
+                                        $file_name.text(response.data.name)
+                                        $progress.next('.js-copy-area').removeClass('hidden').text(copy_area_text).end().remove();
+                                        $cancel_btn.siblings().removeClass('hidden').end().remove();
+                                    }else{
+                                        $progress.addClass('color-red');
+                                        $error.removeClass('hidden').text(response.errors);
+                                    }
+                                },
+                                error(event) {
+                                    console.log(event)
+                                }
+                            });
+
+                        };
+                        reader.readAsDataURL(file);
+                        $files_wrapper.prepend($file_wrapper)
+                    }
+                }
+            })
+
+            const $drop_area = $(".drop-area").waUpload({
+                is_uploadbox: true,
+                show_file_name: false
+            })
+
+            $drop_area.on("drop", function() {
+                const files = $(this).data('upload')?.files;
+                if (files.length) {
+                    const $input = $dialog.find('[type="file"]');
+                    $input[0].files = files
+                    $input.change()
+                }
+            });
+
+        })(jQuery);
+    </script>
+</div>

@@ -1,42 +1,52 @@
-<h2>[`Scheduled sending`]</h2>
+<div class="dialog" id="form_schedule_dialog">
+    <div class="dialog-background"></div>
 
-<form id="form-schedule" action="?module=schedule&action=save" method="post">
+<form id="form-schedule" action="?module=schedule&action=save" method="post" class="dialog-body">
+    <h3 class="dialog-header">[`Scheduled sending`]</h3>
+    <div class="dialog-content fields">
 {*if $cron_ok*}
     {if isset($campaign.id)}<input type="hidden" name="id" value="{$campaign.id}" />{/if}
-    <div class="block fields form">
 
         <div class="datetime">
-            <i class="icon16 clock" style="margin-top: 0.3em;"></i>
-            <input class="datepicker" name="schedule_datetime[]" type="text"  value="{if $schedule_date}{$schedule_date|wa_date}{else}{'today'|wa_date}{/if}" size="8" style="width:100px; text-align: center;">&nbsp;
-            <select name="schedule_datetime[]" class="time" data-role="datetime_hours">
-                {for $h=0 to 23}
-                <option value="{$h}" {if $h==$schedule_hour}selected="selected"{/if}>{"%02d"|sprintf:$h}</option>
-                {/for}
-            </select> :
-            <select name="schedule_datetime[]" class="time" data-role="datetime_minutes">
-                {for $m=0 to 59 step 10}
-                <option value="{$m}" {if $m==$schedule_min}selected="selected"{/if}>{"%02d"|sprintf:$m}</option>
-                {/for}
-            </select>
+            <div class="state-with-inner-icon right">
+                <input class="js-datepicker small shorter" name="schedule_datetime[]" type="text"  value="{if $schedule_date}{$schedule_date|wa_date}{else}{'today'|wa_date}{/if}">&nbsp;
+                <span class="icon cursor-pointer js-datepicker-trigger">
+                    <i class="fas fa-calendar-alt"></i>
+                </span>
+            </div>
+            <div class="wa-select">
+                <select name="schedule_datetime[]" class="time" data-role="datetime_hours">
+                    {for $h=0 to 23}
+                        <option value="{$h}" {if $h==$schedule_hour}selected="selected"{/if}>{"%02d"|sprintf:$h}</option>
+                    {/for}
+                </select>
+            </div>
+            :
+            <div class="wa-select">
+                <select name="schedule_datetime[]" class="time" data-role="datetime_minutes">
+                    {for $m=0 to 59 step 10}
+                        <option value="{$m}" {if $m==$schedule_min}selected="selected"{/if}>{"%02d"|sprintf:$m}</option>
+                    {/for}
+                </select>
         </div>
+    </div>
 
         <span class="hint" style="line-height: 2em;">(<span class="user-date-format"><!-- format placeholder --></span> [`format`], [`current time is`] <span class="current-user-time">{time()|wa_date:'time'}</span>)</span>
 
-        <div id="past-time-error-msg" class="red hidden" style="padding: 10px 0;">[`Incorrect date/time`]</div>
+        <div id="past-time-error-msg" class="state-error-hint" style="display: none">[`Incorrect date or time`]</div>
 
         {if $cron_ok && $last_cron_time}
-        <p class="hint" style="padding: 10px 0;">
-            <i class="icon10 yes"></i>
-            {$last_cron_time|wa_datetime:'humandatetime'|string_format:'[`Cron is working properly. Latest execution time: %s`]'}
-        </p>
+            <p class="hint">
+                <i class="fas fa-check-circle text-green"></i>
+                {$last_cron_time|wa_datetime:'humandatetime'|string_format:'[`Cron is working properly. Latest execution time: %s`]'}
+            </p>
         {/if}
-    </div>
 
-    <div class="hidden buttons">
-        <input type="submit" class="button green" data-action="schedule" value="[`Schedule`]" />
-        <span> [`or`] </span>
-        <a href="#/senders/" class="cancel-link">[`cancel`]</a>
     </div>
+    <footer class="dialog-footer flexbox middle wrap">
+        <input type="submit" class="button" data-action="schedule" value="[`Schedule`]" />
+        <a href="#/senders/" class="js-close-dialog button light-gray">[`Cancel`]</a>
+    </footer>
 {*else}
     <div class="error red">[`Scheduled sending is unavailable (no <tt>cron</tt> jobs set up)!`]</div>
     <div class="hidden buttons">
@@ -49,52 +59,45 @@
 {/if*}
 </form>
 
-<script src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.datepicker.min.js"></script>
-{if $wa->locale() !== 'en_US'}
-<script src="{$wa_url}wa-content/js/jquery-ui/i18n/jquery.ui.datepicker-{$wa->locale()}.js"></script>
-{/if}
+
 
 <script>
 (function() {
     'use strict';
 
-    var form_campaign = $('#form-campaign');
-    var form = $('#form-schedule');
+    const $form_campaign = $('#form-campaign');
+    const $form = $('#form-schedule');
 
     // Set up dialog buttons
-    var buttons = form.find('.buttons').children();
-    form.parents('.dialog').find('.dialog-buttons-gradient').empty().append(buttons);
+    const buttons = $form.find('.dialog-footer');
 {*if $cron_ok*}
-    buttons.filter('.cancel-link').click(function(e){
-        e.preventDefault();
-        form.closest('.dialog').trigger('close').remove();
-    });
 
-    buttons.filter('input').on('click',function(e){
+    buttons.find('input').on('click',function(e){
         e.preventDefault();
-        var min_val = form.find('[data-role="datetime_minutes"]').val(),
-            hours_val = form.find('[data-role="datetime_hours"]').val(),
+        const min_val = $form.find('[data-role="datetime_minutes"]').val(),
+            hours_val = $form.find('[data-role="datetime_hours"]').val(),
             $validation_content = $('#send-main-wrapper').find('.validation-content'),
-            $date = form.find('.datepicker');
+            $date = $form.find('.js-datepicker');
 
-        form.find(':input').removeClass('error');
+        $form.find(':input').removeClass('state-error');
 
         if ($date.val().length === 0) {
-            $date.addClass('error');
+            $date.addClass('state-error');
             $('#past-time-error-msg').show();
             return false;
         }
 
         if (validateHour(hours_val) && validateMinute(min_val)) {
-            $.post(form.attr('action'), form.serialize(), function(data){
+
+            $.post($form.attr('action'), $form.serialize(), function(data){
                 if (data.status === 'ok') {
                     // save campaign!
-                    $.wa.mailer.saveCampaign(form_campaign, form_campaign.find(':submit:last'), function() {
+                    $.wa.mailer.saveCampaign($form_campaign, $form_campaign.find(':submit:last'), function() {
                         // hide dialog
-                        form.parents('.dialog').trigger('close').empty().remove();
+                        $form.find('.js-close-dialog').trigger('click');
                         // hide big green button
                         // show message about "sending is scheduled" and cancel button
-                        $validation_content.html('<i class="icon16 loading"></i>');
+                        $validation_content.html('<i class="fas fa-spin fa-spinner"></i>');
                         $.ajax({
                             type: 'POST',
                             url: '?module=campaigns&action=presend&campaign_id={$campaign.id}',
@@ -117,18 +120,21 @@
                     $('#past-time-error-msg').show();
                 }
             }, "json");
-        }
-        else {
-            form.find('[data-role="datetime_minutes"]').addClass('error');
-            form.find('[data-role="datetime_hours"]').addClass('error');
+        } else {
+            $form.find('[data-role="datetime_minutes"]').addClass('state-error');
+            $form.find('[data-role="datetime_hours"]').addClass('state-error');
             $('#past-time-error-msg').show();
         }
         return false;
     });
 
-    form.find('input').focus(function(e){
+    $form.find('input').focus(function(e){
         $('#past-time-error-msg').hide();
-        $(this).removeClass('error');
+        $(this).removeClass('state-error');
+    });
+
+    $form.find('.js-datepicker-trigger').on('click', function () {
+        $(this).parent().find('input').trigger('focus')
     });
 
     initDatepicker();
@@ -155,44 +161,24 @@
         return minute >= 0 && minute <= 60;
     }
 
-    function initDatepicker(options)
-    {
-        $('#ui-datepicker-div').remove();
+    function initDatepicker() {
 
-        var datepicker_options = {
-            changeMonth : true,
-            changeYear : true,
-            shortYearCutoff: 2,
-            showOtherMonths: false,
-            selectOtherMonths: false,
-            stepMonths: 1,
-            numberOfMonths: 1,
-            showWeek: false,
-            gotoCurrent: true,
-            constrainInput: false,
+        $form.find(".js-datepicker").datepicker({
+                changeMonth : true,
+                changeYear : true,
+                shortYearCutoff: 2,
+                altFormat: "yy-mm-dd",
+                beforeShow: function(input, ui) {
+                    ui.dpDiv.on("click", function(event) {
+                        event.stopPropagation();
+                    });
 
-            beforeShow : function() {
-                // hack! It's needed after-show-callback for changing z-index, but it doesn't exist
-                setTimeout(function() {
-                    // make min z-index 10
-                    var zIndex = $('#ui-datepicker-div').css('z-index');
-                    if (zIndex < 10) {
-                        $('#ui-datepicker-div').css('z-index', 10);
-                    }
-                }, 0);
-            }
-        };
+                    setTimeout(() => ui.dpDiv.css({
+                        "z-index": '1051'
+                    }));
 
-        $('.datepicker').datepicker(datepicker_options)
-                .filter('input[name^=schedule_datetime]').datepicker('option', 'minDate', new Date());
-
-        // hide current datepicker by hardcoding style, because jquery.ui.datepicker
-        // has bag and doesn't hide calendar by oneself
-        $('#ui-datepicker-div').hide();
-
-//        $('.datepicker').focus(function() {
-//            hideDatetimeError($(this));
-//        });
+                }
+            });
 
     }
 
@@ -203,8 +189,9 @@
      */
     function getDateFormat()
     {
-        return $('.datepicker').datepicker('option', 'dateFormat').toUpperCase().replace('YY', 'YYYY');
+        return $form.find(".js-datepicker").datepicker('option', 'dateFormat').toUpperCase().replace('YY', 'YYYY');
     }
 {*/if*}
 })();
 </script>
+</div>

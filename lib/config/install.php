@@ -16,7 +16,22 @@ if (file_exists($file)) {
 $tmpls_dir = $this->getAppPath('templates/preinstalled');
 if ($tmpls_dir && is_readable($tmpls_dir) && is_dir($tmpls_dir) && class_exists('ZipArchive')) {
     $locale = wa()->getLocale();
-    foreach(waFiles::listdir($tmpls_dir) as $tmpl_name) {
+
+    $tmpls = waFiles::listdir($tmpls_dir);
+
+    // Первичная сортировка
+    $pattern = ['Promo', 'Flare', 'Transactional', 'Text', 'Digest', 'Invoice', 'Columns', 'List', 'Sidebar'];
+    $tmpls_sorted = [];
+    foreach ($pattern as $v) {
+        if (in_array($v, $tmpls)) {
+            $tmpls_sorted[] = $v;
+        }
+    }
+    if ($tmpls_sorted) {
+        $tmpls = array_reverse($tmpls_sorted);
+    }
+
+    foreach($tmpls as $tmpl_name) {
         $tmpl_dir = $tmpls_dir.'/'.$tmpl_name;
         if (is_readable($tmpl_dir) && is_dir($tmpl_dir) && strpos($tmpl_name, '.') !== 0) {
             $files = array_fill_keys(waFiles::listdir($tmpl_dir), 1);

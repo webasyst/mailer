@@ -23,7 +23,7 @@
 <script src="{$wa_url}wa-content/js/codemirror/mode/htmlmixed/htmlmixed.js"></script>
 
 <a href="#" class="design-link" onclick="$('#design-actions').toggle('fast'); return false;">
-    <i class="icon16 design"></i>
+    <i class="fas fa-palette"></i>
     [`Design`]
 </a>
 
@@ -42,9 +42,9 @@
     <br>
 {/foreach}
     <div class="wa-design-save-panel block bordered-top">
-        <input type="submit" value="[`Save`]" class="button green">
-        <i class="icon16 loading" style="margin-top: 0.5em; display: none;"></i>
-        <span class="save-msg-icon" style="display: none;"><i class="icon16 yes after-button" style="margin-top: 0.5em;"></i>[`Saved`]</span>
+        <input type="submit" value="[`Save`]" class="button">
+        <i class="fas fa-spinner fa-spin loading" style="display: none;"></i>
+        <span class="save-msg-icon" style="display: none;"><i class="fas fa-check-circle text-green"></i>[`Saved`]</span>
     </div>
 </form>
 
@@ -54,7 +54,7 @@
         <form>
             <div class="dialog-content">
                 <div class="dialog-content-indent">
-                    <h1>[s`Parent theme`]</h1>
+                    <h1 class="h2">[s`Parent theme`]</h1>
                     <span class="wa-theme-dialog-error" style="color: red;font-weight: bold;"></span>
                     <div class="fields form">
                         <div class="field">
@@ -76,7 +76,7 @@
                                 </select>
                             </div>
                             <div class="value">
-                                <p class="small"><i class="icon10 exclamation"></i>[s`IMPORTANT: Theme parenting allows linking HTML templates, CSS files and images from other design themes. If you are about to change parent for a design theme which already has a parent, be aware that existing file links and connections may become corrupted. A design theme can have not more than one parent theme.`]</p>
+                                <p class="small"><i class="fas fa-exclamation-triangle text-orange"></i> [s`IMPORTANT: Theme parenting allows linking HTML templates, CSS files and images from other design themes. If you are about to change parent for a design theme which already has a parent, be aware that existing file links and connections may become corrupted. A design theme can have not more than one parent theme.`]</p>
                             </div>
                         </div>
                     </div>
@@ -85,7 +85,7 @@
             </div>
             <div class="dialog-buttons">
                 <div class="dialog-buttons-gradient">
-                    <input type="submit" class="button green" value="[s`Save`]">
+                    <input type="submit" class="button" value="[s`Save`]">
                     [s`or`] <a href="#/design/themes/" class="cancel">[s`cancel`]</a>
                 </div>
             </div>
@@ -99,8 +99,8 @@
         <form>
             <div class="dialog-content">
                 <div class="dialog-content-indent">
-                    <h1>[s`Revert to original`]</h1>
-                    <p><i class="icon10 exclamation"></i> [s`This will reset all customizations you applied to this design theme. Are you sure?`]</p>
+                    <h1 class="h2">[s`Revert to original`]</h1>
+                    <p><i class="fas fa-exclamation-triangle text-orange"></i> [s`This will reset all customizations you applied to this design theme. Are you sure?`]</p>
                     {if $theme.parent_theme && $theme.parent_theme.type == waTheme::OVERRIDDEN}
                     <label>
                         <input type="checkbox" name="parent" value="1"> {sprintf("[s`Drop all customizations and revert parent theme <strong>%s</strong> to the original version too`]", $theme.parent_theme_id)}

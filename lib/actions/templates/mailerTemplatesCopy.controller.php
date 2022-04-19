@@ -63,8 +63,10 @@ class mailerTemplatesCopyController extends waJsonController
                 $old_url_prefix = wa()->getDataUrl('files/'.$old_id.'/', true, 'mailer', true);
                 $url_prefix = wa()->getDataUrl('files/'.$id.'/', true, 'mailer', true);
                 $tmpl['body'] = str_replace($old_url_prefix, $url_prefix, $tmpl['body']);
+                $tmpl['rebody'] = str_replace($old_url_prefix, $url_prefix, $tmpl['rebody']);
                 $mm->updateById($id, array(
                     'body' => $tmpl['body'],
+                    'rebody' => $tmpl['rebody'],
                 ));
 
                 $this->response = $id;
