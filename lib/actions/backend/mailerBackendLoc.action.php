@@ -29,6 +29,9 @@ class mailerBackendLocAction extends waViewAction
             'Close',
             'Apply',
             'Images & files upload',
+            'Unsubscribe URL',
+            '“Open in browser” link',
+            'Select...',
         ) as $s) {
             $strings[$s] = _w($s);
         }

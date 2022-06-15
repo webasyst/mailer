@@ -90,7 +90,7 @@
                                 {elseif $m.status == mailerMessageModel::STATUS_SENDING_PAUSED}
                                     <div><i class="fas fa-pause-circle"></i> [`Paused`] ({$m.percent_complete}%)<i class="shortener"></i></div>
                                 {else}
-                                    <div><span class="spinner"></span> [`Now sending`] ({$m.percent_complete}%)<i class="shortener"></i></div>
+                                    <div><span class="spinner valign-middle"></span> [`Now sending`]<i class="shortener"></i></div>
                                 {/if}
                             </td>
                             <td title="{$m.from_email}">
@@ -120,6 +120,21 @@
                                 {$m.unsubscribed_num}{if !$m.has_unsubscribe_link}<span class="asterisk-hang-right">*</span>{/if}
                             </td>
                         </tr>
+                        {if $m.status == mailerMessageModel::STATUS_SENDING}
+                            <tr class="m-cmpgn-sending">
+                                <td colspan="8">
+                                    <div class="progressbar custom-mb-8">
+                                        <div class="progressbar-line-wrapper text-inside">
+                                            <div class="progressbar-outer">
+                                                <div class="progressbar-inner" style="width: {$m.percent_complete}%;">
+                                                    <div class="progressbar-text">{$m.percent_complete}%</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {/if}
                     {/foreach}
                     </tbody>
                 </table>
@@ -158,7 +173,7 @@
     (function() {
 
     // Make table rows clickable (middle-click friendly)
-    $.wa.mailer.makeClickable($('.js-campaigns tbody td'), td => '#/campaigns/report/'+td.parent().attr('rel')+'/');
+    $.wa.mailer.makeClickable($('.js-campaigns tbody tr[rel] td'), td => '#/campaigns/report/'+td.parent().attr('rel')+'/');
 
     $.wa.mailer.showLastSearchBreadcrumb.last_search_ids = { };
     {if $search}

@@ -126,7 +126,7 @@
             this.currentHash = hash;
 
             var e = new $.Event('wa.before_dispatched');
-            $(window).trigger(e);
+            $(window).trigger(e, this);
             if (e.isDefaultPrevented()) {
                 this.currentHash = old_hash;
                 window.location.hash = old_hash;
@@ -440,10 +440,12 @@
         saveCampaign: function (form, button, callback, no_saved_hint) {
             // var were_disabled = button.attr('disabled');
             // button.attr('disabled', true).siblings('.process-message').remove();
-            this.buttonLoader({
-                $button: button,
-                status: 'loader'
-            });
+            if (button) {
+                this.buttonLoader({
+                    $button: button,
+                    status: 'loader'
+                });
+            }
             // var process_message = $('<span class="process-message"><i class="fas fa-spinner fa-spin loading"></i></span>');
             // button.parent().append(process_message);
             $.post(form.attr('action'), form.serialize(), r => {
@@ -451,10 +453,12 @@
                 //     button.attr('disabled', false);
                 // }
                 if (r.status == 'ok') {
-                    this.buttonLoader({
-                        $button: button,
-                        status: 'success'
-                    });
+                    if (button) {
+                        this.buttonLoader({
+                            $button: button,
+                            status: 'success'
+                        });
+                    }
                     form.find('input[name="id"]').val(r.data);
                     // if (no_saved_hint) {
                     //     process_message.remove();
@@ -466,10 +470,12 @@
                     //     });
                     // }
                 } else {
-                    this.buttonLoader({
-                        $button: button,
-                        status: 'failed'
-                    });
+                    if (button) {
+                        this.buttonLoader({
+                            $button: button,
+                            status: 'failed'
+                        });
+                    }
                     // process_message.find('.loading').removeClass('loading').addClass('exclamation');
                     console.log('Error saving campaign:', r);
                 }
@@ -528,7 +534,7 @@
             const editorVariables = baseVariables.concat(Object.keys(that.options.variables))
 
             return Revolvapp($editor, {
-                plugins: ['reorder', 'code', 'variable'],
+                plugins: ['reorder', 'code', 'variable', 'definedlinks'],
                 variable: {
                     items: editorVariables,
                     template: {
@@ -539,6 +545,13 @@
                 editor: {
                     path: options.revolvPath,
                     lang: that.options.lang || 'en'
+                },
+                definedlinks: {
+                    items: [
+                        { "name": $_('Select...'), "url": false },
+                        { "name": $_('Unsubscribe URL'), "url": '{$unsubscribe_link}' },
+                        { "name": $_('“Open in browser” link'), "url": '{$mailview_link}' }
+                    ]
                 },
                 image: {
                     upload: options.uploadPath,
@@ -565,6 +578,9 @@
                                 <div class="m-ace-toolbar flexbox middle space-16 semibold">
                                     <a href="javascript:void(0)" class="text-dark-gray js-ace-upload">
                                         <i class="fas fa-images valign-middle"></i> <span class="small desktop-and-tablet-only">${$_('Images & files upload')}</span>
+                                    </a>
+                                    <a href="javascript:void(0)" class="text-dark-gray js-ace-variable">
+                                        <i class="fas fa-dollar-sign valign-middle"></i> <span class="small desktop-and-tablet-only">${$_('Insert variable')}</span>
                                     </a>
                                 </div>
                             </div>`;
@@ -620,6 +636,8 @@
                 session.setValue($(this).val());
             })
 
+            $textarea.on('wa_insert_var', (_, data) => editor.insert(data))
+
             function setEditorTheme() {
                 if (document.documentElement.dataset.theme === 'dark') {
                     editor.setTheme("ace/theme/monokai");
@@ -641,23 +659,25 @@
         /** Animates campaign report progressbar and countdown. */
         updateCampaignReportProgress: function (campaign_id, percent_complete_precise, campaign_estimated_finish_timestamp, campaign_send_datetime, php_time, campaign_paused) {
 
-            var start_ts = (new Date()).getTime();
+            const start_ts = (new Date()).getTime();
             $.wa.mailer.random = start_ts;
 
             // Delay between page reloads in milliseconds and seconds
-            var RELOAD_TIME = 5000;
-            var RELOAD_TIME_SEC = RELOAD_TIME / 1000;
+            const RELOAD_TIME = 5000;
+            const RELOAD_TIME_SEC = RELOAD_TIME / 1000;
 
             // Set up progressbar
-            var previous_time = $.storage.get('mailer/campaign/' + campaign_id + '/time');
-            var previous_value = $.storage.get('mailer/campaign/' + campaign_id + '/value');
-            var current_time = php_time;
-            var current_value = percent_complete_precise;
+            let previous_time = $.storage.get('mailer/campaign/' + campaign_id + '/time');
+            let previous_value = $.storage.get('mailer/campaign/' + campaign_id + '/value');
+            const current_time = php_time;
+            let current_value = percent_complete_precise;
+
             if (!previous_time) {
                 previous_time = campaign_send_datetime;
                 previous_value = 0;
             }
-            var set_time, set_value;
+
+            let set_time, set_value;
             if (current_time - previous_time < RELOAD_TIME_SEC) {
                 set_time = current_time;
                 set_value = previous_value;
@@ -688,14 +708,14 @@
             }
 
             // Animate progressbar
-            var progressbar_text = $('.js-progressbar-text').text('' + Math.round(set_value) + '%');
+            const progressbar_text = $('.js-progressbar-text').text('' + Math.round(set_value) + '%');
             $('.js-progressbar-status').width('' + set_value + '%').animate({
                 width: '' + current_value + '%'
             }, {
                 easing: 'linear',
                 duration: RELOAD_TIME * 1.1,
                 step: function (value) {
-                    var current_value = progressbar_text.text();
+                    const current_value = progressbar_text.text();
                     $.storage.set('mailer/campaign/' + campaign_id + '/value', value);
                     if (current_value && current_value.replace(/[^0-9]/g, '') - 0 < value) {
                         if (!value || value <= 1) {
@@ -709,8 +729,8 @@
             });
 
             // Helper to pad string with zeros
-            var strPad = function (i, l, s) {
-                var o = i.toString();
+            const strPad = function (i, l, s) {
+                let o = i.toString();
                 if (!s) {
                     s = '0';
                 }
@@ -721,28 +741,28 @@
             };
 
             // Helper to format time in [hh:]mm:ss format.
-            var formatTime = function (fullseconds) {
+            const formatTime = function (fullseconds) {
                 if (fullseconds < 60) {
                     return $_('%ds').replace('%d', fullseconds);
                 } else if (fullseconds < 60 * 60) {
-                    var seconds = fullseconds % 60;
-                    var minutes = Math.floor(fullseconds / 60);
+                    const seconds = fullseconds % 60;
+                    const minutes = Math.floor(fullseconds / 60);
                     return $_('%dm').replace('%d', minutes) + ' ' + $_('%ds').replace('%d', strPad(seconds, 2));
                 } else {
-                    var seconds = fullseconds % 60;
-                    var minutes = Math.floor(fullseconds / 60) % 60;
-                    var hours = Math.floor(fullseconds / (60 * 60));
+                    const seconds = fullseconds % 60;
+                    const minutes = Math.floor(fullseconds / 60) % 60;
+                    const hours = Math.floor(fullseconds / (60 * 60));
                     return $_('%dh').replace('%d', hours) + ' ' + $_('%dm').replace('%d', strPad(minutes, 2)) + ' ' + $_('%ds').replace('%d', strPad(seconds, 2));
                 }
             };
 
             // Helper to update total campaign duration and time left
-            var updateDuration = function () {
+            const updateDuration = () => {
                 if (campaign_estimated_finish_timestamp) {
-                    var current_time_ms = (new Date()).getTime();
-                    var seconds_left = Math.max(0, campaign_estimated_finish_timestamp - current_time_ms / 1000);
+                    const current_time_ms = (new Date()).getTime();
+                    let seconds_left = Math.max(0, campaign_estimated_finish_timestamp - current_time_ms / 1000);
 
-                    var old = $.wa.mailer.campaign_countdown;
+                    const old = $.wa.mailer.campaign_countdown;
                     if (old && old.campaign_id == campaign_id) {
                         // When old estimate differs from reality too much (more than 20%), then reset the estimate
                         if (old.seconds_left > 10 && ((old.seconds_left * 1.2 < seconds_left) || (seconds_left * 1.2 < old.seconds_left))) {
@@ -754,9 +774,9 @@
                         // between old and new estimate. This makes the timer run smoothly.
                         else if (old.seconds_left > 0 && current_time_ms - old.current_time_ms < 10000) {
                             // How much real time (in seconds) passed since `old` update
-                            var time_diff = Math.min(seconds_left, (current_time_ms - old.current_time_ms) / 1000);
+                            const time_diff = Math.min(seconds_left, (current_time_ms - old.current_time_ms) / 1000);
                             // What would the old estimate be if we simply decrement it by real time_diff
-                            var bad_estimate = old.seconds_left - time_diff;
+                            const bad_estimate = old.seconds_left - time_diff;
                             // New estimate is calculated from previous one (which makes the timer run smoothly)
                             // with a small addition depending on how far our old estimate is from new, updated estimate.
                             seconds_left = bad_estimate + (seconds_left - bad_estimate) * time_diff / old.seconds_left;
@@ -765,9 +785,9 @@
                         }
                     }
                     $.wa.mailer.campaign_countdown = {
-                        campaign_id: campaign_id,
-                        current_time_ms: current_time_ms,
-                        seconds_left: seconds_left
+                        campaign_id,
+                        current_time_ms,
+                        seconds_left
                     };
                     $('.js-campaign-sending-time-left').html(formatTime(Math.floor(seconds_left))).parent().show();
                 }
@@ -775,13 +795,13 @@
             updateDuration();
 
             // Updates duration counters and progressbar last update time in localStorage
-            var interval = setInterval(function () {
+            let interval = setInterval(function () {
                 if ($.wa.mailer.random != start_ts) {
                     window.clearInterval(interval);
                     return;
                 }
-                var time_passed = (new Date()).getTime() - start_ts;
-                var time;
+                const time_passed = (new Date()).getTime() - start_ts;
+                let time;
                 if (time_passed >= RELOAD_TIME * 1.1) {
                     window.clearInterval(interval);
                     interval = null;
@@ -799,14 +819,15 @@
                 //    window.clearInterval(reloadInterval);
                 //    return;
                 //}
-                $.get('?module=campaigns&action=reportUpdate&campaign_id=' + campaign_id,
-                    function (html) {
-                        if ($.wa.mailer.random != start_ts) {
-                            //window.clearInterval(reloadInterval);
-                            return;
-                        }
-                        $('#update-container').html(html);
-                    });
+                $.get('?module=campaigns&action=reportUpdate&campaign_id=' + campaign_id, html => {
+                    if ($.wa.mailer.random != start_ts) {
+                        //window.clearInterval(reloadInterval);
+                        return;
+                    }
+
+                    // Update chart legend
+                    $('#pie-legend').html(html);
+                });
             }, RELOAD_TIME);
         },
 
@@ -852,8 +873,9 @@
                         '#22d13d',
                         '#555',
                         '#ed2509',
-                        '#aaa'
+                        '#00c2ed'
                     ],
+                    stroke: 'none',
                     no_sort: true,
                     minPercent: -1,
                     matchColors: true
@@ -1466,6 +1488,7 @@
             const $switchContainer = $form.find('.js-switch-redactor-container');
             const $switchItem = $switchContainer.find('.js-switch-redactor');
             const $aboutRevolvapp = options.aboutRevolvapp;
+            const hash = this.getHash();
 
             const revolv = this.initRevolv($revolv, $revolvTemplate, $redactor, {
                 revolvPath: options.revolvPath,
@@ -1481,7 +1504,19 @@
             let currentEditor;
 
             if (sessionStorage.getItem('wa_mailer_editor')) {
-                currentEditor = sessionStorage.getItem('wa_mailer_editor');
+                try {
+                    currentEditor = JSON?.parse(sessionStorage.getItem('wa_mailer_editor'))[hash]
+                }catch (e) {
+
+                }
+            }
+
+            if (!currentEditor) {
+                if (options.oldStyle) {
+                    currentEditor = 'ace';
+                }else{
+                    currentEditor = 'revolv';
+                }
             }
 
             if (options.oldStyle) {
@@ -1552,7 +1587,7 @@
                             $this.closest('li').addClass('hidden').siblings().removeClass('hidden');
                             $redactor.trigger('wa_switch_to_html')
                             $aboutRevolvapp?.toggleClass('hidden', true)
-                            sessionStorage.setItem('wa_mailer_editor', 'ace');
+                            sessionStorage.setItem('wa_mailer_editor', JSON.stringify({[hash]: 'ace'}));
                         }
                     });
                 } else {
@@ -1577,7 +1612,7 @@
                             }
 
                             $aboutRevolvapp?.toggleClass('hidden', false)
-                            sessionStorage.setItem('wa_mailer_editor', 'revolv');
+                            sessionStorage.setItem('wa_mailer_editor', JSON.stringify({[hash]: 'revolv'}));
                         }
                     });
                 }

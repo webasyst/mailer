@@ -68,7 +68,7 @@ class mailerSubscribersFormeditorAction extends waViewAction
     {
         return array(
             '{SUBSCRIBER_NAME}' => _w("Subscriber name, if used in the form."),
-            '{SUBSCRIPTION_CONFIRM_URL}' => _w("URL to confirm subscription. A click on this link opens “My subscriptions” page in your personal account.")
+            '{SUBSCRIPTION_CONFIRM_URL}' => _w("URL to confirm subscription. A click on this link opens “My subscriptions” page in the customer account.")
         );
     }
 }

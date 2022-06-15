@@ -1,7 +1,4 @@
-<div id="pie-legend-copy" class="hidden">
-    {include file="templates/actions/campaigns/pie_diagram_legend.html"}
-</div>
-
+{include file="templates/actions/campaigns/pie_diagram_legend.html"}
 <script>(function($) { "use strict";
     // Update pie chart
     $.wa.mailer.drawReportPie('{$wa_app_static_url}', [
@@ -30,27 +27,6 @@
     if ($current_link_pie_legend.length && graph_ids) {
         $.wa.mailer.getAndPlotData(campaign_id, graph_ids, graph_start, graph_end, false, 1);
     }
-
-    // Update recipients list
-//    if (recipients_statuses) {
-//        $recipient_lists_wrapper.empty();
-//        $.wa.mailer.loadNext50Recipients(campaign_id, {
-//            status: recipients_statuses,
-//            startinterval: 0,
-//            endinterval: 0,
-//            quantum: graph_quantum
-//        });
-//    }
-
-    // Update chart legend
-    var old_pie_legend = $('#pie-legend table'),
-        new_pie_legend = $('#pie-legend-copy table');
-    if (old_pie_legend.find('.no-images-message:visible').length > 0) {
-        new_pie_legend.find('.no-images-message').show();
-    }
-    old_pie_legend.hide().find('.recipients-selection-criteria').insertBefore(new_pie_legend.find('.sub-lined'));
-    old_pie_legend.after(new_pie_legend).remove();
-    $('#pie-legend-copy').remove();
 
     // Retain active link selection in chart legend
     $report_wrapper

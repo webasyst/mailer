@@ -2,14 +2,14 @@
     <p><em class="errormsg">{$errormsg}</em></p>
     <a href="javascript:$.wa.mailer.redispatch()">[`reload`]</a>
 {elseif $form_disabled}
-    <p><em>[`Recipient list preparation is in progress.`] <i class="icon16 loading"></i></em></p>
+    <p><em>[`Recipient list is being prepared.`] <i class="icon16 loading"></i></em></p>
 {else}
     <div id="total-recipients-block">
         <p>[`Total`] <span class="total_count"></span></p>
 
         {if $recipients_stats}
             {if $recipients_stats.unavailable || $recipients_stats.unsubscribed}
-                [`Excepted from this list are:`]
+                [`Excluded from this list will be:`]
                 <ul class="zebra" style="margin:10px 0">
                     {if $recipients_stats.unsubscribed}
                         <li>
@@ -37,7 +37,7 @@
             {/if}
         {else}
             <p>
-                [`Excepted from this list are unsubscribed contacts and those having delivering errors in previous campaign.`]
+                [`Excluded from this list will be unsubscribed contacts and those having delivering errors in previous campaigns.`]
                 [`We could not count the number of excepted recipients at this point, because a total number of your campaign recipients is too high. However, we will count every exception in the process of sending, and all such contacts will be placed in &ldquo;Exceptions&rdquo; list in the Sending Report.`]
             </p>
             <p>

@@ -2,19 +2,19 @@
     <li>
         <a href="javascript:void(0)" rel="" class="show-recipients-link">
             [`All recipients`]
-            <span class="bold text-black" data-count-for="">{$stats.recipients_num}</span>
+            <span class="bold" data-count-for="">{$stats.recipients_num}</span>
         </a>
     </li>
     <li>
-        <a href="javascript:void(0)" rel="status=-3,-4" class="show-recipients-link inline-link">
+        <a href="javascript:void(0)" rel="status=-3,-4" class="show-recipients-link">
             [`Exceptions`]
-            <span class="bold text-black" data-count-for="status=-3,-4">{$stats.exceptions_num}</span>
+            <span class="bold" data-count-for="status=-3,-4">{$stats.exceptions_num}</span>
         </a>
     </li>
     <li>
-        <a href="#" rel="status=-2,-1,1,2,3,4,5" class="show-recipients-link inline-link">
+        <a href="#" rel="status=-2,-1,1,2,3,4,5" class="show-recipients-link">
             [`Sent`]
-            <span class="bold text-black" data-count-for="status=-2,-1,1,2,3,4,5">{$stats.actualy_sent_num}</span>
+            <span class="bold" data-count-for="status=-2,-1,1,2,3,4,5">{$stats.actualy_sent_num}</span>
         </a>
     </li>
 </ul>
@@ -22,36 +22,48 @@
 <ul class="pie-graph-legend chips outlined rounded transparent custom-mt-0 custom-mb-24 custom-mb-16-mobile small">
     <li>
         <a href="javascript:void(0)" rel="status=2,3,4" data-graph-id="2,3,4" data-graph-color="var(--green)" data-graph-label="[`Opened`]" class="show-recipients-link">
-            <i class="fas fa-circle" style="color: var(--green) !important"></i>
+            <i class="fas fa-chart-pie" style="color: var(--green) !important"></i>
             [`Read`]{if !$campaign.opened_count_available} *{/if}
             {if $campaign.opened_count_available}
-                <span data-count-for="status=2,3,4"><span class="bold text-black">{$stats.opened_num}</span> ({$stats.opened_percent_formatted}%)</span>
+                <span data-count-for="status=2,3,4"><span class="bold">{$stats.opened_num}</span> ({$stats.opened_percent_formatted}%)</span>
             {else}
-                <span class="bold text-black">[`no data`]</span>
+                <span class="bold">[`no data`]</span>
             {/if}
+            <span data-wa-tooltip-content="[`The message was delivered and has been viewed by recipients.`]">
+                <i class="fas fa-question-circle" style="color: var(--light-gray) !important"></i>
+            </span>
+        </a>
+    </li>
+    <li>
+        <a href="javascript:void(0)" rel="status=1" class="show-recipients-link">
+            <i class="fas fa-chart-pie" style="color: var(--bright-sky-blue) !important"></i>
+            [`Sent `]{if !$campaign.opened_count_available} *{/if}
+            <span data-count-for="status=1"><span class="bold">{$stats.unknown_num}</span> ({$stats.unknown_percent_formatted}%)</span>
+            <span data-wa-tooltip-content="[`The message was sent but it is unknown whether it has been viewed by recipients.`]">
+                <i class="fas fa-question-circle" style="color: var(--light-gray) !important"></i>
+            </span>
         </a>
     </li>
     <li>
         <a href="javascript:void(0)" rel="status=5" data-graph-id="5" data-graph-color="var(--dark-gray)" data-graph-label="[`Unsubscribed`]" class="show-recipients-link">
-            <i class="fas fa-circle text-dark-gray" style="color: var(--dark-gray) !important"></i>
+            <i class="fas fa-chart-pie" style="color: var(--dark-gray) !important"></i>
             [`Unsubscribed`]{if !$campaign.opened_count_available} *{/if}
             <span data-count-for="status=5">
-                <span class="bold text-black">{$stats.unsubscribed_num}</span> ({$stats.unsubscribed_percent_formatted}%)
+                <span class="bold">{$stats.unsubscribed_num}</span> ({$stats.unsubscribed_percent_formatted}%)
+            </span>
+            <span data-wa-tooltip-content="[`Recipients have clicked on the “Unsubscribe” link in this message. They will be listed in the “Exceptions” section in future campaings’ reports.`]">
+                <i class="fas fa-question-circle" style="color: var(--light-gray) !important"></i>
             </span>
         </a>
     </li>
     <li>
         <a href="javascript:void(0)" rel="status=-1,-2" data-graph-id="-1,-2" data-graph-color="var(--red)" data-graph-label="[`Bounced`]" class="show-recipients-link">
-            <i class="fas fa-circle text-red" style="color: var(--red) !important"></i>
+            <i class="fas fa-chart-pie" style="color: var(--red) !important"></i>
             [`Bounced`]{if !$campaign.opened_count_available} *{/if}
-            <span data-count-for="status=-1,-2"><span class="bold text-black">{$stats.bounced_num}</span> ({$stats.bounced_percent_formatted}%)</span>
-        </a>
-    </li>
-    <li>
-        <a href="javascript:void(0)" rel="status=1" class="show-recipients-link">
-            <i class="fas fa-circle gray" style="color: var(--text-color-hint) !important"></i>
-            [`Unknown`]{if !$campaign.opened_count_available} *{/if}
-            <span data-count-for="status=1"><span class="bold text-black">{$stats.unknown_num}</span> ({$stats.unknown_percent_formatted}%)</span>
+            <span data-count-for="status=-1,-2"><span class="bold">{$stats.bounced_num}</span> ({$stats.bounced_percent_formatted}%)</span>
+            <span data-wa-tooltip-content="[`The message was not delivered to recipients due to various technical issues such as incorrectly configured mail servers or non-existent email addresses.`]">
+                <i class="fas fa-question-circle" style="color: var(--light-gray) !important"></i>
+            </span>
         </a>
     </li>
 </ul>
@@ -60,4 +72,10 @@
     <button class="icon"><i class="fas fa-search"></i></button>
     <input class="full-width" id="search-recipients" type="search" placeholder="[`Search by name or email`]">
 </div>
-<p class="small gray custom-mt-0 js-legend-hint">[`Select a segment or make a search for subscribers.`]</p>
+<p class="small gray custom-mt-0 js-legend-hint">[`Select a category or run a search to view recipients.`]</p>
+
+<script>
+    (function(){
+        $(".pie-graph-legend [data-wa-tooltip-content]").waTooltip();
+    })($)
+</script>

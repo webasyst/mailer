@@ -132,7 +132,7 @@ class mailerCampaignsArchiveAction extends waViewAction
             foreach($messages as &$m) {
                 $m['error'] = '';
                 if (!empty($return_path_errors[$m['return_path']]) && strtotime(ifempty($m['finished_datetime'], $m['send_datetime'])) > time() - mailerConfig::RETURN_PATH_CHECK_PERIOD) {
-                    $m['error'] = _w('Error checking Return-Path mailbox');
+                    $m['error'] = _w('Error checking the Return-Path mailbox');
                 }
             }
             unset($m);

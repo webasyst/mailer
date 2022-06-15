@@ -442,7 +442,7 @@ class mailerHelper
                         $params['recipients_update_error'] = $error;
                         return 0;
                     } else {
-                        $error = _w('Recipient list preparation is in progress.');
+                        $error = _w('Recipient list is being prepared.');
                         return 0;
                     }
                 }

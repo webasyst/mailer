@@ -42,6 +42,7 @@
     <script src="{$wa_app_static_url}js/vendor/revolvapp/plugins/reorder/reorder.min.js"></script>
     <script src="{$wa_app_static_url}js/vendor/revolvapp/plugins/code/code.min.js"></script>
     <script src="{$wa_app_static_url}js/vendor/revolvapp/plugins/variable/variable.min.js"></script>
+    <script src="{$wa_app_static_url}js/vendor/revolvapp/plugins/definedlinks/definedlinks.min.js"></script>
     <script src="{$wa_app_static_url}js/vendor/revolvapp/languages/translate.js"></script>
 
 
@@ -76,7 +77,7 @@
             {/if}
 
             {* CONTENT *}
-            <div class="content hide-scrollbar blank" id="content">
+            <div class="content blank" id="content">
                 {$content}
             </div>
             {include file="../actions/backend/skeletons/default.html"}
@@ -104,41 +105,63 @@
         </div>
     </div>
 
-    <div class="hidden block" id="available-smarty-variables">
-        <div class="fields variables-wrapper" style="max-width:600px;">
-            <div class="field one-var" style="margin: 10px 0;">
-                <div class="name">
-                    <span class="hidden var-code">&lt;a href=&quot;{sprintf('{$unsubscribe_link}')}&quot;&gt;[`Unsubscribe`]&lt;/a&gt;</span>
-                    <a href="javascript:void(0)" class="strong inline-link"><b><i>[`Unsubscribe URL`]</i></b></a>
-                </div>
-                <div class="value hint">
-                    [`In every outgoing message this variable will be replaced with a unique link pointing to recipient’s personal subscription management page.`]
-                </div>
-            </div>
-
-            <div class="field one-var" style="margin-bottom: 20px">
-                <div class="name">
-                    <span class="hidden var-code">&lt;a href=&quot;{sprintf('{$mailview_link}')}&quot;&gt;[`Open in browser`]&lt;/a&gt;</span>
-                    <a href="javascript:void(0)" class="strong inline-link"><b><i>[`“Open in browser” link`]</i></b></a>
-                </div>
-                <div class="value hint">
-                    [`This variable will be replaced with a personal recipient link that can be used to view message on browser.`]
-                </div>
-            </div>
-
-            <div class="field" style="padding:0 5px 10px 1px">
-                [`Following variables will be replaced with recipient’s contact data:`]
-            </div>
-            {foreach mailerHelper::getVars() as $var_id => $var_name}
-                <div class="field one-var">
-                    <div class="name">
-                        <a href="javascript:void(0)" class="inline-link"><b><i><span class="var-code">{$var_id|escape}</span></i></b></a>
+    <div class="dialog" id="available-smarty-variables">
+        <div class="dialog-background"></div>
+        <div class="dialog-body">
+            <h3 class="dialog-header">[`Insert variable`]</h3>
+            <div class="dialog-content fields">
+                <div class="field">
+                    <div class="name custom-pt-0 break-all">
+                        <a href="javascript:void(0)" class="uppercase semibold">
+                            [`Unsubscribe URL`]
+                            <span class="hidden var-code">
+                                &lt;a href=&quot;{sprintf('{$unsubscribe_link}')}&quot;&gt;[`Unsubscribe`]&lt;/a&gt;
+                            </span>
+                        </a>
                     </div>
-                    <div class="value hint">{$var_name|escape}</div>
+                    <div class="value">
+                        <span class="small text-gray">
+                            [`In every outgoing message this variable will be replaced with a unique link pointing to recipient’s personal subscription management page.`]
+                        </span>
+                    </div>
                 </div>
-            {/foreach}
+                <div class="field">
+                    <div class="name custom-pt-0 break-all">
+                        <a href="javascript:void(0)" class="uppercase semibold">
+                            [`“Open in browser” link`]
+                            <span class="hidden var-code">
+                                &lt;a href=&quot;{sprintf('{$mailview_link}')}&quot;&gt;[`Open in browser`]&lt;/a&gt;
+                            </span>
+                        </a>
+                    </div>
+                    <div class="value">
+                        <span class="small text-gray">
+                        [`This variable will be replaced with a personal recipient link that can be used to view message on browser.`]
+                    </div>
+                </div>
 
-        </div>
+                <p class="bold">
+                    [`Following variables will be replaced with recipient’s contact data:`]
+                </p>
+                {foreach mailerHelper::getVars() as $var_id => $var_name}
+                    <div class="field">
+                        <div class="name custom-pt-0 break-all">
+                            <a href="javascript:void(0)" class="uppercase semibold">
+                                <span class="var-code">{$var_id|escape}</span>
+                            </a>
+                        </div>
+                        <div class="value">
+                            <span class="small text-gray">
+                                {$var_name|escape}
+                            </span>
+                        </div>
+                    </div>
+                {/foreach}
+            </div>
+            <footer class="dialog-footer flexbox middle wrap">
+                <a href="javascript:void(0)" class="js-close-dialog button light-gray">[`Cancel`]</a>
+            </footer>
+        </div
     </div>
 
     <script>

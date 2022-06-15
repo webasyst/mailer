@@ -38,7 +38,7 @@
 
     {if $return_path_error}
     <div class="info-block">
-        <p><i class="icon16 exclamation"></i>[`Error checking Return-Path mailbox`] {$campaign.return_path}</p>
+        <p><i class="icon16 exclamation"></i>[`Error checking the Return-Path mailbox`] {$campaign.return_path}</p>
         <p><span class="errormsg">{$return_path_error}</span></p>
         {if $allow_return_path_edit}
             <p><a href="javascript:void(0)" class="edit-return-path-link" class="left-padded">[`Edit settings`]</a></p>
@@ -92,7 +92,7 @@
                 </span>
                 {if $wa->mailer->writable($campaign)}
                     <a id="resume-pause" href="javascript:void(0)" class="button blue">
-                        <i class="icon16 pause"></i>[`Pause`]</a>
+                        <i class="icon16 pause"></i>[`Pause`]
                     </a>
                 {/if}
             {elseif $campaign.status == mailerMessageModel::STATUS_SENDING_PAUSED}
@@ -133,7 +133,7 @@
                 <span class="title">[`All recipients`]: <span class="cnt">{$stats.recipients_num}</span></span>
                 {if !empty($recipient_criterias)}
                 <span class="how-were-choosen report-options">
-                    <a class="inline-link small" href="#"><b>[`how were chosen`]</b></a>
+                    <a class="inline-link small" href="#"><b>[`how were selected`]</b></a>
                 </span>
                 <div class="options-wrapper selected-recipients-details">
                     {*
@@ -220,7 +220,7 @@
     {if empty($campaign.return_path)}
         <div class="hidden recipients-hint" id="no-return-path-hint">
             <hr>
-            [`* NOTE:`] [`Return-Path is not customized. This does not allow to track most of potential bounces from recipient mail servers. Only invalid messages bounced by your sender server have been counted.`]
+            [`* NOTE:`] [`Return-Path is not set up. This does not allow tracking of most potential bounces from recipient mail servers. Only invalid messages bounced by your sender server have been counted.`]
         </div>
     {/if}
     {if !$campaign.opened_count_available}

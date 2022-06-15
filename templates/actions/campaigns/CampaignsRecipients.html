@@ -4,58 +4,58 @@
                 <form id="form-campaign" action="?module=campaigns&action=recipients&" method="post" class="fields">
                     <div class="flexbox middle custom-mb-32">
                     {if !empty($campaign.id)}
-                        <ul class="tabs wide">
+                        <ul class="tabs wide overflow-arrows">
                             <li class="m-first-step">
                                 <a href="#/campaigns/letter/{$campaign.id}/">
-                                    <span class="icon rounded bg-light-gray custom-p-8 custom-mr-8">
+                                    <span class="icon rounded bg-light-gray custom-p-8 custom-mr-4">
                                         <i class="fas fa-pen-alt text-white" style="font-size: 87.5%;"></i>
                                     </span>
-                                    [`Compose letter`]
+                                    <span class="text">[`Compose letter`]</span>
                                 </a>
                             </li>
                             <li class="m-second-step selected">
                                 <i class="fas fa-arrow-right"></i>
                                 <a href="#/campaigns/recipients/{$campaign.id}/">
-                                    <span class="icon rounded bg-blue custom-p-8 custom-mr-8">
+                                    <span class="icon rounded bg-blue custom-p-8 custom-mr-4">
                                         <i class="fas fa-users text-white" style="font-size: 87.5%;"></i>
                                     </span>
-                                    [`Choose recipients`]
+                                    <span class="text">[`Choose recipients`]</span>
                                 </a>
                                 <i class="fas fa-arrow-right"></i>
                             </li>
                             <li class="m-third-step">
                                 <a id="right-sidebar-send-link" href="#/campaigns/send/{$campaign.id}/" class="text-gray">
-                                    <span class="icon rounded bg-light-gray custom-p-8 custom-mr-8">
+                                    <span class="icon rounded bg-light-gray custom-p-8 custom-mr-4">
                                         <i class="fas fa-paper-plane text-white" style="font-size: 87.5%;"></i>
                                     </span>
-                                    [`Check and send`]
+                                    <span class="text">[`Check and send`]</span>
                                 </a>
                             </li>
                         </ul>
                     {else}
-                        <ul class="tabs wide">
+                        <ul class="tabs wide overflow-arrows">
                             <li class="m-first-step selected">
                                 <a href="javascript:void(0)">
-                                    <span class="icon rounded bg-blue custom-p-8 custom-mr-8">
+                                    <span class="icon rounded bg-blue custom-p-8 custom-mr-4">
                                         <i class="fas fa-pen-alt text-white" style="font-size: 87.5%;"></i>
                                     </span>
-                                    [`Compose letter`]
+                                    <span class="text">[`Compose letter`]</span>
                                 </a>
                             </li>
                             <li class="m-second-step m-disabled">
                                 <a href="javascript:void(0)" class="text-gray">
-                                    <span class="icon rounded bg-light-gray custom-p-8 custom-mr-8">
+                                    <span class="icon rounded bg-light-gray custom-p-8 custom-mr-4">
                                         <i class="fas fa-users text-white" style="font-size: 87.5%;"></i>
                                     </span>
-                                    [`Choose recipients`]
+                                    <span class="text">[`Choose recipients`]</span>
                                 </a>
                             </li>
                             <li class="m-third-step m-disabled">
                                 <a href="javascript:void(0)" class="text-gray">
-                                    <span class="icon rounded bg-light-gray custom-p-8 custom-mr-8">
+                                    <span class="icon rounded bg-light-gray custom-p-8 custom-mr-4">
                                         <i class="fas fa-paper-plane text-white" style="font-size: 87.5%;"></i>
                                     </span>
-                                    [`Check and send`]
+                                    <span class="text">[`Check and send`]</span>
                                 </a>
                             </li>
                         </ul>
@@ -69,7 +69,7 @@
 
                     <input type="hidden" name="campaign_id" value="{$campaign.id}">
 
-                    <p class="small text-gray">[`The campaign may be sent to particular contact groups and segments, including additional recipients added intentionally.`]</p>
+                    <p class="small text-gray">[`A campaign can be sent to selected contact groups or segments, including additional recipients added manually.`]</p>
 
                     <div class="recipients-groups">
                         <div class="recipients-group" id="recipients-group-all-contacts">
@@ -111,7 +111,7 @@
                                     <span class="custom-mx-8">[`or`]</span>
                                     <div class="dropdown clickable more-recipients">
                                         <a href="#" class="open-menu dropdown-toggle semibold">
-                                            <i class="fas fa-plus-circle middle custom-mr-4"></i> [`Select intentionally`]
+                                            <i class="fas fa-plus-circle middle custom-mr-4"></i> [`Select groups`]
                                         </a>
                                         <div class="dropdown-body js-more z-10">
                                             <ul class="menu">
@@ -185,7 +185,7 @@
                         <a href="#" id="m-recipients-stat-show" class="small semibold">[`Show recipient list with unique email addresses`]</a>
                         <div id="m-recipients-stat" class="recipients-stat shadowed hidden">
                             <div class="recipients-stat-content">
-                                <div class="preparing-recipient-list">
+                                <div class="preparing-recipient-list small">
                                     <i class="fas fa-spin fa-spinner loading"></i> [`Preparing recipient list`]
                                 </div>
                             </div>
@@ -196,7 +196,7 @@
                         <a href="javascript:$.wa.mailer.redispatch()" class="js-close-dialog button light-gray">[`Cancel`]</a>
                     </div>
                     {if !empty($campaign.id) && ($recipients || $all_contacts_selected_id)}
-                        <section class="bottombar sticky js-actions-wrapper shadowless custom-mt-16">
+                        <section class="bottombar sticky js-actions-wrapper shadowless flexbox middle">
                             <a href="#/campaigns/send/{$campaign.id}/" class="button light-gray">
                                 [`Next`]
                                 <i class="fas fa-arrow-right fa-xs"></i>
@@ -384,6 +384,10 @@
         });
 
         setTimeout(() => $form.trigger('wa.ready'), 0);
+
+        $(".tabs").waTabs({
+            arrows_side: 'both'
+        });
 
         $.wa.mailer.setTitle();
     })();

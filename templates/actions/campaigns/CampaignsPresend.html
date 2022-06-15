@@ -6,24 +6,26 @@
     </p>
 {else}
 
+    {if !$scheduled}
+        <a href="javascript:void(0)" class="text-light-gray" title="[`Cancel`]" style="position:absolute;top:.5rem;right:1rem;"><i class="fas fa-times"></i></a>
+    {/if}
+
     {$warnings = ((int) empty($cron_ok)) + ((int) empty($return_path_ok['status'])) + ((int) empty($routing_ok))}
 
     {if $warnings}
         {if !empty($cron_ok) || $warnings > 1}
-            <h4 class="custom-mb-8">[`Warning`]</h4>
+            <h4 class="custom-mb-8 custom-mt-0">[`Warning`]</h4>
         {/if}
-    {else}
-        <p class="small">[`Settings checking passed. Campaign is ready for sending.`]</p>
     {/if}
 
     {if empty($cron_ok)}
         {if $warnings <= 1}
-            <h4 class="custom-mb-8">[`Warning`]</h4>
+            <h4 class="custom-mb-8 custom-mt-0">[`Warning`]</h4>
         {/if}
         <div class="small">
             <p class="custom-mt-8">
                 [`No <tt>cron</tt> jobs, required for long mailings, have been set up for your account.`]
-                <strong>[`Without <tt>cron</tt> jobs set up, do not close your browser window after clicking on the “Send to selected recipients” button to complete the email sending process.`]</strong>
+                <strong>{sprintf_wp('Without <tt>cron</tt> jobs set up, do not close your browser window after clicking on the “%s” button to complete the email sending process.', _w('Launch campaign'))}</strong>
             </p>
 
             <p>{sprintf_wp(
@@ -41,7 +43,7 @@
             {if $return_path_ok['reason'] == 1 || $return_path_ok['reason'] == 2 || $return_path_ok['reason'] == 3}
                 [`Return-Path address specified above is not available.`]
             {elseif $return_path_ok['reason'] == 4}
-                {sprintf_wp('Return-Path “%s” forbidden by sending server.', $return_path_ok['return-path'])}
+                {sprintf_wp('Return-Path “%s” is forbidden by the sending server.', $return_path_ok['return-path'])}
             {/if}
             [`Return-Path address is used to automatically process bounced emails.`]
         </p>
@@ -56,22 +58,42 @@
         </p>
     {/if}
 
+    {if $warnings}
+        <hr class="custom-my-24">
+    {/if}
+
     {if $scheduled}
-        <p class="custom-mb-8">
-            <i class="fas fa-clock text-blue"></i> [`Sending is scheduled for`] <strong class="custom-mr-12">{$scheduled_time|wa_datetime:'humandatetime'}</strong>
-            <button type="button" class="cancel-schedule button outlined smaller gray custom-mt-8">[`Cancel`]</button>
+        <p class="custom-my-0 flexbox middle wrap vertical">
+            <i class="fas fa-clock fa-3x text-blue custom-my-12"></i>
+            <span>
+                [`Sending is scheduled for`] <strong class="lowercase">{$scheduled_time|wa_datetime:'humandatetime'}</strong>
+            </span>
+            <span{if !$estimated_duration}  class="custom-mb-16"{/if}>
+                {_w('Ready to send to <span class="bold">%d recipients</span>.', 'Ready to send to <span class="bold">%d recipients</span>.', $unique_recipients)}
+            </span>
+            {if $estimated_duration}
+                <span class="custom-mb-16">
+                    {sprintf_wp('The sending will take <strong>about %s</strong>.', $estimated_duration)}
+                </span>
+            {/if}
+            <button type="button" class="cancel-schedule button outlined rounded smaller gray custom-mb-12">[`Cancel`]</button>
         </p>
     {else}
-        <p class="flexbox middle wrap">
-            <button id="message-send" type="submit" class="button small custom-mb-8">
-                <i class="fas fa-paper-plane"></i> {sprintf_wp('Send to selected recipients (%d)', $unique_recipients)}
-            </button>
-            <span>
-                <button type="button" class="button outlined open-schedule-dialog small custom-mb-8">
-                    <i class="fas fa-clock"></i> [`Scheduled sending`]
-                </button>
-                <a href="javascript:void(0)" class="button outlined gray small">[`Cancel`]</a>
+        <p class="flexbox middle wrap vertical">
+            <span{if !$estimated_duration} class="custom-mb-16"{/if}>
+                {_w('Ready to send to <span class="bold">%d recipients</span>.', 'Ready to send to <span class="bold">%d recipients</span>.', $unique_recipients)}
             </span>
+            {if $estimated_duration}
+                <span class="custom-mb-16">
+                    {sprintf_wp('The sending will take <strong>%s</strong>.', $estimated_duration)}
+                </span>
+            {/if}
+            <button id="message-send" type="submit" class="button gradient rounded blue larger custom-mb-12 custom-mr-0">
+                <i class="fas fa-spin fa-spinner custom-mr-8 hidden"></i><i class="fas fa-paper-plane custom-mr-8"></i> <span>[`Launch campaign`]</span>
+            </button>
+            <button type="button" class="button nobutton rounded open-schedule-dialog custom-mb-8">
+                <i class="fas fa-clock"></i> [`Scheduled sending`]
+            </button>
         </p>
     {/if}
 {/if}

@@ -62,7 +62,7 @@
             <div class="variables-link-wrapper equal-width">
                 <textarea class="body-textarea">{$body|escape}</textarea>
                 {if !empty($variables)}
-                    <a href="javascript:void(0)" class="variables-link inline-link" style="font-size:.8em;"><b><i>[`Variables`]</i></b></a>
+                    <a href="javascript:void(0)" class="variables-link" style="font-size:.8em;"><b><i>[`Variables`]</i></b></a>
                 {/if}
             </div>
         </div>
@@ -73,7 +73,7 @@
             <div class="fields shadowed equal-width">
                 {foreach ifempty($variables, array()) as $k => $v}
                     <div class="field">
-                        <div class="name"><a href="javascript:void(0)" class="inline-link{if strlen($k) > 35} small{/if}"><b><i>{$k|escape}</i></b></a></div>
+                        <div class="name"><a href="javascript:void(0)"{if strlen($k) > 35} class="small"{/if}><b><i>{$k|escape}</i></b></a></div>
                         {if $v}
                             <div class="value hint">{$v|escape}</div>
                         {/if}

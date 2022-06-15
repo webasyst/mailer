@@ -127,7 +127,8 @@
 
         {if mailerHelper::isAdmin()}
             // 'Save as a template' link
-            $('.save-template-link').on('click', function () {
+            $('.save-template-link').on('click', function (e) {
+                e.stopImmediatePropagation();
                 $.wa.mailer.showLoading();
                 $.post('?module=templates&action=copy&id={$campaign.id}', response => window.location.hash = '#/template/' + response.data + '/', 'json');
             });
@@ -135,7 +136,8 @@
 
         {if mailerHelper::isAuthor()}
             // 'Create new from this' link
-            $('.new-from-this-link').on('click', function () {
+            $('.new-from-this-link').on('click', function (e) {
+                e.stopImmediatePropagation();
                 $.wa.mailer.showLoading();
                 $.post('?module=templates&action=copy&create_draft=1&id={$campaign.id}', response => {
                     $.wa.mailer.reloadSidebar();

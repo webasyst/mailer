@@ -2,47 +2,71 @@
     <p><em class="state-error-hint">{$errormsg}</em></p>
     <a href="javascript:$.wa.mailer.redispatch()">[`reload`]</a>
 {elseif $form_disabled}
-    <p><em>[`Recipient list preparation is in progress.`] <i class="fas fa-spinner fa-spin loading"></i></em></p>
+    <p class="small"><i class="fas fa-spinner fa-spin loading"></i> [`Recipient list is being prepared.`]</p>
 {else}
     <div id="total-recipients-block">
-        <p>[`Total`] <span class="total_count"></span></p>
+        <p>[`Total`]: <span class="total_count"></span></p>
 
         {if $recipients_stats}
             {if $recipients_stats.unavailable || $recipients_stats.unsubscribed}
-                [`Excepted from this list are:`]
-                <ul class="zebra" style="margin:10px 0">
+                <span class="small text-gray">[`Excluded from this list will be:`]</span>
+                <ul class="zebra small">
                     {if $recipients_stats.unsubscribed}
                         <li>
-                            <span class="count">{$recipients_stats.unsubscribed}</span>
-                            <a href="javascript:void(0)" class="recipients-list-preview-link inline-link" rel="unsubscribed"><b>
+                            <span class="count gray">{$recipients_stats.unsubscribed}</span>
+                            <a href="javascript:void(0)" class="recipients-list-preview-link" rel="unsubscribed">
                                 [`Earlier unsubscribed`]
-                            </b></a>
+                            </a>
                         </li>
                     {/if}
                     {if $recipients_stats.unavailable}
-                        <li>
-                            <span class="count">{$recipients_stats.unavailable}</span>
-                            <a href="javascript:void(0)" class="recipients-list-preview-link inline-link" rel="unavailable"><b>
+                        <li class="flexbox">
+                            <a href="javascript:void(0)" class="recipients-list-preview-link" rel="unavailable">
                                 [`Having delivering errors in previous campaign`]
-                            </b></a>
+                            </a>
+                            <span class="count custom-ml-auto gray">{$recipients_stats.unavailable}</span>
                         </li>
                     {/if}
                 </ul>
                 {if $recipients_stats.unavailable}
-                    <p>
-                        <label><input type="checkbox" name="send_to_unavailable" value="1"{if !empty($params.send_to_unavailable)} checked{/if}> [`Send to contacts having delivering errors anyway`]</label>
-                        <br><span class="hint">[`Use this option only if the reason of delivering errors has been resolved; otherwise recipient mail servers can ban your sending server for spam.`]</span>
+                    <p class="custom-mb-4 custom-mt-12">
+                        <label class="small">
+                            <span class="wa-checkbox">
+                                <input type="checkbox" name="send_to_unavailable" value="1"{if !empty($params.send_to_unavailable)} checked{/if}>
+                                <span>
+                                    <span class="icon">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                </span>
+                            </span>
+                            [`Send to contacts having delivering errors anyway`]
+                        </label>
+                    </p>
+                    <p class="hint custom-mt-0 custom-mb-32">
+                        [`Use this option only if the reason of delivering errors has been resolved; otherwise recipient mail servers can ban your sending server for spam.`]
                     </p>
                 {/if}
             {/if}
         {else}
-            <p>
-                [`Excepted from this list are unsubscribed contacts and those having delivering errors in previous campaign.`]
+            <p class="small text-gray">
+                [`Excluded from this list will be unsubscribed contacts and those having delivering errors in previous campaigns.`]
                 [`We could not count the number of excepted recipients at this point, because a total number of your campaign recipients is too high. However, we will count every exception in the process of sending, and all such contacts will be placed in &ldquo;Exceptions&rdquo; list in the Sending Report.`]
             </p>
-            <p>
-                <label><input type="checkbox" name="send_to_unavailable" value="1"{if !empty($params.send_to_unavailable)} checked{/if}> [`Send to contacts having delivering errors anyway`]</label>
-                <br><span class="hint">[`Use this option only if the reason of delivering errors has been resolved; otherwise recipient mail servers can ban your sending server for spam.`]</span>
+            <p class="custom-mb-4">
+                <label class="small">
+                    <span class="wa-checkbox">
+                        <input type="checkbox" name="send_to_unavailable" value="1"{if !empty($params.send_to_unavailable)} checked{/if}>
+                        <span>
+                            <span class="icon">
+                                <i class="fas fa-check"></i>
+                            </span>
+                        </span>
+                    </span>
+                    [`Send to contacts having delivering errors anyway`]
+                </label>
+            </p>
+            <p class="hint custom-mt-0 custom-mb-32">
+                [`Use this option only if the reason of delivering errors has been resolved; otherwise recipient mail servers can ban your sending server for spam.`]
             </p>
         {/if}
 
@@ -62,7 +86,7 @@
 
         // Helper to load next 50 recipients
         var loadNext50 = function(params, callback_before, callback_after) {
-            recipient_lists_wrapper.append('<i class="fas fa-spinner fa-spin loading" style="margin:0 0 0 27px;"></i>');
+            recipient_lists_wrapper.append('<i class="fas fa-spinner fa-spin loading"></i>');
             $.get('?module=campaigns&action=recipientsPreview&campaign_id={$campaign.id}', params, function(r) {
                 recipient_lists_wrapper.children('.loading').remove();
                 if (typeof callback_before == 'function') {
@@ -113,7 +137,7 @@
                 $.wa.mailer.showRecipientsInRightSidebar(total_recipients);
                 if (total_recipients > 0) {
                     total_recipients_block.find('.total_count').html(
-                            '<a href="javascript:void(0)" class="recipients-list-preview-link bold text-black">' + total_recipients_formatted + '</a>'
+                            '<a href="javascript:void(0)" class="recipients-list-preview-link bold">' + total_recipients_formatted + '</a>'
                     ).find('a').trigger('click');
                 } else {
                     total_recipients_block.find('span').text("[`0 recipients`]");

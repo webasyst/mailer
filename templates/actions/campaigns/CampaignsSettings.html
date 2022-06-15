@@ -24,58 +24,58 @@
         <form id="form-campaign" action="?module=campaigns&action=save" method="post" class="fields">
             <div class="flexbox middle custom-mb-32">
                 {if !empty($campaign.id)}
-                    <ul class="tabs wide">
+                    <ul class="tabs wide overflow-arrows">
                         <li class="m-first-step">
                             <a href="#/campaigns/letter/{$campaign.id}/">
-                                <span class="icon rounded bg-light-gray custom-p-8 custom-mr-8">
+                                <span class="icon rounded bg-light-gray custom-p-8 custom-mr-4">
                                     <i class="fas fa-pen-alt text-white" style="font-size: 87.5%;"></i>
                                 </span>
-                                [`Compose letter`]
+                                <span class="text">[`Compose letter`]</span>
                             </a>
                         </li>
                         <li class="m-second-step">
                             <i class="fas fa-arrow-right"></i>
                             <a href="#/campaigns/recipients/{$campaign.id}/">
-                                <span class="icon rounded bg-light-gray custom-p-8 custom-mr-8">
+                                <span class="icon rounded bg-light-gray custom-p-8 custom-mr-4">
                                     <i class="fas fa-users text-white" style="font-size: 87.5%;"></i>
                                 </span>
-                                [`Choose recipients`]
+                                <span class="text">[`Choose recipients`]</span>
                             </a>
                             <i class="fas fa-arrow-right"></i>
                         </li>
                         <li class="m-third-step selected">
                             <a id="right-sidebar-send-link" href="#/campaigns/send/{$campaign.id}/">
-                                <span class="icon rounded bg-blue custom-p-8 custom-mr-8">
+                                <span class="icon rounded bg-blue custom-p-8 custom-mr-4">
                                     <i class="fas fa-paper-plane text-white" style="font-size: 87.5%;"></i>
                                 </span>
-                                [`Check and send`]
+                                <span class="text">[`Check and send`]</span>
                             </a>
                         </li>
                     </ul>
                 {else}
-                    <ul class="tabs wide">
+                    <ul class="tabs wide overflow-arrows">
                         <li class="m-first-step selected">
                             <a href="javascript:void(0)">
-                                <span class="icon rounded bg-blue custom-p-8 custom-mr-8">
+                                <span class="icon rounded bg-blue custom-p-8 custom-mr-4">
                                     <i class="fas fa-pen-alt text-white" style="font-size: 87.5%;"></i>
                                 </span>
-                                [`Compose letter`]
+                                <span class="text">[`Compose letter`]</span>
                             </a>
                         </li>
                         <li class="m-second-step m-disabled">
                             <a href="javascript:void(0)" class="text-gray">
-                                <span class="icon rounded bg-light-gray custom-p-8 custom-mr-8">
+                                <span class="icon rounded bg-light-gray custom-p-8 custom-mr-4">
                                     <i class="fas fa-users text-white" style="font-size: 87.5%;"></i>
                                 </span>
-                                [`Choose recipients`]
+                                <span class="text">[`Choose recipients`]</span>
                             </a>
                         </li>
                         <li class="m-third-step m-disabled">
                             <a href="javascript:void(0)" class="text-gray">
-                                <span class="icon rounded bg-blue custom-p-8 custom-mr-8">
+                                <span class="icon rounded bg-blue custom-p-8 custom-mr-4">
                                     <i class="fas fa-paper-plane text-white" style="font-size: 87.5%;"></i>
                                 </span>
-                                [`Check and send`]
+                                <span class="text">[`Check and send`]</span>
                             </a>
                         </li>
                     </ul>
@@ -166,7 +166,7 @@
                             {/foreach}
                         </select>
                     </div>
-                    <p class="hint">[`If many of your recipients addresses reside on popular mail services (e.g. @gmail.com, @yahoo.com, etc.) then too high sending speed may cause banning of your sender server because of spam suspicion and these recipients will not receive your message.`]</p>
+                    <p class="hint">[`If many of your recipients addresses are hosted by popular mail services; e.g., @gmail.com, @yahoo.com, etc., then too high sending speed may cause banning of your mail server because of spam suspicion and those recipients will not receive your message.`]</p>
                 </div>
             </div>
 
@@ -238,7 +238,8 @@
                     <a href="javascript:void(0)" class="button large light-gray">[`Send test message`] <i class="fas fa-chevron-down fa-xs"></i></a>
                 </div>
                 <div class="show-if-opened" style="display: none;">
-                    <h4>[`Send test message`]</h4>
+                    <a href="javascript:void(0)" class="text-light-gray" title="[`Cancel`]" style="position:absolute;top:.5rem;right:1rem;"><i class="fas fa-times"></i></a>
+                    <h4 class="custom-mt-0">[`Send test message`]</h4>
                     {$user_email = $wa->user('email', 'default')|escape}
                     <label class="small">
                         <span class="wa-checkbox">
@@ -261,7 +262,6 @@
                     </p>
                     <p>
                         <button type="submit" class="button dark-gray custom-mb-8">[`Send test message`]</button>
-                        <a href="javascript:void(0)" class="button light-gray custom-mb-8">[`Cancel`]</a>
                     </p>
 
                 </div>
@@ -273,7 +273,7 @@
             <div id="send-main-wrapper" class="closed">
                 <div class="show-if-closed" style="display: none;">
                     <a href="javascript:void(0)" class="button large">[`Send to selected recipients`] <i class="fas fa-chevron-down fa-xs"></i></a>
-                    <p class="hint custom-mt-4">[`We will provide final checking and offer you to choose: send now or schedule sending for future date/time.`]</p>
+                    <p class="hint custom-mt-4">[`We will provide final checking and offer you to choose whether to send now or to schedule sending for a future date and time.`]</p>
                 </div>
                 <div class="show-if-opened" style="display: none;">
                     <div class="validation-content">
@@ -398,6 +398,7 @@
             validation_content = wrapper.find('.validation-content');
 
         wrapper.on('click', 'a:not(.open-schedule-dialog)', function() {
+            $('#send-test-wrapper').removeClass('opened').addClass('closed');
             wrapper.removeClass('sent');
             if (wrapper.hasClass('opened')) {
                 wrapper.removeClass('opened');
@@ -406,7 +407,7 @@
                 if (!validateForm()) {
                     return;
                 }
-                validation_content.html('<span><i class="fas fa-spinner fa-spin loading"></i> [`Checking campaign settings and preparing recipient list`]</span>');
+                validation_content.html('<div class="align-center"><i class="fas fa-spinner fa-spin loading"></i> [`Checking campaign settings and preparing recipient list`]</div>');
                 setTimeout(() => validation_content.load('?module=campaigns&action=presend&campaign_id={$campaign.id}'), 2000);
                 wrapper.removeClass('closed');
                 wrapper.addClass('opened');
@@ -487,19 +488,40 @@
         }
 
         // Validation passed: save the campaign (outer XHR), then start sending (inner XHR)
-        const button = form.find(':submit:last').hide();
+        const $button = $(this),
+            btn_start_text = '[`Starting...`]',
+            $button_text = $button.find('span'),
+            awaitingText = ['[`Just a second...`]', '[`Almost ready...`]', '[`Please wait...`]']
+
+        form.find('.open-schedule-dialog').hide();
+
+        $button
+            .addClass('disabled')
+            .find('svg')
+            .toggleClass('hidden')
+            .end()
+            .closest('.validation-content')
+            .find('a:first')
+            .hide();
+
+        $button_text.text(btn_start_text)
+
+        const timerId = setInterval(() => $button_text.text(awaitingText[Math.floor(Math.random() * awaitingText.length)]), 5000);
+
         $.storage.del('mailer/hash');
-        return $.wa.mailer.saveCampaign(form, button, function() {
+        return $.wa.mailer.saveCampaign(form, null, function() {
             $.ajax({
                 type: 'POST',
                 url: '?module=campaigns&action=presend&campaign_id={$campaign.id}',
                 data: { send: 1 },
                 dataType: 'html',
                 success: function (response) {
+                    clearInterval(timerId);
                     $('#send-main-wrapper').html(response);
                 },
                 global: false, // prevent ajaxError handlers to trigger
                 error: function() {
+                    clearInterval(timerId);
                     $.wa.mailer.redispatch();
                 },
                 timeout: 40000
@@ -575,22 +597,28 @@
         }
     });
     form.on('click', '.cancel-schedule', function() {
-        let url = '?module=schedule&action=delete',
-            mess_id = form.find('[name=id]').val();
-
         // it make sense if only we saved campaign
-        if (confirm("[`Cancel schedule`]?") === true && parseInt(mess_id,10)) {
-            $.post(url, { id: mess_id }, function(response){
-                if (response.status === 'ok') {
-                    // reload yellow box
-                    $('#send-main-wrapper')
-                        .find('.validation-content')
-                        .html('<i class="fas fa-spinner fa-spin loading"></i>')
-                        .load('?module=campaigns&action=presend&campaign_id='+response.data);
-                    // renew sidebar
-                    $.wa.mailer.reloadSidebar();
+        const mess_id = form.find('[name=id]').val();
+
+        if (parseInt(mess_id,10)) {
+            $.waDialog.confirm({
+                text: "[`Cancel schedule`]?",
+                success_button_title: '[`Yes`]',
+                cancel_button_title: '[`No`]',
+                onSuccess() {
+                    $.post('?module=schedule&action=delete', { id: mess_id }, function(response){
+                            if (response.status === 'ok') {
+                                // reload yellow box
+                                $('#send-main-wrapper')
+                                    .find('.validation-content')
+                                    .html('<i class="fas fa-spinner fa-spin loading"></i>')
+                                    .load('?module=campaigns&action=presend&campaign_id='+response.data);
+                                // renew sidebar
+                                $.wa.mailer.reloadSidebar();
+                            }
+                }, "json");
                 }
-            }, "json");
+            })
         }
     });
 
@@ -610,6 +638,10 @@
                 validation_content.load('?module=campaigns&action=presend&campaign_id={$campaign.id}');
             }
         }, true);
+    });
+
+    $(".tabs").waTabs({
+        arrows_side: 'both'
     });
 
     $.wa.mailer.setTitle();

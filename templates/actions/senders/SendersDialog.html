@@ -56,7 +56,7 @@
             </div>
 
             {if isset($sender_types.mail)}
-                <div id="mail-params"{if $params.type != 'mail'} style="display:none"{/if} class="field-group transport-params">
+                <div id="mail-params"{if $params.type != 'mail'} style="display:none"{/if} class="field-group transport-params custom-mt-8">
                     <div class="field">
                         <div class="name">[`Parameters`]</div>
                         <div class="value">
@@ -108,7 +108,7 @@
             {/if}
 
             {if isset($sender_types.sendmail)}
-                <div id="sendmail-params"{if $params.type != 'sendmail'} style="display:none"{/if} class="field-group transport-params">
+                <div id="sendmail-params"{if $params.type != 'sendmail'} style="display:none"{/if} class="field-group transport-params custom-mt-8">
                     <div class="field">
                         <div class="name">[`Command`]</div>
                         <div class="value">
@@ -252,7 +252,7 @@
                         });
                         const other_errors = $form.find('.state-error-hint').empty().parent().show();
                         let input;
-                        for (let fld in r.errors) {
+                        for (let fld in response.errors) {
                             if (response.errors.hasOwnProperty(fld)) {
                                 // Note: r.errors[fld] being null means that json_encode() failed to process a message
                                 // in other than UTF8 encoding. Most probably this is an error checking SMTP mailbox.
@@ -298,8 +298,14 @@
                         cancel_button_class: 'light-gray',
                         onSuccess() {
                             $.post('?module=senders&action=delete', { id: "{$sender.id}" }, () => $.wa.mailer.redispatch());
+                            $btn.closest('.dialog').data('dialog').close();
                         },
                         onCancel() {
+                            $.wa.mailer.buttonLoader({
+                                $button: $btn,
+                                status: 'failed',
+                                removeOtherIcons: true
+                            });
                             return false;
                         }
                     });

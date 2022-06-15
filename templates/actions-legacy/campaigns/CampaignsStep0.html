@@ -71,7 +71,7 @@
     // Click on a template creates campaign from that template
     $('#template-list').on('click', 'li', function() {
         var template_id = $(this).attr('rel');
-        window.location.hash = '#/campaigns/letter/new/'+(template_id ? template_id+'/' : '');
+        $.wa.mailer.campaignsLetterAction('new', (template_id ? template_id : ''))
     });
 
     $.wa.mailer.setTitle();

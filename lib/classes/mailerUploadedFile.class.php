@@ -63,7 +63,7 @@ class mailerUploadedFile extends waRequestFile
      * @param array $allowedExtensions list of valid extensions, ex. array("jpeg", "xml", "bmp"); empty to allow anything
      * @param int $sizeLimit max file size in bytes (defaults to 10 Mb)
      */
-    public static function uploadToTmp($file_id, $dir, $allowedExtensions = array(), $sizeLimit = 10485760)
+    public static function uploadToTmp($file_id, $dir, $allowedExtensions = array(), $sizeLimit = 67108864)
     {
         $dir = preg_replace('~[\\\\/]*$~', '/', $dir);
 
@@ -101,7 +101,7 @@ class qqFileUploader
     private $sizeLimit;
     private $file;
 
-    function __construct(array $allowedExtensions = array(), $sizeLimit = 10485760) {
+    function __construct(array $allowedExtensions = array(), $sizeLimit = 67108864) {
         $allowedExtensions = array_map("strtolower", $allowedExtensions);
 
         $this->allowedExtensions = $allowedExtensions;

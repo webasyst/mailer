@@ -166,7 +166,7 @@ msgstr "Черновик удален."
 msgid "Unable to prepare recipients list. Another user attempted to start sending this campaign?"
 msgstr "Ошибка во время формирования списка получателей. Другой пользователь параллельно запустил рассылку?"
 
-msgid "If many of your recipients addresses reside on popular mail services (e.g. @gmail.com, @yahoo.com, etc.) then too high sending speed may cause banning of your sender server because of spam suspicion and these recipients will not receive your message."
+msgid "If many of your recipients addresses are hosted by popular mail services; e.g., @gmail.com, @yahoo.com, etc., then too high sending speed may cause banning of your mail server because of spam suspicion and those recipients will not receive your message."
 msgstr "Если многие из адресов ваших получателей расположены на популярных почтовых сервисах (например @mail.ru, @gmail.com и т. д.), то при слишком высокой скорости рассылки ваш сервер отправителя будет заблокирован из-за подозрения на спам, и эти получатели не получат сообщение."
 
 msgid "Sending report"
@@ -454,7 +454,7 @@ msgstr "Продолжить"
 msgid "Sending paused"
 msgstr "Рассылка остановлена"
 
-msgid "Error checking Return-Path mailbox"
+msgid "Error checking the Return-Path mailbox"
 msgstr "Ошибка проверки адреса Return-path"
 
 msgid "All subscribers"
@@ -496,7 +496,7 @@ msgstr "Прочтения нельзя посчитать, потому что 
 msgid "Unsubscribe URL is located only in your message headers. It does not guarantee an appearance of unsubscribe link in recipient mail program."
 msgstr "Ссылка отписки содержится только в заголовках вашего письма. Это не гарантирует появление ссылки отписки в почтовой программе получателя."
 
-msgid "Return-Path is not customized. This does not allow to track most of potential bounces from recipient mail servers. Only invalid messages bounced by your sender server have been counted."
+msgid "Return-Path is not set up. This does not allow tracking of most potential bounces from recipient mail servers. Only invalid messages bounced by your sender server have been counted."
 msgstr "Return-Path не настроен. Это не позволяет отследить большинство отказов от почтовых серверов получателей. Посчитаны только адреса, отвергнутые вашим сервером отправителя."
 
 msgid "select"
@@ -664,7 +664,7 @@ msgstr "не указан"
 msgid "0 recipients"
 msgstr "0 получателей"
 
-msgid "Use this source code to embed in your website or blog where you want this signup form to appear."
+msgid "Embed this code in your website or blog page where you want this signup form to be displayed."
 msgstr "Вставьте этот код на страницу сайта или в блог — туда, где вы хотите разместить форму подписки."
 
 msgid "Preview"
@@ -694,7 +694,7 @@ msgstr "Все исключения"
 msgid "Timeout error during recipient list preparation."
 msgstr "Превышен лимит времени на подготовку списка получателей."
 
-msgid "Recipient list preparation is in progress."
+msgid "Recipient list is being prepared."
 msgstr "Идет подготовка списка получателей."
 
 msgid "We recommend that you create a dedicated email account for this purpose, and use it merely for receiving and processing these kinds of auto notification messages."
@@ -724,7 +724,7 @@ msgstr "Тестовые письма отправлены на следующи
 msgid "Send one more test"
 msgstr "Отправить тест еще раз"
 
-msgid "Excepted from this list are unsubscribed contacts and those having delivering errors in previous campaign."
+msgid "Excluded from this list will be unsubscribed contacts and those having delivering errors in previous campaigns."
 msgstr "Из них будут исключены ранее отписавшиеся контакты и те, у кого были ошибки доставки в прошлых рассылках."
 
 msgid "We could not count the number of excepted recipients at this point, because a total number of your campaign recipients is too high. However, we will count every exception in the process of sending, and all such contacts will be placed in &ldquo;Exceptions&rdquo; list in the Sending Report."
@@ -736,7 +736,7 @@ msgstr "Отправить имевшим ошибки доставки все �
 msgid "Use this option only if the reason of delivering errors has been resolved; otherwise recipient mail servers can ban your sending server for spam."
 msgstr "Используйте эту опцию только после устранения причины недоставки сообщений. В противном случае почтовые серверы получателей могут поместить ваш сервер отправителя в &laquo;черный список&raquo;."
 
-msgid "Excepted from this list are:"
+msgid "Excluded from this list will be:"
 msgstr "Из них будут исключены:"
 
 msgid "Having delivering errors in previous campaign"
@@ -808,7 +808,7 @@ msgstr "Нет темы сообщения."
 msgid "Unsaved changes will be lost if you leave this page now. Are you sure?"
 msgstr "Несохраненные изменения будут потеряны. Уйти с этой страницы?"
 
-msgid "how were chosen"
+msgid "how were selected"
 msgstr "как были выбраны"
 
 msgid "Author"
@@ -825,6 +825,9 @@ msgstr "Отложенная рассылка невозможна (не нас�
 
 msgid "Without <tt>cron</tt> jobs set up, do not close your browser window after clicking on the “Send to selected recipients” button to complete the email sending process."
 msgstr "<br>Внимание! Без настройки <tt>cron</tt> не закрывайте страницу после нажатия на кнопку «Отправить выбранным получателям» до завершения отправки."
+
+msgid "Without <tt>cron</tt> jobs set up, do not close your browser window after clicking on the “%s” button to complete the email sending process."
+msgstr "<br>Внимание! Без настройки <tt>cron</tt> не закрывайте страницу после нажатия на кнопку «%s» до завершения отправки."
 
 msgid "To ensure that sending is completed without your input, please set up <tt>cron</tt> jobs (<a href=\"%s\" target=\"_blank\">view instructions</a>), with the commands specified below, in your web-hosting control panel:"
 msgstr "Для того чтобы рассылка автоматически продолжалась без вашего участия, необходимо настроить задания <tt>cron</tt> (<a href=\"%s\" target=\"_blank\">инструкция по настройке</a>) с указанными ниже командами в контрольной панели вашего хостинга:"
@@ -898,7 +901,7 @@ msgstr "Указанный адрес Return-Path недоступен."
 msgid "Return-Path address is used to automatically process bounced emails."
 msgstr "Адрес Return-Path используется для автоматического получения и обработки отказов (bounces) почтовым сервером получателя."
 
-msgid "Return-Path “%s” forbidden by sending server."
+msgid "Return-Path “%s” is forbidden by the sending server."
 msgstr "Return-Path «%s» запрещен сервером отправителя."
 
 msgid "Save as a template"
@@ -937,8 +940,8 @@ msgstr "Проверка настроек выполнена. Сообщение
 msgid "Scheduled sending"
 msgstr "Отложенная рассылка"
 
-msgid "We will provide final checking and offer you to choose: send now or schedule sending for future date/time."
-msgstr "Мы выполним финальную проверку и предложим выбор: отправить сейчас или настроить отложенную рассылку."
+msgid "We will provide final checking and offer you to choose whether to send now or to schedule sending for a future date and time."
+msgstr "Мы выполним финальную проверку и предложим выбор: отправить сейчас или настроить отложенную рассылку на определенную дату и время."
 
 msgid "current time is"
 msgstr "текущее время:"
@@ -1240,8 +1243,8 @@ msgstr "Перейдите по ссылке для подтверждения �
 msgid "Thank you!"
 msgstr "Спасибо!"
 
-msgid "Message will be sent to the subscriber’s address. This message contains a special link which must be clicked to confirm the subscription."
-msgstr "Подписчику будет отправлено сообщение. В этом сообщении будет содержаться специальная ссылка, по которой необходимо перейти для подтверждения подписки."
+msgid "A message will be sent to the subscriber’s address, with a special link which must be clicked to confirm the subscription."
+msgstr "Подписчику будет отправлено сообщение со специальной ссылкой, по которой необходимо перейти для подтверждения подписки."
 
 msgid "Are you sure?"
 msgstr "Вы уверены?"
@@ -1273,7 +1276,7 @@ msgstr "Контакты PRO"
 msgid "Subscriber name, if used in the form."
 msgstr "Имя подписчика, если используется в форме."
 
-msgid "URL to confirm subscription. A click on this link opens “My subscriptions” page in your personal account."
+msgid "URL to confirm subscription. A click on this link opens “My subscriptions” page in the customer account."
 msgstr "Адрес подтверждения подписки. Щелчок по нему открывает страницу «Мои подписки» в личном кабинете подписчика."
 
 msgid "My subscriptions"
@@ -1429,7 +1432,7 @@ msgstr "Рассылки"
 msgid "Status"
 msgstr "Статус"
 
-msgid "Send newsletter in Mailer"
+msgid "Send newsletter with Mailer"
 msgstr "Отправить письмо в «Рассылках»"
 
 msgid "Shop customers"
@@ -1474,13 +1477,13 @@ msgstr "Предлагать включить обязательный флаж�
 msgid "Restore original text"
 msgstr "Восстановить стандартный текст"
 
-msgid "Please confirm your agreement"
+msgid "Please confirm your consent"
 msgstr "Подтвердите согласие с условиями"
 
 msgid "CRM segments"
 msgstr "Сегменты CRM"
 
-msgid "To select CRM segments, first create them in <a href=\"%s\">CRM</a> app."
+msgid "To select CRM segments, first create them in the <a href=\"%s\">CRM</a> app."
 msgstr "Для использования сегментов CRM создайте их в приложении <a href=\"%s\">CRM</a>."
 
 msgid "Upload image"
@@ -1528,10 +1531,10 @@ msgstr "пред"
 msgid "next"
 msgstr "след"
 
-msgid "NOTE: This contact will not be deleted. It will be only eliminated from the subscription list."
+msgid "NOTE: This contact will not be deleted. It will be only removed from the subscription list."
 msgstr "Контакт будет исключен из списка рассылок, но сохранится в вашей базе данных."
 
-msgid "Do you really want to eliminate contact %s from subscribers?"
+msgid "Do you really want to remove contact %s from subscribers?"
 msgid_plural "<span id=\"delete-contact-name-email\"></span>"
 msgstr[0] "Исключить контакт %s из списка рассылки?"
 msgstr[1] "<span id=“delete-contact-name-email”></span>"
@@ -1612,16 +1615,16 @@ msgstr "<strong>Внимание!</strong> Все изменения, сдела
 msgid "Switch"
 msgstr "Переключиться"
 
-msgid "Select a segment or make a search for subscribers."
-msgstr "Выберите сегмент или выполните поиск, чтобы показать подписчиков."
+msgid "Select a category or run a search to view recipients."
+msgstr "Выберите категорию или выполните поиск, чтобы показать получателей."
 
 msgid "Warning"
 msgstr "Предупреждение"
 
-msgid "The campaign may be sent to particular contact groups and segments, including additional recipients added intentionally."
+msgid "A campaign can be sent to selected contact groups or segments, including additional recipients added manually."
 msgstr "В качестве получателей рассылки могут быть указаны различные группы и сегменты из вашей базы контактов, а также дополнительные адреса, указанные вручную."
 
-msgid "Select intentionally"
+msgid "Select groups"
 msgstr "Выбрать отдельно"
 
 msgid "Actions"
@@ -1630,7 +1633,7 @@ msgstr "Действия"
 msgid "Sending duration"
 msgstr "Длительность отправки"
 
-msgid "How were chosen"
+msgid "How were selected"
 msgstr "Как были выбраны"
 
 msgid "UTM tags"
@@ -1691,7 +1694,7 @@ msgid "<p class=\"h2\">About the Revolvapp editor</p><p>Mailer app uses WYSIWYG 
 msgstr "<p class=\"h2\">О визуальном редакторе Revolvapp</p><p>Для составления содержимого сообщений в приложении «Рассылки» используется визуальный редактор <a href=\"https://imperavi.com/revolvapp/\" rel=\"noopener\" target=\"_blank\">Revolvapp</a>. Этот редактор разработан сторонней компанией Imperavi.</p><p class=\"h3\">Как работать с редактором</p><p>Выберите в тексте письма ту область, которую хотите отредактировать. В панели инструментов появятся кнопки, которые позволят вам изменить эту часть содержимого.</p><p>Поработайте с редактором некоторое время, чтобы привыкнуть к тому, как он действует. Поэкспериментируйте с каждой кнопкой, чтобы немного освоиться. После этого приступайте к созданию своей первой email-рассылки!</p>"
 
 msgid "not set yet"
-msgstr "ещё не выбран"
+msgstr "еще не выбран"
 
 msgid "Images & files upload"
 msgstr "Загрузка изображений и файлов"
@@ -1710,3 +1713,66 @@ msgid_plural "A Return-Path address can be deleted in %d days after the last cam
 msgstr[0] "Адрес Return-Path можно удалить через %d день после завершения последней рассылки, в которой он использовался."
 msgstr[1] "Адрес Return-Path можно удалить через %d дня после завершения последней рассылки, в которой он использовался."
 msgstr[2] "Адрес Return-Path можно удалить через %d дней после завершения последней рассылки, в которой он использовался."
+
+msgid "Ready to send to <span class=\"bold\">%d recipients</span>."
+msgid_plural "Ready to send to <span class=\"bold\">%d recipients</span>."
+msgstr[0] "Готово к отправке <span class=\"bold\">%d получателю</span>."
+msgstr[1] "Готово к отправке <span class=\"bold\">%d получателям</span>."
+msgstr[2] "Готово к отправке <span class=\"bold\">%d получателям</span>."
+
+msgid "Select..."
+msgstr "Выберите..."
+
+msgid "The message was delivered and has been viewed by recipients."
+msgstr "Письмо было доставлено и прочитано получателями."
+
+msgid "The message was sent but it is unknown whether it has been viewed by recipients."
+msgstr "Письмо отправлено, но о факте его прочтения получателем неизвестно."
+
+msgid "Recipients have clicked on the “Unsubscribe” link in this message. They will be listed in the “Exceptions” section in future campaings’ reports."
+msgstr "Получатели нажали на ссылку «Отписаться» в этом письме. При отправке следующих рассылок они попадут в категорию «Исключения»."
+
+msgid "The message was not delivered to recipients due to various technical issues such as incorrectly configured mail servers or non-existent email addresses."
+msgstr "Письмо не было доставлено получателям из-за различных технических проблем, например, неправильно настроенные почтовые серверы получателей или несуществующие email-адреса."
+
+msgid "Starting..."
+msgstr "Начинаем..."
+
+msgid "Just a second..."
+msgstr "Еще чуть-чуть..."
+
+msgid "Almost ready..."
+msgstr "Уже скоро..."
+
+msgid "Please wait..."
+msgstr "Подождите..."
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Launch campaign"
+msgstr "Начать рассылку"
+
+msgid "The sending will take <strong>about %s</strong>."
+msgstr "Рассылка будет длиться <strong>около %s</strong>."
+
+msgid "The sending will take <strong>%s</strong>."
+msgstr "Рассылка будет длиться <strong>%s</strong>."
+
+msgid "about %d minute"
+msgid_plural "about %d minutes"
+msgstr[0] "около %d минуты"
+msgstr[1] "около %d минут"
+msgstr[2] "около %d минут"
+
+msgid "about %d hour"
+msgid_plural "about %d hours"
+msgstr[0] "около %d часа"
+msgstr[1] "около %d часов"
+msgstr[2] "около %d часов"
+
+msgid "less than a minute"
+msgstr "менее минуты"
+
+msgid "This file will be deleted from all campaigns."
+msgstr "Этот файл будет удален из всех рассылок."

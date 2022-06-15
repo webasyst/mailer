@@ -212,16 +212,24 @@
 
         // Confirmation before user leaves page
         let h2;
-        $(window).on('wa.before_dispatched', h2 = function (e) {
+        $(window).on('wa.before_dispatched', h2 = function (e, context) {
             if ($submit_btn && $submit_btn.hasClass('yellow') && $form && $form.closest('html').length) {
-                if (!confirm("[`Unsaved changes will be lost if you leave this page now. Are you sure?`]")) {
-                    e.preventDefault();
-                    return false;
-                }
+                e.preventDefault();
+                const context_hash = context.getHash()
+                $.waDialog.confirm({
+                    text: "[`Unsaved changes will be lost if you leave this page now. Are you sure?`]",
+                    success_button_title: '[`OK`]',
+                    cancel_button_title: '[`Cancel`]',
+                    onSuccess(){
+                        $.wa.setHash(context_hash)
+                        $(window).off('wa.before_dispatched', h2);
+                    }
+                })
+            }else{
+                $(window).off('wa.before_dispatched', h2);
+                $(document).off('keydown', h);
+                return true;
             }
-            $(window).off('wa.before_dispatched', h2);
-            $(document).off('keydown', h);
-            return true;
         });
 
         // Description editor

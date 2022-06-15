@@ -6,58 +6,58 @@
             <div class="js-core-header"></div>
             <div class="flexbox middle custom-mb-32">
                 {if !empty($campaign.id)}
-                    <ul class="tabs wide">
+                    <ul class="tabs wide overflow-arrows">
                         <li class="m-first-step selected">
                             <a href="#/campaigns/letter/{$campaign.id}/">
-                                <span class="icon rounded bg-blue custom-p-8 custom-mr-8">
+                                <span class="icon rounded bg-blue custom-p-8 custom-mr-4">
                                     <i class="fas fa-pen-alt text-white" style="font-size: 87.5%;"></i>
                                 </span>
-                                [`Compose letter`]
+                                <span class="text">[`Compose letter`]</span>
                             </a>
                         </li>
                         <li class="m-second-step">
                             <i class="fas fa-arrow-right"></i>
                             <a href="#/campaigns/recipients/{$campaign.id}/" class="text-gray">
-                                <span class="icon rounded bg-light-gray custom-p-8 custom-mr-8">
+                                <span class="icon rounded bg-light-gray custom-p-8 custom-mr-4">
                                     <i class="fas fa-users text-white" style="font-size: 87.5%;"></i>
                                 </span>
-                                [`Choose recipients`]
+                                <span class="text">[`Choose recipients`]</span>
                             </a>
                             <i class="fas fa-arrow-right"></i>
                         </li>
                         <li class="m-third-step">
                             <a id="right-sidebar-send-link" href="#/campaigns/send/{$campaign.id}/" class="text-gray">
-                                <span class="icon rounded bg-light-gray custom-p-8 custom-mr-8">
+                                <span class="icon rounded bg-light-gray custom-p-8 custom-mr-4">
                                     <i class="fas fa-paper-plane text-white" style="font-size: 87.5%;"></i>
                                 </span>
-                                [`Check and send`]
+                                <span class="text">[`Check and send`]</span>
                             </a>
                         </li>
                     </ul>
                 {else}
-                    <ul class="tabs wide">
+                    <ul class="tabs wide overflow-arrows">
                         <li class="m-first-step selected">
                             <a href="javascript:void(0)">
-                                <span class="icon rounded bg-blue custom-p-8 custom-mr-8">
+                                <span class="icon rounded bg-blue custom-p-8 custom-mr-4">
                                     <i class="fas fa-pen-alt text-white" style="font-size: 87.5%;"></i>
                                 </span>
-                                [`Compose letter`]
+                                <span class="text">[`Compose letter`]</span>
                             </a>
                         </li>
                         <li class="m-second-step m-disabled">
                             <a href="javascript:void(0)" class="text-gray">
-                                <span class="icon rounded bg-light-gray custom-p-8 custom-mr-8">
+                                <span class="icon rounded bg-light-gray custom-p-8 custom-mr-4">
                                     <i class="fas fa-users text-white" style="font-size: 87.5%;"></i>
                                 </span>
-                                [`Choose recipients`]
+                                <span class="text">[`Choose recipients`]</span>
                             </a>
                         </li>
                         <li class="m-third-step m-disabled">
                             <a href="javascript:void(0)" class="text-gray">
-                                <span class="icon rounded bg-light-gray custom-p-8 custom-mr-8">
+                                <span class="icon rounded bg-light-gray custom-p-8 custom-mr-4">
                                     <i class="fas fa-paper-plane text-white" style="font-size: 87.5%;"></i>
                                 </span>
-                                [`Check and send`]
+                                <span class="text">[`Check and send`]</span>
                             </a>
                         </li>
                     </ul>
@@ -73,7 +73,7 @@
                            name="data[subject]"
                            value="{$campaign.subject|escape}"
                            placeholder="[`Subject`]">
-                    {if !$campaign.id}
+                    {if empty($campaign.id)}
                         <p class="hint custom-mt-0">[`Be sure to enter your message subject and text to proceed to recipient selection and message sending steps.`]</p>
                     {/if}
                 </div>
@@ -83,7 +83,7 @@
 
             <div class="js-editor-revolv">
                 {include file="../../../js/vendor/revolvapp/templates/index.html" assign="revolv_default"}
-                {if !isset($campaign.id)}
+                {if empty($campaign.id)}
                     {* new draft *}
                     {$revolv_default}
                 {else}
@@ -108,7 +108,7 @@
         <div class="article-body custom-py-8 flexbox middle space-16">
             <button form="{$form_id}" type="submit" class="button js-campaign-save">[`Save`]</button>
             <em class="hint">[`Ctrl+S`]</em>
-            <a href="javascript:void(0)" class="small js-about-revolvapp text-light-gray align-right wide"><i class="fas fa-info-circle"></i> [`About Revolvapp`]</a>
+            <a href="javascript:void(0)" class="small js-about-revolvapp text-light-gray align-right wide"><i class="fas fa-info-circle"></i> <span class="desktop-and-tablet-only">[`About Revolvapp`]</span></a>
             {if !empty($campaign.id)}
                 <a href="#/campaigns/recipients/{$campaign.id}/" class="button light-gray custom-ml-auto">
                     [`Next`]
@@ -174,7 +174,7 @@
 
             return $.wa.mailer.saveCampaign($form, $submit_btn, function (r) {
                 $submit_btn.removeClass('yellow');
-                {if !$campaign.id}
+                {if empty($campaign.id)}
                     var message_id = r.data;
                     $.wa.mailer.collapseSidebarSection($('#m-sb-drafts-header'), 'uncollapse');
                     $.wa.mailer.reloadSidebar();
@@ -210,19 +210,23 @@
         });
 
         // Confirmation before user leaves page
-        var linksNotModeToggle = $('a:not(.wa-editor-core-wrapper a):not(.js-about-revolvapp):not(#message-delete) ');
-        var askConfirmation = function (event) {
+        var linksNotModeToggle = $('a:not(.wa-editor-core-wrapper a):not(.js-about-revolvapp):not(#message-delete)');
+        var askConfirmation = function (event, context) {
             if ($submit_btn.hasClass('yellow') && $form.closest('html').length) {
-                if (!confirm("[`Unsaved changes will be lost if you leave this page now. Are you sure?`]")) {
-                    event.preventDefault();
-                    return false;
-                } else {
-                    linksNotModeToggle.off('click', askConfirmation);
-                }
+                event.preventDefault();
+                $.waDialog.confirm({
+                    text: "[`Unsaved changes will be lost if you leave this page now. Are you sure?`]",
+                    success_button_title: '[`OK`]',
+                    cancel_button_title: '[`Cancel`]',
+                    onSuccess(){
+                        $(context).unbind('click')
+                        event.currentTarget.click();
+                    }
+                })
             }
         };
         linksNotModeToggle.on('click', function (e) {
-            askConfirmation(e);
+            askConfirmation(e, this);
         });
 
         {if empty($campaign.subject)}
@@ -234,7 +238,7 @@
         $.wa.mailer.reloadSidebar();
         {/if}
 
-        {if $campaign.id}
+        {if !empty($campaign.id)}
         if ($.wa.mailer.getHash() != '#/campaigns/letter/{$campaign.id}/') {
             $.wa.mailer.stopDispatch(1);
             window.location.hash = '#/campaigns/letter/{$campaign.id}/';
@@ -249,6 +253,21 @@
             }, html => $.waDialog({ html }))
         })
 
+        // Variables Dialog
+        $('#{$form_id}').on('click', '.js-ace-variable', function() {
+            $.waDialog({
+                $wrapper: $('#available-smarty-variables').clone(),
+                onOpen($dialog, dialog) {
+                    const $textarea = $('.js-redactor-body');
+                    $dialog.find('a').on('click', function () {
+                        const variable = $(this).find('.var-code').text().trim()
+                        $textarea.trigger('wa_insert_var', variable);
+                        dialog.close()
+                    })
+                }
+            })
+        })
+
         // About Revolvapp
         $('.js-about-revolvapp').on('click', () => {
                 $.waDialog.alert({
@@ -256,6 +275,10 @@
                     button_title: "[`Close`]"
                 })
             })
+
+        $(".tabs").waTabs({
+            arrows_side: 'both'
+        });
 
         $.wa.mailer.setTitle();
 

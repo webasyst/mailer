@@ -63,6 +63,12 @@ class mailerCampaignsPresendAction extends waViewAction
         $last_cron_time = wa()->getSetting('last_cron_time', 0);
         $last_cron_time = wa_is_int($last_cron_time) && $last_cron_time >= 0 ? $last_cron_time : 0;
 
+        $estimated_duration_str = null;
+        $estimated_duration_sec = $this->getEstimatedDuration($campaign['sender_id'], ifset($params, 'speed_limit', null), ifset($params, 'recipients_count', 0));
+        if ($estimated_duration_sec) {
+            $estimated_duration_str = self::getAge($estimated_duration_sec);
+        }
+
         $this->view->assign('errormsg', $errormsg);
         $this->view->assign('cron_command', '<code>php '.wa()->getConfig()->getRootPath().'/cli.php mailer send</code><br><br><code>php '.wa()->getConfig()->getRootPath().'/cli.php mailer check</code>');
         $this->view->assign('cron_ok', $last_cron_time + 3600*2 > time());
@@ -70,6 +76,7 @@ class mailerCampaignsPresendAction extends waViewAction
         $this->view->assign('return_path_ok', $return_path_ok);
         $this->view->assign('unique_recipients', $params['recipients_count']);
         $this->view->assign('routing_ok', !!wa()->getRouteUrl('mailer', true));
+        $this->view->assign('estimated_duration', $estimated_duration_str);
 
         $this->view->assign('scheduled', $campaign['status'] == mailerMessageModel::STATUS_PENDING );
         $this->view->assign('scheduled_time', $campaign['send_datetime'] );
@@ -226,5 +233,67 @@ class mailerCampaignsPresendAction extends waViewAction
             'status'=>true
         );
     }
-}
 
+    protected function getEstimatedDuration($sender_id, $speed_limit, $recipients_count)
+    {
+        if ($speed_limit > 0) {
+            return $recipients_count * 3600 / $speed_limit;
+        }
+
+        // Get several finished campaigns that use this sender
+        $m = new waModel();
+        $sql = "SELECT id, send_datetime, finished_datetime, mp1.value AS recipients_count, mp2.value AS fake_send_timestamp, mp3.value AS speed_limit
+                FROM mailer_message AS m
+                    JOIN mailer_message_params AS mp1
+                        ON mp1.message_id=m.id
+                            AND mp1.name='recipients_count'
+                    LEFT JOIN mailer_message_params AS mp2
+                        ON mp2.message_id=m.id
+                            AND mp2.name='fake_send_timestamp'
+                    LEFT JOIN mailer_message_params AS mp3
+                        ON mp3.message_id=m.id
+                            AND mp3.name='speed_limit'
+                WHERE m.sender_id=?
+                    AND m.send_datetime IS NOT NULL
+                    AND m.finished_datetime IS NOT NULL
+                HAVING speed_limit IS NULL
+                ORDER BY m.id DESC
+                LIMIT 5";
+        $rows = $m->query($sql, [$sender_id]);
+
+        // Calculate total sent count and total sending time of finished campaigns
+        $total_sending_time = 0;
+        $total_recipients_count = 0;
+        foreach($rows as $row) {
+            $total_recipients_count += $row['recipients_count'];
+            $start_ts = ifempty($row['fake_send_timestamp'], strtotime($row['send_datetime']));
+            $end_ts = strtotime($row['finished_datetime']);
+            $total_sending_time += $end_ts - $start_ts;
+        }
+
+        if ($total_recipients_count > 0) {
+            return $recipients_count*$total_sending_time / $total_recipients_count;
+        } else {
+            return null;
+        }
+    }
+
+    public static function getAge($fullseconds)
+    {
+        if($fullseconds < 60) {
+            return _w('less than a minute');
+        } elseif($fullseconds < 60 * 60) {
+            return _w('about %d minute', 'about %d minutes', round(($fullseconds) / 60));
+        } else {
+            $minutes = round($fullseconds / 60) % 60;
+            $hours = floor($fullseconds / (60*60));
+
+            $result = _w('about %d hour', 'about %d hours', $hours);
+            if ($minutes) {
+                $result .= ' ' . _w('%d minute', '%d minutes', $minutes);
+            }
+
+            return $result;
+        }
+    }
+}

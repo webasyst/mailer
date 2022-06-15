@@ -43,7 +43,7 @@
             {if $return_path_ok['reason'] == 1 || $return_path_ok['reason'] == 2 || $return_path_ok['reason'] == 3}
             [`Return-Path address specified above is not available.`]
             {elseif $return_path_ok['reason'] == 4}
-            {sprintf_wp('Return-Path “%s” forbidden by sending server.', $return_path_ok['return-path'])}
+            {sprintf_wp('Return-Path “%s” is forbidden by the sending server.', $return_path_ok['return-path'])}
             {/if}
             [`Return-Path address is used to automatically process bounced emails.`]
         </p>

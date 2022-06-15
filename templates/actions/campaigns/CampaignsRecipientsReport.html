@@ -1,6 +1,3 @@
-<div id="pie-legend-copy" class="hidden">
-    {include file="templates/actions/campaigns/pie_diagram_legend.html"}
-</div>
 {if $recipients}
     {if $error_classes}
         <div class="dropdown js-errors-report custom-mb-16">
@@ -27,7 +24,7 @@
             <table class="errors-table">
                 {foreach $error_classes as $e}
                     <tr>
-                        <td><a class="inline-link show-recipients-link" href="javascript:void(0)" rel="{$e.param}" data-hide-title="false" {if $e.status > mailerMessageLogModel::STATUS_PREVIOUSLY_UNSUBSCRIBED}data-graph-id="{$e.status}"{/if}><b>{$e.name}</b></a></td>
+                        <td><a class="show-recipients-link" href="javascript:void(0)" rel="{$e.param}" data-hide-title="false" {if $e.status > mailerMessageLogModel::STATUS_PREVIOUSLY_UNSUBSCRIBED}data-graph-id="{$e.status}"{/if}><b>{$e.name}</b></a></td>
                         {if $e.percent !== null}
                             <td>{$e.count}</td>
                             <td>({$e.percent}%)</td>
@@ -72,13 +69,6 @@
     <p>[`No entries in this list`]</p>
 {/if}
 <script>(function($) { "use strict";
-
-    // Update chart legend
-    var old_pie_legend = $('#pie-legend table');
-    var new_pie_legend = $('#pie-legend-copy table');
-    old_pie_legend.hide().find('.recipients-selection-criteria').insertBefore(new_pie_legend.find('.sub-lined'));
-    old_pie_legend.after(new_pie_legend).remove();
-    $('#pie-legend-copy').remove();
 
     {if $search}
         $('#pie-legend').find('.search-recipients input').val('{$search}');

@@ -98,7 +98,8 @@
     <script>(function() { "use strict";
             $(".switch").waSwitch();
 
-            const $form = $('#form-return-path');
+            const $form = $('#form-return-path'),
+                dialog = $form.closest('.dialog').data('dialog')
 
             $form.find('[type="submit"]').on('click', function(event) {
                 event.preventDefault();
@@ -125,6 +126,7 @@
                                     $.storage.set('mailer/settings/new_return_path_id', $form.find('[name="data[email]"]').val());
                                 {/if}
                                 $.wa.mailer.redispatch();
+                                dialog?.close();
                             }
                         });
                     }
@@ -147,7 +149,10 @@
                                 $button: $btn,
                                 status: 'loader'
                             });
-                            $.post('?module=returnpath&action=delete', { id: "{$data.id}" }, () => $.wa.mailer.redispatch());
+                            $.post('?module=returnpath&action=delete', { id: "{$data.id}" }, () => {
+                                $.wa.mailer.redispatch();
+                                dialog?.close();
+                            });
                         },
                         onCancel() {
                             return false;

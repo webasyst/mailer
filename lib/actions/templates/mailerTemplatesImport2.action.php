@@ -61,7 +61,7 @@ class mailerTemplatesImport2Action extends waViewAction
             if ($this->whichUI() == '1.3') {
                 echo '<script>window.location.hash = "#/template/'.$template_id.'/"; $(".dialog").trigger("close"); $.wa.mailer.reloadSidebar(); </script>';
             }else{
-                echo '<script>window.location.hash = "#/template/'.$template_id.'/"; $(".dialog").data("dialog").close(); $.wa.mailer.reloadSidebar(); </script>';
+                echo '<script>window.location.hash = "#/template/'.$template_id.'/"; $(".dialog:visible").data("dialog")?.close(); $.wa.mailer.reloadSidebar(); </script>';
             }
             exit;
         } else if ($error_msg) {
@@ -141,7 +141,7 @@ class mailerTemplatesImport2Action extends waViewAction
         // When found, mark this file to extract later and replace its URL in template.
         $data_path = wa()->getDataPath('files/'.$template_id.'/', true, 'mailer');
         $url_prefix = wa()->getDataUrl('files/'.$template_id.'/', true, 'mailer', true);
-        $url_prefix = str_replace('https://', 'http://', $url_prefix);
+        $url_prefix = str_replace(['https://', 'http://'], waRequest::server('HTTPS') ? 'https://' : 'http://', $url_prefix);
         $files_to_extract = array();
 
         for ($i = 0; $i < $archive->numFiles; $i++) {
@@ -164,10 +164,16 @@ class mailerTemplatesImport2Action extends waViewAction
 
         foreach ($files_to_extract as $archive_path => $file_info) {
             $html = str_replace(array('./'.$archive_path, $archive_path), md5($archive_path), $html);
+            if ($re_html) {
+                $re_html = str_replace(array('./'.$archive_path, $archive_path), md5($archive_path), $re_html);
+            }
         }
 
         foreach ($files_to_extract as $archive_path => $file_info) {
             $html = str_replace(md5($archive_path), $url_prefix.$archive_path, $html);
+            if ($re_html) {
+                $re_html = str_replace(md5($archive_path), $url_prefix.$archive_path, $re_html);
+            }
         }
 
         // Extract assets and save modified template text.
@@ -181,8 +187,10 @@ class mailerTemplatesImport2Action extends waViewAction
         }
 
         // Replace <style> blocks with inline styles
-        $emo = new mailerEmogrifier($html);
-        @$html = $emo->emogrify();
+        if (!$re_html) {
+            $emo = new mailerEmogrifier($html);
+            @$html = $emo->emogrify();
+        }
 
         // Finally save the template HTML
         $tm->updateById($template_id, array(
