@@ -47,18 +47,36 @@ class mailerCampaignsSendTestAction extends waViewAction
         $errors = self::eventValidateTest($campaign, $params, $addresses, $subject);
         $result = array();
         if (!$errors) {
-            $result = wao(new mailerMessage($campaign_id))->sendTestMessage($addresses, $subject);
+            $message = new mailerMessage($campaign_id);
+            $result = $message->sendTestMessage($addresses, $subject);
             self::eventTestSent($campaign, $params, $addresses, $result);
+            $transport_report = $message->getTestSendingReport();
         }
 
-        $this->view->assign('result', $result);
-        $this->view->assign('errors', $errors);
+        $this->view->assign([
+            'transport_report' => ifset($transport_report),
+            'result' => $result,
+            'errors' => $errors,
+        ]);
     }
 
     /** Allows plugins to validate campaign before sending. */
     public static function eventValidateTest($campaign, $params, &$addresses, &$subject)
     {
-        /**@/**
+        // Check if WA transport is available if selected for this campaign
+        $sender_params_model = new mailerSenderParamsModel();
+        $sender_params = $sender_params_model->getBySender($campaign['sender_id']);
+        if (ifset($sender_params, 'type', '') == 'wa') {
+            $api = new mailerWaTransportServiceApi();
+            if (!$api->isConnected()) {
+                return [sprintf_wp(
+                    '<a href="%s">Connect to Webasyst ID</a> to use the Webasyst sender server.',
+                    wa()->getConfig()->getBackendUrl(true).'webasyst/settings/waid/'
+                )];
+            }
+        }
+
+        /**
          * @event campaign.validate_test
          *
          * Allows to validate and cancel sending tests
@@ -83,7 +101,7 @@ class mailerCampaignsSendTestAction extends waViewAction
 
     public static function eventTestSent($campaign, $params, $addresses, $result)
     {
-        /**@/**
+        /**
          * @event campaign.sending_test
          *
          * Notify plugins about test sending
@@ -105,4 +123,3 @@ class mailerCampaignsSendTestAction extends waViewAction
         wa()->event('campaign.sending_test', $evt_params);
     }
 }
-

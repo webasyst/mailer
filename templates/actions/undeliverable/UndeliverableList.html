@@ -66,9 +66,20 @@
                                 <i class="shortener"></i>
                             </div>
                         </td>
-                        <td title="{$row.subject|escape}">
+                        <td>
                             <div>
-                                {$row.subject|escape}
+                                {foreach $row.messages as $m}
+                                    {strip}
+                                        <a href="#/campaigns/report/{$m.id}/" target="_blank" title="{$m.subject|escape} ({mailerCampaignsArchiveAction::formatListDate($m['send_datetime'])|escape})">
+                                            {if count($row.messages) == 1}
+                                                {$m.subject|escape}
+                                            {else}
+                                                [{$m@index+1}]
+                                            {/if}
+                                        </a>
+                                        {if !$m@last},{/if}
+                                    {/strip}
+                                {/foreach}
                                 <i class="shortener"></i>
                             </div>
                         </td>

@@ -1,35 +1,67 @@
 <div class="fields">
     <div class="fields-group">
-        <div class="field">
-            <div class="name bold">[`Sender`]</div>
-            <div class="value strong">{$campaign.from_name|escape} &lt;{$campaign.from_email|escape}&gt;</div>
-        </div>
-        <div class="field custom-mt-8">
-            <div class="name custom-pt-0">[`Reply-To Email`]</div>
-            <div class="value small text-dark-gray">
-                {if isset($sender_params.reply_to)}
-                    {$sender_params.reply_to|escape}
-                {else}
-                    {$campaign.from_email|escape}
-                {/if}
+        {if $sender_params.type == 'wa'}
+            <div class="field">
+                <div class="name bold">[`Sender`]</div>
+                <div class="value strong">Webasyst Email Sender</div>
             </div>
-        </div>
-        <div class="field custom-mt-8">
-            <div class="name custom-pt-0">[`Transport`]</div>
-            <div class="value small text-dark-gray">
-                {if $sender_params.type == 'default'}
-                    [`System Default`]
-                {elseif $sender_params.type == 'mail'}
-                    [`PHP mail() function`] {if isset($sender_params.options)}({$sender_params.options}){/if}
-                {elseif $sender_params.type == 'smtp'}
-                    [`SMTP`]
-                {elseif $sender_params.type == 'sendmail'}
-                    [`Sendmail`] {if isset($sender_params.command)}({$sender_params.command}){/if}
-                {elseif $sender_params.type == 'test'}
-                    [`Debug mailer`]
-                {/if}
+            {if !empty($wa_report_data) && !empty($wa_report_data.amount)}
+            <div class="field custom-mt-8">
+                <div class="name bold custom-pt-0">[`Sending cost`]</div>
+                <div class="value strong">
+                    {foreach $wa_report_data.amount as $currency_id => $amount}
+                        {wa_currency_html($amount, $currency_id, '%4t{s}')}<br>
+                    {/foreach}
+                </div>
             </div>
-        </div>
+            {/if}
+            <div class="field custom-mt-8">
+                <div class="name custom-pt-0">[`Sender name`]</div>
+                <div class="value small text-dark-gray">{$campaign.from_name|escape}</div>
+            </div>
+            <div class="field custom-mt-8">
+                <div class="name custom-pt-0">[`Email From`]</div>
+                <div class="value small text-dark-gray">{$campaign.from_email|escape}</div>
+            </div>
+            <div class="field custom-mt-8">
+                <div class="name custom-pt-0">[`Email Reply-To`]</div>
+                <div class="value small text-dark-gray">{$sender_params.reply_to|escape}</div>
+            </div>
+        {else}
+            <div class="field">
+                <div class="name bold">[`Sender`]</div>
+                <div class="value strong">{$campaign.from_name|escape} &lt;{$campaign.from_email|escape}&gt;</div>
+            </div>
+            <div class="field custom-mt-8">
+                <div class="name custom-pt-0">[`Reply-To Email`]</div>
+                <div class="value small text-dark-gray">
+                    {if isset($sender_params.reply_to)}
+                        {$sender_params.reply_to|escape}
+                    {else}
+                        {$campaign.from_email|escape}
+                    {/if}
+                </div>
+            </div>
+
+            <div class="field custom-mt-8">
+                <div class="name custom-pt-0">[`Transport`]</div>
+                <div class="value small text-dark-gray">
+                    {if !empty($sender_params.type)}
+                        {if $sender_params.type == 'mail'}
+                            [`PHP mail() function`] {if isset($sender_params.options)}({$sender_params.options}){/if}
+                        {elseif $sender_params.type == 'sendmail'}
+                            [`Sendmail`] {if isset($sender_params.command)}({$sender_params.command}){/if}
+                        {elseif isset($sender_types[$sender_params.type])}
+                            {$sender_types[$sender_params.type].name|escape}
+                        {else}
+                            {$sender_params.type|escape}
+                        {/if}
+                    {else}
+                        [`Unknown or deleted`]
+                    {/if}
+                </div>
+            </div>
+        {/if}
 
         {if $sender_params.type == 'smtp'}
             {if isset($sender_params.server)}
@@ -62,61 +94,63 @@
         {/if}
     </div>
 
-    <div class="fields-group custom-mt-24">
-        <div class="field">
-            <div class="name bold">[`Return-Path`]</div>
-            <div class="value strong">
-                {if $campaign.return_path}
-                    {$campaign.return_path|escape}
-                {else}
-                    [`Not specified`]
-                {/if}
+    {if $sender_params.type != 'wa'}
+        <div class="fields-group custom-mt-24">
+            <div class="field">
+                <div class="name bold">[`Return-Path`]</div>
+                <div class="value strong">
+                    {if $campaign.return_path}
+                        {$campaign.return_path|escape}
+                    {else}
+                        [`Not specified`]
+                    {/if}
+                </div>
             </div>
+            {if isset($return_path.server)}
+                <div class="field custom-mt-8">
+                    <div class="name custom-pt-0">[`Server`]</div>
+                    <div class="value small text-dark-gray">{$return_path.server|escape}</div>
+                </div>
+            {/if}
+            {if isset($return_path.port)}
+                <div class="field custom-mt-8">
+                    <div class="name custom-pt-0">[`Port`]</div>
+                    <div class="value small text-dark-gray">{$return_path.port|escape}</div>
+                </div>
+            {/if}
+            {if isset($return_path.login)}
+                <div class="field custom-mt-8">
+                    <div class="name custom-pt-0">[`Login`]</div>
+                    <div class="value small text-dark-gray">{$return_path.login|escape}</div>
+                </div>
+            {/if}
+            {if isset($return_path.ssl)}
+                <div class="field custom-mt-8">
+                    <div class="name custom-pt-0">[`SSL`]</div>
+                    <div class="value small text-dark-gray">{if $return_path.ssl > 0}[`Yes`]{else}[`No`]{/if}</div>
+                </div>
+            {/if}
         </div>
-        {if isset($return_path.server)}
-            <div class="field custom-mt-8">
-                <div class="name custom-pt-0">[`Server`]</div>
-                <div class="value small text-dark-gray">{$return_path.server|escape}</div>
-            </div>
-        {/if}
-        {if isset($return_path.port)}
-            <div class="field custom-mt-8">
-                <div class="name custom-pt-0">[`Port`]</div>
-                <div class="value small text-dark-gray">{$return_path.port|escape}</div>
-            </div>
-        {/if}
-        {if isset($return_path.login)}
-            <div class="field custom-mt-8">
-                <div class="name custom-pt-0">[`Login`]</div>
-                <div class="value small text-dark-gray">{$return_path.login|escape}</div>
-            </div>
-        {/if}
-        {if isset($return_path.ssl)}
-            <div class="field custom-mt-8">
-                <div class="name custom-pt-0">[`SSL`]</div>
-                <div class="value small text-dark-gray">{if $return_path.ssl > 0}[`Yes`]{else}[`No`]{/if}</div>
-            </div>
-        {/if}
-    </div>
 
-    <div class="fields-group custom-mt-24">
-        <div class="field">
-            <div class="name bold">[`Sending speed`]</div>
-            <div class="value strong">
-                {if empty($params.speed_limit)}
-                    [`No limit`]
-                {else}
-                    {$params.speed_limit} [`letters per hour`]
-                {/if}
+        <div class="fields-group custom-mt-24">
+            <div class="field">
+                <div class="name bold">[`Sending speed`]</div>
+                <div class="value strong">
+                    {if empty($params.speed_limit)}
+                        [`No limit`]
+                    {else}
+                        {$params.speed_limit} [`messages per hour`]
+                    {/if}
+                </div>
             </div>
         </div>
-    </div>
+    {/if}
 
     <div class="fields-group custom-mt-24">
         {if empty($params.google_analytics)}
             <div class="field">
                 <div class="name bold">[`Google Analytics`]</div>
-                <div class="value strong">[`Disabled`]</div>
+                <div class="value text-dark-gray">[`Disabled`]</div>
             </div>
         {else}
             <div class="field">
@@ -134,6 +168,24 @@
             <div class="field custom-mt-8">
                 <div class="name custom-pt-0">[`Campaign (utm_campaign)`]</div>
                 <div class="value small text-dark-gray">{ifempty($params.google_analytics_utm_campaign)|escape}</div>
+            </div>
+        {/if}
+    </div>
+
+    <div class="fields-group custom-mt-24">
+        {if empty($params.feedback_loop)}
+            <div class="field">
+                <div class="name bold">[`Feedback-ID header for GMail FBL Tool`]</div>
+                <div class="value text-dark-gray">[`Disabled`]</div>
+            </div>
+        {else}
+            <div class="field">
+                <div class="name bold">[`Feedback-ID header for GMail FBL Tool`]</div>
+                <div class="value strong">[`Enabled`]</div>
+            </div>
+            <div class="field custom-mt-8">
+                <div class="name custom-pt-0">[`Feedback-ID`]</div>
+                <div class="value small text-dark-gray">{ifempty($params.feedback_loop)|escape}</div>
             </div>
         {/if}
     </div>

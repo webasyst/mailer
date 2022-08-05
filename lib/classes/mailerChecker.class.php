@@ -21,7 +21,7 @@ class mailerChecker
         return wa()->getDataPath('lock/checker.lock', false, 'mailer');
     }
 
-    public function check($id = false)
+    public function check($id = false, $sender_id = false)
     {
         $filename = $this->getLockFile();
         touch($filename);
@@ -44,12 +44,16 @@ class mailerChecker
             if ($row && $rpm->isActive($row)) {
                 $return_paths = array($row);
             }
+        } else if ($sender_id) {
+            $return_paths = [];
         } else {
             $return_paths = $rpm->getActive();
         }
 
+        $this->checkExtendedTransports($sender_id);
+
         if ($return_paths) {
-            /**@/**
+            /**
              * @event return_path.check
              *
              * Mailer is about to start checking return-path mailboxes for bounced mail
@@ -111,7 +115,6 @@ class mailerChecker
         $source_save_path = wa()->getDataPath('mailcheck/'.date('Y-m').'/', false, 'mailer');
         $pattern = '/X-Log-ID:[\s\t]*([0-9]+)/is';
         $processed_count = 0;
-        $bounce_types = wa('mailer')->getConfig()->getBounceTypes();
         for ($i = 1; $i <= $n[0]; $i++) {
             $uniq_id = isset($ids[$i]) ? $ids[$i].'.'.$return_path['server'] : uniqid(true);
             $mail_path = $temp_path.'/'.$uniq_id;
@@ -160,17 +163,7 @@ class mailerChecker
             if ($log_id) {
 
                 $full_error_text = $this->getError($mail);
-                $error_type = null;
-                $error_fatal = false; // When failed to parse a bounce, count it as non-fatal
-
-                // If this bounce can be classified, do so
-                foreach ($bounce_types as $type => $bt) {
-                    if (preg_match($bt['regex'], $full_error_text)) {
-                        $error_type = $type;
-                        $error_fatal = $bt['fatal'];
-                        break;
-                    }
-                }
+                list($error_type, $error_fatal) = self::classifyBounce($full_error_text);
 
                 // Mark recipient as bounced
                 $this->log_model->setStatus($log_id, -2, $full_error_text, $error_type, $error_fatal);
@@ -214,6 +207,135 @@ class mailerChecker
             $error = preg_replace("/-{2,8}\s+Original\s+message\s+-{2,8}.*/is", "", $error);
         }
         return $error;
+    }
+
+    protected function getSendersWithExtendedTransport($sender_id=false)
+    {
+        $sender_model = new mailerSenderModel();
+        $sender_params_model = new mailerSenderParamsModel();
+
+        // Load senders
+        if ($sender_id) {
+            $sender = $sender_model->getById($sender_id);
+            if (!$sender) {
+                return;
+            }
+            $senders = [$sender_id => $sender];
+        } else {
+            // Built in extended transports
+            $senders = $sender_model->getByType('wa');
+
+            // Extended transports from plugins
+            $senders += $sender_model->getSendersWithUnknownType();
+        }
+        $sender_params_model->loadForSenders($senders);
+
+        // Load sender transports
+        foreach($senders as $sender_id => &$sender) {
+            $type = $sender['params']['type'];
+            if ($type == 'wa') {
+                $transport = new mailerWaTransport($sender, $sender['params']);
+            } else {
+                $transport = mailerSimpleMessage::getPluginTransport($sender, $sender['params']);
+                if (!$transport || !($transport instanceof mailerBounceTransportInterface)) {
+                    unset($senders[$sender_id]);
+                    continue;
+                }
+            }
+            $sender['transport'] = $transport;
+        }
+        unset($sender);
+
+        return $senders;
+    }
+
+    protected function checkExtendedTransports($sender_id=false)
+    {
+        $senders = $this->getSendersWithExtendedTransport($sender_id);
+        if (!$senders) {
+            return;
+        }
+
+        /**
+         * @event extended_transport.check
+         *
+         * Mailer is about to start checking extended transports for bounced mail
+         *
+         * @param array[string]array $params['return_paths'] list of rows from mailer_return_path
+         * @return void
+         */
+        $evt_params = array(
+            'senders' => &$senders,
+        );
+        wa()->event('extended_transport.check', $evt_params);
+        register_shutdown_function(array($this, 'closeTransport'));
+
+        foreach($senders as $sender_id => $sender) {
+            if (empty($sender['transport']) || !($sender['transport'] instanceof mailerBounceTransportInterface)) {
+                continue;
+            }
+            $this->last_extended_transport = $sender['transport'];
+            $bounces = $sender['transport']->getBounces($this->options['limit']);
+            $this->last_extended_transport = null;
+            if (!is_array($bounces)) {
+                continue;
+            }
+
+            foreach($bounces as $log_id => $bounce) {
+                if (is_array($bounce)) {
+                    $full_error_text = ifset($bounce, 'error_text', '');
+                    $error_type = ifset($bounce, 'error_type', null);
+                    $error_fatal = !empty($bounce['is_fatal']);
+                } else {
+                    $full_error_text = $bounce;
+                    $error_type = null;
+                    $error_fatal = false;
+                }
+
+                if (!isset($error_type)) {
+                    list($error_type, $error_fatal) = self::classifyBounce($full_error_text);
+                }
+
+                // Mark recipient as bounced
+                $this->log_model->setStatus($log_id, mailerMessageLogModel::STATUS_NOT_DELIVERED, $full_error_text, $error_type, $error_fatal);
+            }
+        }
+    }
+
+    // If this bounce can be classified, do so
+    public static function classifyBounce($full_error_text)
+    {
+        static $bounce_types = null;
+        if ($bounce_types === null) {
+            $bounce_types = wa('mailer')->getConfig()->getBounceTypes();
+        }
+
+        $error_type = null;
+        $error_fatal = false; // When failed to parse a bounce, count it as non-fatal
+
+        foreach ($bounce_types as $type => $bt) {
+            if (preg_match($bt['regex'], $full_error_text)) {
+                $error_type = $type;
+                $error_fatal = $bt['fatal'];
+                break;
+            }
+        }
+
+        return array($error_type, $error_fatal);
+    }
+
+    protected $last_extended_transport = null;
+    public function closeTransport()
+    {
+        if ($this->last_extended_transport) {
+            try {
+                echo "Closing transport...\n";
+                $this->last_extended_transport->bounceCheckerShutdown();
+                echo 'Closed!';
+            } catch (Exception $e) {
+                echo 'Exception while closing transport!';
+            }
+        }
     }
 }
 

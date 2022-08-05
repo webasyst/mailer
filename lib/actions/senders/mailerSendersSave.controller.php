@@ -12,13 +12,33 @@ class mailerSendersSaveController extends waJsonController
         $id = waRequest::post('id');
         $data = waRequest::post('data');
         $this->validateArray($data);
+        unset($data['id']);
+
+        // Sender params
+        $params = waRequest::post('params', array());
+        $this->validateArray($params);
+
+        if ($params['type'] == 'wa') {
+            if (!(new mailerWaTransportServiceApi)->isConnected()) {
+                $this->errors = array(
+                    '' => sprintf_wp(
+                        '<a href="%s">Connect to Webasyst ID</a> to use the Webasyst sender server.',
+                        wa()->getConfig()->getBackendUrl(true)."webasyst/settings/waid/"
+                    ),
+                );
+                return;
+            }
+        }
 
         // Validate email
         if (empty($data['email'])) {
-            $this->errors = array(
-                'data[email]' => _w('Email is required'),
-            );
-            return;
+            if ($params['type'] != 'wa') {
+                // Email required for non Webasyst Transport
+                $this->errors = array(
+                    'data[email]' => _w('Email is required'),
+                );
+                return;
+            }
         } else {
             $ev = new waEmailValidator();
             if (!$ev->isValid($data['email'])) {
@@ -28,10 +48,6 @@ class mailerSendersSaveController extends waJsonController
                 return;
             }
         }
-
-        // Sender params
-        $params = waRequest::post('params', array());
-        $this->validateArray($params);
 
         $spm = new mailerSenderParamsModel();
 
@@ -91,6 +107,63 @@ class mailerSendersSaveController extends waJsonController
         }
 
         $sender_model = new mailerSenderModel();
+        if ($id) {
+            $sender = $sender_model->getById($id);
+            if (!$sender) {
+                throw new waException('Sender not found', 404);
+            }
+            $sender_params = $spm->getBySender($id);
+        } else {
+            $sender = $sender_model->getEmptyRow();
+            $sender_params = [];
+        }
+
+        // If specified email is used in Webasyst Transport sender
+        // remove this email from Webasyst Transport sender data to allow save it in new sender
+        $check_sender_email_unique = $sender_model->getByField('email', $data['email']);
+        if (!empty($check_sender_email_unique) && $check_sender_email_unique['id'] != $id) {
+            if (!empty($spm->getByField(['sender_id' => $check_sender_email_unique['id'], 'name' => 'type', 'value' => 'wa']))) {
+                $sender_model->updateById($check_sender_email_unique['id'], ['email' => '']);
+            }
+        }
+
+        /**
+         * Allows to check and validate sender settings.
+         *
+         * Return array of error strings.
+         * Keys are field names as set in name attribute in DOM.
+         * If field is not found in DOM, generic error will be shown below the form.
+         * Values are strings containing human-readable error description.
+         *
+         * @return array field name => human-readable error description
+         * @since 2.1.2
+         */
+        $before_save_result = wa('mailer')->event('sender.before_save', ref([
+            'sender_id' => $id,
+            'sender' => $sender,
+            'sender_params' => $sender_params,
+            'sender_update' => &$data,
+            'sender_params_update' => &$params,
+        ]));
+
+        foreach($before_save_result as $plugin_id => $errors) {
+            if (is_array($errors)) {
+                $this->errors += $errors;
+            }
+        }
+
+        if ($this->errors) {
+            return;
+        }
+
+        if ($params['type'] == 'wa') {
+            // Force no_return_path param for WES transport
+            $params['no_return_path'] = '1';
+            // Save From address in params for WES transport
+            $params['from'] = $data['email'];
+            $data['email'] = '';
+        }
+
         try {
             if ($id) {
                 $sender_model->updateById($id, $data);
@@ -111,6 +184,18 @@ class mailerSendersSaveController extends waJsonController
         // Save sender params
         $spm->save($id, $params);
         $this->response = $id;
+
+        /**
+         * @since 2.1.2
+         */
+        wa('mailer')->event('sender.save', ref([
+            'sender_id' => $id,
+            'sender' => array_intersect_key($data + $sender, $sender),
+            'sender_params' => $params,
+            'sender_update' => $data,
+            'sender_params_update' => $params,
+        ]));
+
     }
 
     /**

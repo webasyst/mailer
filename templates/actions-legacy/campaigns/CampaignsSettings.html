@@ -27,15 +27,15 @@ form#form-campaign { 1overflow: visible; }
 <form id="form-campaign" action="?module=campaigns&action=save" method="post">
     {if !empty($campaign.id)}
     <ul class="m-compose-navigation tabs">
-        <li class="m-first-step"><a href="#/campaigns/letter/{$campaign.id}/">[`Compose letter`]</a></li>
+        <li class="m-first-step"><a href="#/campaigns/letter/{$campaign.id}/">[`Compose message`]</a></li>
         <li class="m-second-step"><a href="#/campaigns/recipients/{$campaign.id}/">[`Choose recipients`]</a></li>
-        <li class="m-third-step selected"><a id="right-sidebar-send-link" href="#/campaigns/send/{$campaign.id}/">[`Check and send`]</a></li>
+        <li class="m-third-step selected"><a id="right-sidebar-send-link" href="#/campaigns/send/{$campaign.id}/">[`Check &amp; send`]</a></li>
     </ul>
     {else}
     <ul class="m-compose-navigation tabs">
-        <li class="m-first-step selected"><a href="javascript:void(0)">[`Compose letter`]</a></li>
+        <li class="m-first-step selected"><a href="javascript:void(0)">[`Compose message`]</a></li>
         <li class="m-second-step m-disabled"><a href="javascript:void(0)">[`Choose recipients`]</a></li>
-        <li class="m-third-step m-disabled"><a href="javascript:void(0)">[`Check and send`]</a></li>
+        <li class="m-third-step m-disabled"><a href="javascript:void(0)">[`Check &amp; send`]</a></li>
     </ul>
     {/if}
 

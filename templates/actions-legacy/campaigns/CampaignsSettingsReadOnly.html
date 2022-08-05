@@ -17,17 +17,19 @@
             <div class="field">
                 <div class="name">[`Transport`]:</div>
                 <div class="value">
-                {if $sender_params.type == 'default'}
-                    [`System Default`]
-                {elseif $sender_params.type == 'mail'}
-                    [`PHP mail() function`] {if isset($sender_params.options)}({$sender_params.options}){/if}
-                {elseif $sender_params.type == 'smtp'}
-                    [`SMTP`]
-                {elseif $sender_params.type == 'sendmail'}
-                    [`Sendmail`] {if isset($sender_params.command)}({$sender_params.command}){/if}
-                {elseif $sender_params.type == 'test'}
-                    [`Debug mailer`]
-                {/if}
+                    {if !empty($sender_params.type)}
+                        {if $sender_params.type == 'mail'}
+                            [`PHP mail() function`] {if isset($sender_params.options)}({$sender_params.options}){/if}
+                        {elseif $sender_params.type == 'sendmail'}
+                            [`Sendmail`] {if isset($sender_params.command)}({$sender_params.command}){/if}
+                        {elseif isset($sender_types[$sender_params.type])}
+                            {$sender_types[$sender_params.type].name|escape}
+                        {else}
+                            {$sender_params.type|escape}
+                        {/if}
+                    {else}
+                        [`Unknown or deleted`]
+                    {/if}
                 </div>
             </div>
             {if $sender_params.type == 'smtp'}
@@ -104,7 +106,7 @@
             {if empty($params.speed_limit)}
                 [`No limit`]
             {else}
-                {$params.speed_limit} [`letters per hour`]
+                {$params.speed_limit} [`messages per hour`]
             {/if}
         </div>
     </div>

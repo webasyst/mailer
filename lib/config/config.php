@@ -81,6 +81,8 @@ return array(
                         |   Mailbox\sis\sfrozen
                         |   Recipient\sverify\sfailed
                         |   No\ssuch\se-mail\sin\ssystem
+                        |   No\sMX\srecords\sin\sdomain
+                        |   Address\swas\spreviously\sdetermined\sas\sunreachable
                         ~xi",
         ),
 

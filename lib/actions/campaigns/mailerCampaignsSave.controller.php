@@ -36,12 +36,32 @@ class mailerCampaignsSaveController extends waJsonController
             $sm = new mailerSenderModel();
             $sender = $sm->getById($data['sender_id']);
             if ($sender) {
-                // Update message data using data from sender parameters.
                 $spm = new mailerSenderParamsModel();
                 $sender_params = $spm->getBySender($data['sender_id']);
-                $data['from_name'] = trim($sender['name']);
-                $data['from_email'] = trim($sender['email']);
-                $data['reply_to'] = trim(ifempty($sender_params['reply_to'], ''));
+                if ($sender_params['type'] == 'wa') {
+                    // For WA transport update sender data from form - email, name, reply-to
+                    if (!empty($data['from_email'])) {
+                        $ev = new waEmailValidator();
+                        if ($ev->isValid($data['from_email'])) {
+                            $sender['name'] = $data['from_name'];
+                            $sender_params['from'] = $data['from_email'];
+                            $sender_params['reply_to'] = $data['reply_to'];
+                            $sm->updateById($sender['id'], $sender);
+                            $spm->save($sender['id'], $sender_params);
+                        }
+                    }
+                } else {
+                    // Update message data using data from sender parameters.
+                    $data['from_name'] = trim($sender['name']);
+                    $data['from_email'] = trim($sender['email']);
+                    $data['reply_to'] = trim(ifempty($sender_params['reply_to'], ''));
+                }
+                if (!empty($sender_params['no_return_path'])) {
+                    // Some senders disable return path functionality
+                    $data['return_path'] = '';
+                }
+                $asm = new waAppSettingsModel();
+                $asm->set('mailer', 'last_sender_id', $data['sender_id']);
             } else {
                 $data['sender_id'] = 0;
             }
@@ -51,7 +71,7 @@ class mailerCampaignsSaveController extends waJsonController
         if (empty($data['sender_id']) && (!$message_id || array_key_exists('sender_id', $data))) {
             $asm = new waAppSettingsModel();
             $data['sender_id'] = 0;
-            $data['from_name'] = $asm->get('webasyst', 'name');
+            $data['from_name'] = wa()->accountName();
             $data['from_email'] = $asm->get('webasyst', 'email');
         }
 

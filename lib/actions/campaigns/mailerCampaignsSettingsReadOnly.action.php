@@ -34,9 +34,13 @@ class mailerCampaignsSettingsReadOnlyAction extends waViewAction
 
         $ms = new mailerSenderModel();
         $sender = $ms->getById($campaign['sender_id']);
-
-        $msp = new mailerSenderParamsModel();
-        $sender_params = $msp->getBySender($sender['id']);
+        if (!$sender) {
+            $sender = $ms->getEmptyRow();
+            $sender_params = ['type' => ''];
+        } else {
+            $msp = new mailerSenderParamsModel();
+            $sender_params = $msp->getBySender($sender['id']);
+        }
 
         // if we save sender params in campaigns_params table
         $params_changed = false;
@@ -51,6 +55,12 @@ class mailerCampaignsSettingsReadOnlyAction extends waViewAction
             }
         }
 
+        $wa_report_data = null;
+        if ($sender_params['type'] === 'wa') {
+            $transport = new mailerWaTransport($sender, $sender_params);
+            $wa_report_data = $transport->getCampaignReport($campaign_id);
+        }
+
         $mrp = new mailerReturnPathModel();
         $return_path = $mrp->getByField('email', $campaign['return_path']);
 
@@ -60,6 +70,8 @@ class mailerCampaignsSettingsReadOnlyAction extends waViewAction
         $this->view->assign('sender', $sender);
         $this->view->assign('sender_params', $sender_params);
         $this->view->assign('return_path', $return_path);
+        $this->view->assign('wa_report_data', $wa_report_data);
+        $this->view->assign('sender_types', mailerHelper::getSenderTypes());
     }
 }
 

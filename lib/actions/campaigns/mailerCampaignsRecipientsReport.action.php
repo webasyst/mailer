@@ -133,7 +133,7 @@ class mailerCampaignsRecipientsReportAction extends mailerCampaignsReportAction
             // try to get name from contacts or mailer_message_log table
             $l['name'] = empty($l['cname']) ? $l['name'] : $l['cname'];
             $l['email'] = !empty($l['name']) ? '<'.$l['email'].'>' : $l['email'];
-            $l['datetime'] = waDateTime::format('fulldatetime', $l['datetime']);
+            $l['datetime'] = waDateTime::format('datetime', $l['datetime']);
             $log[$l['id']] = $l;
         }
 

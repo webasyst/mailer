@@ -95,10 +95,9 @@ class mailerCampaignsReportAction extends waViewAction
          * @param int $params['id'] mailer_message.id - campaign id
          * @return array[string][string]string - UI html blocks indexed by place ('bottom', 'top')
          */
-        $params = array(
-            'id' => $campaign_id
-        );
-        $event_campaign_report = wa()->event('campaign.report', $params);
+        $event_campaign_report = wa()->event('campaign.report', ref(array(
+            'id' => $campaign_id,
+        )));
 
         $this->view->assign('recipient_criterias', mailerHelper::getRecipients($campaign['id']));
         $this->view->assign('allow_return_path_edit', $allow_return_path_edit);

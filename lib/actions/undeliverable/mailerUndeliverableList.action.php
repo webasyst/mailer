@@ -61,7 +61,7 @@ class mailerUndeliverableListAction extends waViewAction
 
     public static function getListView($search='', $start=0, $limit=50, $order=null, &$total_rows=null)
     {
-        $m = new waModel();
+        $m = new mailerMessageModel();
 
         // Search condition
         $where_sql = '';
@@ -100,15 +100,14 @@ class mailerUndeliverableListAction extends waViewAction
             $total_rows_sql = ' SQL_CALC_FOUND_ROWS';
         }
 
-        $sql = "SELECT{$total_rows_sql} c.name, ce.email, m.send_datetime AS datetime, m.subject
+        $sql = "SELECT{$total_rows_sql} c.name, ce.email, MAX(ml.datetime) AS datetime, GROUP_CONCAT(ml.message_id SEPARATOR ',') AS message_ids
                 FROM wa_contact_emails AS ce
                     JOIN wa_contact AS c
                         ON ce.contact_id=c.id
                     LEFT JOIN mailer_message_log AS ml
                         ON ml.contact_id=ce.contact_id
                             AND ml.email=ce.email
-                    LEFT JOIN mailer_message AS m
-                        ON ml.message_id=m.id
+                            AND ml.status IN (-2, -1)
                 WHERE ce.status='unavailable'
                     {$where_sql}
                 GROUP BY ce.id
@@ -119,6 +118,41 @@ class mailerUndeliverableListAction extends waViewAction
         if ($total_rows) {
             $total_rows = $m->query('SELECT FOUND_ROWS()')->fetchField();
         }
+
+        $message_ids = [];
+        foreach($result as &$row) {
+            $row['messages'] = [];
+            if ($row['message_ids']) {
+                $row['message_ids'] = explode(',', $row['message_ids']);
+                foreach($row['message_ids'] as $id) {
+                    $message_ids[$id] = $id;
+                }
+            }
+        }
+        unset($row);
+
+        if ($message_ids) {
+            $messages = $m->getById($message_ids);
+            foreach($result as &$row) {
+                if ($row['message_ids']) {
+                    foreach($row['message_ids'] as $id) {
+                        if (isset($messages[$id])) {
+                            $row['messages'][$id] = array_intersect_key($messages[$id], [
+                                'id' => 1,
+                                'subject' => 1,
+                                'status' => 1,
+                                'create_datetime' => 1,
+                                'send_datetime' => 1,
+                                'finished_datetime' => 1,
+                            ]);
+                        }
+                    }
+                }
+                unset($row['message_ids']);
+            }
+            unset($row);
+        }
+
         return $result;
     }
 }

@@ -20,6 +20,10 @@
 </div>
 
 {if $list}
+    <style>
+        table.zebra#undeliverable-list-table a { display: inline; }
+    </style>
+
     <table class="zebra single-lined" id="undeliverable-list-table">
         <thead><tr>
             {foreach $columns as $cid => $cname}
@@ -39,12 +43,26 @@
             {/foreach}
             <th class="m-last"></th>
         </tr></thead><tbody>
+
         {foreach $list as $row}
             <tr>
                 <td class="m-first">{$row.name|escape}</td>
                 <td class="email-field">{$row.email|escape}</td>
                 <td>{$row.datetime_formatted|escape}</td>
-                <td>{$row.subject|escape}</td>
+                <td>
+                    {foreach $row.messages as $m}
+                        {strip}
+                            <a href="#/campaigns/report/{$m.id}/" target="_blank" title="{$m.subject|escape} ({mailerCampaignsArchiveAction::formatListDate($m['send_datetime'])|escape})">
+                                {if count($row.messages) == 1}
+                                    {$m.subject|escape}
+                                {else}
+                                    [{$m@index+1}]
+                                {/if}
+                            </a>
+                            {if !$m@last},{/if}
+                        {/strip}
+                    {/foreach}
+                </td>
                 <td class="m-last">
                     <i class="icon16 delete" style="cursor:pointer;" title="[`Remove address from this list`]"></i>
                 </td>

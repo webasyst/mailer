@@ -84,7 +84,7 @@ class mailerConfig extends waAppConfig
         foreach($speeds as $num => &$s) {
             $s['num'] = $num;
             if (empty($s['name'])) {
-                $s['name'] = _w('send not more than').' '.$num.' '._w('letters per hour');
+                $s['name'] = _w('send not more than').' '.$num.' '._w('messages per hour');
             } else {
                 $s['name'] = _w($s['name']);
             }
@@ -95,5 +95,12 @@ class mailerConfig extends waAppConfig
         unset($s);
 
         return $speeds;
+    }
+
+    public function onCount()
+    {
+        (new mailerWaTransportApiUrlConfig())->keepEndpointsSynchronized();
+
+        return null;
     }
 }

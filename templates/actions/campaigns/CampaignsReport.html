@@ -1,6 +1,6 @@
 <div class="article">
     <div class="article-body">
-        {$params = [
+        {$include_params = [
             'back' => [
                 'link' => '#/campaigns/archive/',
                 'name' => '[`Sent`]'
@@ -8,7 +8,7 @@
             'has_toggle' => true,
             'title' => {ifempty($campaign.subject, "[`<no subject>`]")|escape}
         ]}
-        {include file="templates/actions/campaigns/includes/CampaignsHeader.html" params=$params}
+        {include file="templates/actions/campaigns/includes/CampaignsHeader.html" params=$include_params}
         <div class="flexbox middle{if $campaign.status != mailerMessageModel::STATUS_SENDING_ERROR} custom-mb-24{else} custom-mb-8{/if}">
             <ul class="toggle js-toggle semibold custom-mr-12">
                 {if $wa->mailer->isInspector() || $wa->mailer->isAuthor()}
@@ -96,11 +96,19 @@
             </div>
             {/if}
             {if $campaign.status == mailerMessageModel::STATUS_SENDING_ERROR}
-            <div class="alert warning">
-                <p>
-                    [`An error occurred during the sending of this campaign.`]
-                </p>
-            </div>
+                <div class="alert warning">
+                    <p>
+                        [`An error occurred during the sending of this campaign.`]
+                    </p>
+                </div>
+            {elseif $campaign.status == mailerMessageModel::STATUS_SENDING_PAUSED && !empty($params.sending_softfail_description)}
+                <div class="alert warning">
+                    <p>
+                        [`An error occurred during the sending of this campaign.`]
+                        <br><br>
+                        {$params.sending_softfail_description|escape}
+                    </p>
+                </div>
             {/if}
 
 
@@ -515,6 +523,8 @@
             {/if}
 
             {if $wa->mailer->writable($campaign)}
+                var generic_error_unable_to_pause_resume = {_w('Server error')|json_encode};
+
                 // Pause/resume sending
                 $('#resume-pause').on('click', function() {
                     {if $campaign.status == mailerMessageModel::STATUS_SENDING}
@@ -530,7 +540,18 @@
                             'data-icon': 'spinner',
                         }).addClass('fa-spin loading');
 
-                    $.post('?module=campaigns&action=pause', data, function() {
+                    $.post('?module=campaigns&action=pause', data, function(response) {
+                        if (response && response.status == 'fail') {
+                            console.log(response);
+                            if (response.errors && response.errors.length) {
+                                alert(response.errors.join("\n")); // quick and dirty
+                            } else {
+                                alert(generic_error_unable_to_pause_resume);
+                            }
+                            // !!! should also revert SVG spinner on the button
+                            return;
+                        }
+
                         if (data.resume) {
                             $.wa.mailer.redispatch();
                             $.post("?module=campaigns&action=send", data);

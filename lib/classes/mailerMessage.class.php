@@ -18,6 +18,7 @@ class mailerMessage extends mailerSimpleMessage
     */
     protected $log_model;
     protected $contact_fields;
+    protected $test_sending_report;
 
     public function __construct($data)
     {
@@ -233,6 +234,7 @@ class mailerMessage extends mailerSimpleMessage
         return wa()->getDataPath('lock/'.$this->id.'.lock', false, 'mailer');
     }
 
+    /** @deprecated */
     public function getTestMessage()
     {
         $this->prepareBody();
@@ -243,25 +245,28 @@ class mailerMessage extends mailerSimpleMessage
         $message->setTo($user->get('email', 'default'), $user->getName());
         if (trim($this->data['return_path'])) {
             $message->setReturnPath(str_replace('@', '+'.$row_id.'@', $this->data['return_path']));
-        } elseif ($this->data['return_path'] === ' ') {
-            $this->setHeader($message, 'X-Log-ID', $row_id);
         }
+        $this->setHeader($message, 'X-Log-ID', $row_id);
 
         $unsubscribe_link = $this->getUnsubscribeLink();
         $this->setHeader($message, 'List-Unsubscribe', '<'.$unsubscribe_link.'>');
 
-        // use smarty view
         $view = wa()->getView();
+        $view->clearAllAssign();
         $view->assign('log_id', $row_id);
         $view->assign('unsubscribe_link', $unsubscribe_link);
         $view->assign('mailview_link', $this->getMailviewLink());
         if ($this->contact_fields) {
             $this->assignContactData($view, $user->load('value'));
         }
-        $body = $view->display('eval:'.$this->data['body']);
-
+        $_body = str_replace(['<style', '</style>'], ['{literal}<style', '</style>{/literal}'], $this->data['body']);
+        $body = $view->fetch('string:'.$_body);
         $message->setBody($body, 'text/html', 'utf-8');
         $message->addPart(mailerHtml2text::convert($body), 'text/plain');
+        if (!$message->getSender()) {
+            $message->setSender($message->getFrom());
+        }
+
         $message->generateId();
 
         return $message;
@@ -269,12 +274,21 @@ class mailerMessage extends mailerSimpleMessage
 
     public function sendTestMessage($addresses, $subject=null)
     {
+        $this->test_sending_report = null;
         if (!$addresses || !is_array($addresses)) {
             return array();
         }
 
         $this->prepareBody();
-        $mailer = Swift_Mailer::newInstance($this->getTransport());
+
+        $transport = $this->getTransport();
+        if ($transport instanceof mailerExtendedTransportInterface) {
+            $campaign = $this->data;
+            $campaign['params'] = $this->params;
+            $transport->setCampaign($campaign, true);
+        }
+
+        $mailer = Swift_Mailer::newInstance($transport);
         $view = wa()->getView();
 
         if ($this->contact_fields) {
@@ -315,9 +329,8 @@ class mailerMessage extends mailerSimpleMessage
                     // do not modify return path or handle exception after send
                     //$message->setReturnPath(str_replace('@', '+'.$row_id.'@', $this->data['return_path']));
                     $message->setReturnPath($this->data['return_path']);
-                } elseif ($this->data['return_path'] === ' ') {
-                    $this->setHeader($message, 'X-Log-ID', $row_id);
                 }
+                $this->setHeader($message, 'X-Log-ID', $row_id);
                 // set Reply-to
                 if (trim($this->data['reply_to'])) {
                     $message->setReplyTo(trim($this->data['reply_to']));
@@ -382,7 +395,16 @@ class mailerMessage extends mailerSimpleMessage
             }
         }
 
+        if ($transport instanceof mailerExtendedTransportInterface) {
+            $this->test_sending_report = $transport->testSendingReport();
+        }
+
         return $result;
+    }
+
+    public function getTestSendingReport()
+    {
+        return $this->test_sending_report;
     }
 
     public function testReturnPathSmtpSender()
@@ -413,6 +435,11 @@ class mailerMessage extends mailerSimpleMessage
 
         // send message
         $transport = $this->getTransport();
+        if ($transport instanceof mailerExtendedTransportInterface) {
+            $campaign = $this->data;
+            $campaign['params'] = $this->params;
+            $transport->setCampaign($campaign);
+        }
 
         $mailer = Swift_Mailer::newInstance($transport);
 
@@ -521,6 +548,39 @@ class mailerMessage extends mailerSimpleMessage
                     // send message
                     $recipient_status = $mailer->send($message) ? mailerMessageLogModel::STATUS_SENT : mailerMessageLogModel::STATUS_SENDING_ERROR;
                     $this->log_model->setStatus($row_id, $recipient_status);
+                } catch (mailerTransportSoftfailException $e) {
+
+                    //
+                    // Transport signalled a soft fail that requires user attention.
+                    // E.g. unable to send due to insufficient funds.
+                    // Pause campaign without marking current recipient as fail.
+                    //
+
+                    if ($sent_since_last_event > 0) {
+                        $this->eventSending($sent_since_last_event);
+                        $sent_since_last_event = 0;
+                    }
+
+                    $message_params_model = new mailerMessageParamsModel();
+                    $params = $message_params_model->getByMessage($this->id);
+
+                    $message_model = new mailerMessageModel();
+                    $campaign = $message_model->getById($this->id);
+                    if ($campaign['status'] == mailerMessageModel::STATUS_SENDING) {
+                        $message_model->updateById($this->id, [
+                            'status' => mailerMessageModel::STATUS_SENDING_PAUSED,
+                        ]);
+
+                        // Calculate total sending time and save in message params
+                        $send_datetime = ifempty($params['fake_send_timestamp'], strtotime($campaign['send_datetime']));
+                        $message_params_model->save($this->id, array(
+                            'total_sending_time' => time() - $send_datetime + 5,
+                            'sending_softfail_description' => $e->getMessage(),
+                        ), array('fake_send_timestamp'));
+                    }
+
+                    return;
+
                 } catch (Exception $e) {
                     if ($i == 1 && $this->data['return_path'] &&
                         $e instanceof Swift_TransportException &&

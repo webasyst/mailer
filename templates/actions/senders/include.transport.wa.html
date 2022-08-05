@@ -1,0 +1,175 @@
+<div class="field">
+    <div class="name">[`Cost`]</div>
+    <div class="value">
+        {sprintf_wp('%s / message')}
+    </div>
+</div>
+<div class="field">
+    <div class="name">[`Current balance`]</div>
+    <div class="value">
+        {$wa_balance}
+    </div>
+</div>
+
+<div class="field">
+    <div class="name"></div>
+    <div class="value">
+        <button class="button outlined" id="js-balance-button">[`Top up balance`]</button>
+    </div>
+</div>
+
+{if !empty($wa_transport_configured)}
+    <div class="field">
+        <div class="name">[`Add IP address to the white list`]</div>
+        <div class="value">
+            <input type="text" class="semibold js-ip" placeholder="127.0.0.7">
+            <button class="button outlined" id="js-add-current-ip-button">[`Add`]</button>
+        </div>
+    </div>
+    <div class="field">
+        <div class="name">[`White list of IP addresses`]</div>
+        <div class="value">
+            {if empty($wa_white_list)}
+                &mdash;
+            {else}
+                <table class="borderless" style="width: auto" id="js-ips-table">
+                    {foreach $wa_white_list as $_ip}
+                        <tr>
+                            <td><code>{$_ip|escape}</code></td>
+                            <td>
+                                <button class="button outlined orange smallest js-delete-ip" data-ip="{$_ip|escape}">
+                                    <i class="fas fa-times" style="color: firebrick"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    {/foreach}
+                </table>
+            {/if}
+        </div>
+    </div>
+{/if}
+
+<div class="dialog" id="js-dialog-elements">
+    <header class="dialog-header js-header-1"><h1>[`Confirmation code`]</h1></header>
+    <header class="dialog-header js-header-2"><h3>[`Server response`]</h3></header>
+    <div class="dialog-content">
+        <input type="text" class="semibold js-code" placeholder="1234">
+        <button class="button outlined js-code-confirm">[`Confirm`]</button>
+        <div class="gray custom-mt-8"></div>
+    </div>
+    <footer class="dialog-footer"><button class='js-close-dialog'>[`Close`]</button></footer>
+</div>
+
+<script>(function() { "use strict";
+
+    var code_sent_to_phone_str = {_w('Code has been sent to phone number %s.')|json_encode};
+    var code_sent_to_email_str = {_w('Code has been sent to email address %s.')|json_encode};
+    var response_code_str = {_w('Response code: %s.')|json_encode};
+
+    $('#js-balance-button').on('click', function () {
+        $.get('?module=senders&action=balanceWa', function (data) {
+            let resp = data.data.response;
+            let status = data.data.status || '-';
+            let err = resp.error_description || resp.error || resp.errors || null;
+            if (data.status === 'fail') {
+                console.warn('balance', data);
+                responseDialog(status, '');
+            } else if (err) {
+                responseDialog(status, err.toString());
+            } else if (typeof resp.url !== 'undefined') {
+                document.location = resp.url;
+            }
+        });
+        return false;
+    });
+
+    $('#js-add-current-ip-button').on('click', function () {
+        let ip = $('.js-ip').val();
+        $.post('?module=senders&action=addIpWa', { ip: ip }, function (data) {
+            let resp = data.data.response;
+            let status = data.data.status || '-';
+            let err = resp.error_description || resp.error || resp.errors || null;
+            if (data.status === 'fail') {
+                console.warn('add IP', data);
+                responseDialog(status, '');
+            } else if (err) {
+                responseDialog(status, err.toString());
+            } else if (resp.email) {
+                codeConfirm(code_sent_to_email_str.replace('%s', resp.email));
+            } else if (resp.phone) {
+                codeConfirm(code_sent_to_phone_str.replace('%s', resp.phone));
+            }
+        });
+        return false;
+    });
+
+    $('#js-ips-table').on('click', '.js-delete-ip', function () {
+        let ip = $(this).data('ip');
+        $.post('?module=senders&action=deleteIpWa', { ip: ip }, function (data) {
+            let resp = data.data.response;
+            let status = data.data.status || '-';
+            let err = resp.error_description || resp.error || resp.errors || null;
+            if (data.status === 'fail') {
+                console.warn('delete IP', data);
+                responseDialog(status, '');
+            } else if (err) {
+                responseDialog(status, err.toString());
+            } else if (resp.email) {
+                codeConfirm(code_sent_to_email_str.replace('%s', resp.email));
+            } else if (resp.phone) {
+                codeConfirm(code_sent_to_phone_str.replace('%s', resp.phone));
+            }
+        });
+        return false;
+    });
+
+    function responseDialog(code, message) {
+        let content = response_code_str.replace('%s', code);
+        content += message ? '<br><pre class="small gray">'+ message +'</pre>' : '';
+        $.waDialog({
+            header: $('#js-dialog-elements header.js-header-2').html(),
+            content: content,
+            footer: $('#js-dialog-elements footer').html(),
+        });
+    }
+
+    function myConfirm(code) {
+        if (typeof code === 'undefined' || code.trim() === '') {
+            return null;
+        }
+        $.post('?module=senders&action=confirmCodeWa', { code: code }, function (data) {
+            let resp = data.data.response;
+            let status = data.data.status || '-';
+            let err = resp.error_description || resp.error || resp.errors || null;
+            if (data.status === 'fail') {
+                console.warn('confirm code', data);
+                responseDialog(status, '');
+            } else if (err) {
+                responseDialog(status, err.toString());
+            } else if (typeof resp.action !== 'undefined' && typeof resp.ip !== 'undefined') {
+                if (resp.action === 'add' || resp.action === 'delete') {
+                    document.location.reload();
+                }
+            }
+        });
+    }
+
+    function codeConfirm(message) {
+        $.waDialog({
+            header: $('#js-dialog-elements header.js-header-1').html(),
+            content: $('#js-dialog-elements div.dialog-content').html(),
+            footer: $('#js-dialog-elements footer').html(),
+            onOpen: function (dialog) {
+                dialog.find('.js-code').removeClass('state-error');
+                dialog.find('.gray').html(message);
+                dialog.find('.js-code-confirm').on('click', function () {
+                    let res = myConfirm(dialog.find('.js-code').val());
+                    if (res === null) {
+                        dialog.find('.js-code').addClass('state-error');
+                    }
+                });
+            }
+        });
+    }
+
+})();</script>

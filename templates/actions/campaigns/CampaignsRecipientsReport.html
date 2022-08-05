@@ -38,26 +38,31 @@
         </div>
     {/if}
 
-    <table class="zebra recipients-report">
+    <table class="zebra recipients-report custom-mt-16">
         {foreach $recipients as $r}
             <tr>
-                {if ($r.status >= mailerMessageLogModel::STATUS_NOT_DELIVERED && !empty($statuses)) ||
-                    !empty($search)}
-                <td>{$r.datetime}</td>
+                {if ($r.status >= mailerMessageLogModel::STATUS_NOT_DELIVERED && !empty($statuses)) && empty($search)}
+                    <td>{$r.datetime}</td>
                 {/if}
                 <td>{$r.name|escape} {$r.email|escape}</td>
                 {if $r.status != mailerMessageLogModel::STATUS_VIEWED && (count($statuses) > 1 || !empty($search))}
-                <td>{$r.status_text}
-                    {if $r.error}
-                    <div class="hidden">{$r.error|escape|nl2br}</div>
-                    {/if}
-                </td>
+                    <td>{$r.status_text}
+                        {if $r.error}
+                            <div class="hidden">{$r.error|escape|nl2br}</div>
+                        {elseif !empty($search)}
+                            <span>{$r.datetime}</span>
+                        {/if}
+                    </td>
                 {elseif count($statuses) == 7}
-                <td>{$r.status_text}
-                    {if $r.error}
-                    <div class="hidden">{$r.error|escape|nl2br}</div>
-                    {/if}
-                </td>
+                    <td>{$r.status_text}
+                        {if $r.error}
+                            <div class="hidden">{$r.error|escape|nl2br}</div>
+                        {elseif !empty($search)}
+                            <span>{$r.datetime}</span>
+                        {/if}
+                    </td>
+                {else}
+                    <td></td>
                 {/if}
             </tr>
         {/foreach}

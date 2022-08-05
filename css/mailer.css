@@ -228,11 +228,12 @@ table.zebra.recipients-report {
     border:         0;
     vertical-align: middle;
 }
-.recipients-report .earlier-unsubscribed { color: var(--red) !important; }
-.recipients-report .error { color: var(--red) !important; }
-.recipients-report .awaits-sending { color: #888 !important; }
-.recipients-report .opened { color: var(--green) !important; }
-.recipients-report .unsubscribed { color: var(--green) !important; text-decoration: line-through !important; }
+.recipients-report .earlier-unsubscribed, .recipients-report .earlier-unsubscribed + span { color: var(--red) !important; }
+.recipients-report .error, .recipients-report .error + span { color: var(--red) !important; }
+.recipients-report .awaits-sending, .recipients-report .awaits-sending + span { color: var(--dark-gray) !important; }
+.recipients-report .opened, .recipients-report .opened + span { color: var(--green) !important; }
+.recipients-report .sent, .recipients-report .sent + span { color: var(--bright-sky-blue) !important; }
+.recipients-report .unsubscribed, .recipients-report .unsubscribed + span { color: var(--dark-gray) !important;}
 .recipients-report .show-full-error-text { font-weight: 500; cursor: pointer !important; }
 
 .recipients-stat-content {

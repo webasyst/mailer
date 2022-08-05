@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.4.3\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\n"
 
@@ -76,7 +76,7 @@ msgstr "как можно быстрее"
 msgid "send not more than"
 msgstr "отправлять не более"
 
-msgid "letters per hour"
+msgid "messages per hour"
 msgstr "писем в час"
 
 msgid "Paste emails here, one email (or Name <email>) per line."
@@ -1045,7 +1045,7 @@ msgstr "Удалить список"
 msgid "Edit button label"
 msgstr "Редактировать название кнопки"
 
-msgid "Check and send"
+msgid "Check &amp; send"
 msgstr "Проверить и отправить"
 
 msgid "Choose recipients"
@@ -1102,7 +1102,7 @@ msgstr "Однако не всем из них было фактически о�
 msgid "Excluded were previously unsubscribed and also those email addresses that have resulted in a permanent error returned by the recipient server in your past mailing campaigns. Those mail boxes either do not exist, or cannot receive your message by any reason. Further attempts to send messages to these addresses may result in the blacklisting of your mail server. Therefore, it is recommended to exclude these addresses from all future recipient lists."
 msgstr "Из рассылки были исключены ранее отписавшиеся, а также те адреса, почтовый сервер которых вернул в прошлых рассылках сообщение о постоянной ошибке в адресе получателя. Такие адреса либо не существуют, либо не могут по какой-либо причине получать от вас сообщения. Попытки повторных рассылок на эти адреса могут привести к тому, что ваш сервер отправителя попадет в «черный список». По этой причине данные адреса исключаются по умолчанию из списков получателей ваших рассылок."
 
-msgid "Compose letter"
+msgid "Compose message"
 msgstr "Написать письмо"
 
 msgid "Preparing recipient list"
@@ -1776,3 +1776,183 @@ msgstr "менее минуты"
 
 msgid "This file will be deleted from all campaigns."
 msgstr "Этот файл будет удален из всех рассылок."
+
+msgid "%d message"
+msgid_plural "%d messages"
+msgstr[0] "%d письмо"
+msgstr[1] "%d письма"
+msgstr[2] "%d писем"
+
+msgid "hour"
+msgstr "час"
+
+msgid "day"
+msgstr "день"
+
+msgid "month"
+msgstr "месяц"
+
+msgid "total"
+msgstr "всего"
+
+msgid "Email From"
+msgstr "Адрес From"
+
+msgid "Email Reply-To"
+msgstr "Адрес Reply-To"
+
+msgid "Cost"
+msgstr "Стоимость"
+
+msgid "%s / message"
+msgstr "%s / письмо"
+
+msgid "Current balance"
+msgstr "Текущий баланс"
+
+msgid "Top up balance"
+msgstr "Пополнить баланс"
+
+msgid "Add IP address to the white list"
+msgstr "Добавить IP-адрес в белый список"
+
+msgid "White list of IP addresses"
+msgstr "Белый список IP-адресов"
+
+msgid "Confirmation code"
+msgstr "Код подтверждения"
+
+msgid "Server response"
+msgstr "Ответ сервера"
+
+msgid "Confirm"
+msgstr "Подтвердить"
+
+msgid "Code has been sent to phone number %s."
+msgstr "Код отправлен на номер телефона %s."
+
+msgid "Code has been sent to email address %s."
+msgstr "Код отправлен на email-адрес %s."
+
+msgid "Response code: %s."
+msgstr "Код ответа: %s."
+
+msgid "Webasyst API error"
+msgstr "Ошибка API Webasyst"
+
+msgid "Selected transport does not require DKIM setup."
+msgstr "Выбранный транспорт не требует настройки DKIM."
+
+msgid "<a href=\"%s\">Connect to Webasyst ID</a> to use the Webasyst sender server."
+msgstr "<a href=\"%s\">Подключите Webasyst ID</a>, чтобы пользоваться отправителем Webasyst."
+
+msgid "Running an email campaign via Webasyst services will ensure reliable message deliverability."
+msgstr "Отправка рассылки через службы Webasyst обеспечит надежную доставку сообщений получателям."
+
+msgid "If you have your own SMTP server, you may use it to send email campaigns, too."
+msgstr "Если у вас есть собственный SMTP-сервер, то отправлять рассылку можно и через него."
+
+msgid "To do so, <a href=\"javascript:void(0)\" class=\"open-sender-dialog-new\">add a new sender server</a>."
+msgstr "Для этого необходимо <a href=\"javascript:void(0)\" class=\"open-sender-dialog-new\">Добавить новый сервер отправителя</a>."
+
+msgid "Switch plan"
+msgstr "Сменить тариф"
+
+msgid "Free"
+msgstr "Бесплатно"
+
+msgid "The IP address of the server where your Mailer app is installed is in the list of banned addresses."
+msgstr "IP-адрес сервера, на котором установлено ваше приложение «Рассылки», попал в список запрещенных адресов."
+
+msgid "It might have been caused by several technical reasons; e.g., by moving your Webasyst account to another server."
+msgstr "Это могло произойти по ряду технических причин, например, в результате переезда вашей установки на новый хостинг."
+
+msgid "Click this button to add your new IP address to the list of allowed addresses."
+msgstr "Нажмите на кнопку, чтобы добавить ваш новый IP-адрес в реестр разрешенных адресов."
+
+msgid "Add current IP address to the white list"
+msgstr "Включить текущий IP-адрес в белый список"
+
+msgid "%s remains"
+msgid_plural "%s remain"
+msgstr[0] "Остался %s"
+msgstr[1] "Осталось %s"
+msgstr[2] "Осталось %s"
+
+msgid "Enough to send &#8776;%s message."
+msgid_plural "Enough to send &#8776;%s messages."
+msgstr[0] "Достаточно для отправки &#8776;%s сообщения."
+msgstr[1] "Достаточно для отправки &#8776;%s сообщений."
+msgstr[2] "Достаточно для отправки &#8776;%s сообщений."
+
+msgid "Sender server"
+msgstr "Сервер отправителя"
+
+msgid "Sending cost"
+msgstr "Стоимость рассылки"
+
+msgid "Sender name"
+msgstr "Имя отправителя"
+
+msgid "Unknown or deleted"
+msgstr "Неизвестный или удаленный"
+
+msgid "Add own server"
+msgstr "Добавить собственный сервер"
+
+msgid "When you send messages via your SMTP server or a third-party service, you need to set up the sending parameters on your own."
+msgstr "Когда вы отправляете сообщения через свой SMTP-сервер или сторонний сервис, необходимо самостоятельно настроить параметры отправки."
+
+msgid "SMTP server"
+msgstr "SMTP-сервер"
+
+msgid "Try the Webasyst Email Sender to send email campaigns!"
+msgstr "Попробуйте Webasyst Email Sender для отправки рассылки!"
+
+msgid "Not used for the selected transport."
+msgstr "Не используется для выбранного транспорта."
+
+msgid "Please switch to the Webasyst 2 mode to edit the selected sender."
+msgstr "Чтобы отредактировать выбранного отправителя, переключитесь в режим интерфейса Webasyst 2."
+
+msgid "Not sufficient account balance to continue the campaign."
+msgstr "Недостаточно средств на счету для продолжения рассылки."
+
+msgid "Add funds to your balance in the sender settings."
+msgstr "Пополните счет, открыв настройки отправителя."
+
+msgid "Current account balance: <strong>%s</strong>, sending cost: <strong>%s</strong>."
+msgstr "Текущее состояние счета: <strong>%s</strong>; стоимость рассылки: <strong>%s</strong>."
+
+msgid "Not sufficient account balance to complete the campaign."
+msgstr "Недостаточно средств на счете для полной отправки рассылки."
+
+msgid "Please to up your balance."
+msgstr "Необходимо пополнить баланс."
+
+msgid "Use the “%s” button above on this page."
+msgstr "Используйте кнопку «%s» выше на этой странице."
+
+msgid "DKIM is set up on Webasyst servers and does not require additional setup in the Mailer app."
+msgstr "DKIM настроен на серверах Webasyst и не требует дополнительной настройки в приложении «Рассылки»."
+
+msgid "Webasyst API transport connection error"
+msgstr "Ошибка подключения к API транспорта Webasyst"
+
+msgid "Not sufficient account balance. Please top up your balance to resume the campaign."
+msgstr "Недостаточно средств на счете. Пополните баланс и после этого снимите рассылку с паузы."
+
+msgid "To prevent messages from being rejected or marked as SPAM by recipients’ servers, the sender’s information will be replaced as follows in the message headers:"
+msgstr "Чтобы сообщения не отвергались серверами получателей и не помечались как спам, информация об отправителе в заголовках отправленных сообщений будет изменена следующим образом:"
+
+msgid "Sender address <em>%s</em> cannot be used for sending email campaigns via the Webasyst service because of the <em>%s</em> domain’s DMARC policy level <strong>%s</strong>."
+msgstr "Адрес отправителя <em>%s</em> не может использоваться для выполнения рассылок через сервис Webasyst — этого не допускает DMARC-политика домена <em>%s</em> уровня <strong>%s</strong>."
+
+msgid "If you do not want such a replacement and would like to use only sender address <em>%s</em> then change the DMARC policy for domain name <strong>%s</strong> (it may be required to wait up to 2 days for this change to take effect). Or use a sender address on a different domain, or subdomain, with a different DMARC policy level."
+msgstr "Если вам не нужна такая замена и обязательно необходимо использовать адрес отправителя <em>%s</em>, измените политику DMARC для домена <strong>%s</strong> (может потребоваться ожидание до 2 суток, чтобы изменения вступили в силу). Или используйте адрес отправителя на другом домене (либо поддомене) с другим уровнем политики DMARC."
+
+msgid "Accept replacement"
+msgstr "Принять изменение"
+
+msgid "Edit email From"
+msgstr "Редактировать адрес From"

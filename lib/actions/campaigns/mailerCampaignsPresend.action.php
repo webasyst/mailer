@@ -77,7 +77,7 @@ class mailerCampaignsPresendAction extends waViewAction
         $this->view->assign('unique_recipients', $params['recipients_count']);
         $this->view->assign('routing_ok', !!wa()->getRouteUrl('mailer', true));
         $this->view->assign('estimated_duration', $estimated_duration_str);
-
+        $this->view->assign('need_from_replace', ifset($params['need_from_replace'], false));
         $this->view->assign('scheduled', $campaign['status'] == mailerMessageModel::STATUS_PENDING );
         $this->view->assign('scheduled_time', $campaign['send_datetime'] );
     }
@@ -91,6 +91,15 @@ class mailerCampaignsPresendAction extends waViewAction
         }
         if (!trim($campaign['subject'])) {
             $errormsg[] = _w('No message subject.');
+        }
+        $validator = new waEmailValidator();
+        if (!trim($campaign['from_email'])) {
+            $errormsg[] = _w('No message from email.');
+        } elseif (!$validator->isValid($campaign['from_email'])) {
+            $errormsg[] = _w('Invalid message from email address.');
+        }
+        if (!empty($campaign['reply_to']) && !$validator->isValid($campaign['reply_to'])) {
+            $errormsg[] = _w('Invalid message reply-to email address.');
         }
 
         // Check if there are recipients selected
@@ -125,6 +134,53 @@ class mailerCampaignsPresendAction extends waViewAction
             }
         }
 
+        // Check if WA transport is available if selected for this campaign,
+        // and balance exceeds campaign cost
+        $sender_params_model = new mailerSenderParamsModel();
+        $sender_params = $sender_params_model->getBySender($campaign['sender_id']);
+        if (ifset($sender_params, 'type', '') == 'wa') {
+            $api = new mailerWaTransportServiceApi();
+            if (!$api->isConnected()) {
+                $errormsg[] = sprintf_wp(
+                    '<a href="%s">Connect to Webasyst ID</a> to use the Webasyst sender server.',
+                    wa()->getConfig()->getBackendUrl(true).'webasyst/settings/waid/'
+                );
+            } elseif ($params['recipients_count'] > 0) {
+                try {
+                    $sufficient_balance = $api->balanceCheckService('EMAIL', [
+                        'count' => $params['recipients_count'],
+                    ], $result);
+                    if (!$sufficient_balance) {
+                        $current_balance = wa_currency_html($result['response']['current_balance'], $result['response']['currency_id']);
+                        $campaign_cost = wa_currency_html($result['response']['amount'], $result['response']['currency_id']);
+                        $errormsg[] = join("\n<br>\n", [
+                            _w('Not sufficient account balance to complete the campaign.'),
+                            sprintf_wp(
+                                'Current account balance: <strong>%s</strong>, sending cost: <strong>%s</strong>.',
+                                $current_balance,
+                                $campaign_cost
+                            ),
+                            _w('Please to up your balance.'),
+                            '<span class="small">' . sprintf_wp('Use the “%s” button above on this page.', _w('Top up balance')) . '</span>',
+                        ]);
+                    } else {
+                        $check_from_email = $api->serviceCall('SENDERCHECK', [
+                            'from_email' => $campaign['from_email'],
+                            'from_name' => $campaign['from_name'],
+                            'reply_to_email' => $campaign['reply_to'],
+                        ]);
+                        if (ifset($check_from_email, 'response', 'need_replace', null)) {
+                            $params['need_from_replace'] = $check_from_email['response'];
+                            $params['need_from_replace']['original_from_email'] = $campaign['from_email'];
+                        }
+                    }
+                } catch (waException $e) {
+                    // should never happen
+                    $errormsg[] = $e->getMessage();
+                }
+            }
+        }
+
         return $errormsg;
     }
 
@@ -143,6 +199,9 @@ class mailerCampaignsPresendAction extends waViewAction
             $params = $mpm->getByMessage($campaign['id']);
         }
 
+        $sender_params_model = new mailerSenderParamsModel();
+        $sender_params = $sender_params_model->getBySender($campaign['sender_id']);
+
         /**@/**
          * @event campaign.validate
          *
@@ -150,13 +209,15 @@ class mailerCampaignsPresendAction extends waViewAction
          *
          * @param array[string]array $params['campaign'] input: row from mailer_message
          * @param array[string]array $params['params'] input: campaign params from mailer_message_params, key => value
+         * @param array[string]array $params['sender_params'] input: sender params from mailer_sender_params, key => value
          * @param array[string]array $params['errors'] output: list of error message strings to show to user
          * @return void
          */
         $evt_params = array(
-            'campaign' => &$campaign, // INPUT
-            'params' => &$params,     // INPUT
-            'errors' => array(),      // OUTPUT
+            'campaign' => &$campaign,           // INPUT
+            'params' => &$params,               // INPUT
+            'sender_params' => &$sender_params, // INPUT
+            'errors' => array(),                // OUTPUT
         );
         wa()->event('campaign.validate', $evt_params);
         return (array) $evt_params['errors'];

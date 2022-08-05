@@ -10,36 +10,37 @@
         <a href="javascript:void(0)" class="text-light-gray" title="[`Cancel`]" style="position:absolute;top:.5rem;right:1rem;"><i class="fas fa-times"></i></a>
     {/if}
 
-    {$warnings = ((int) empty($cron_ok)) + ((int) empty($return_path_ok['status'])) + ((int) empty($routing_ok))}
-
-    {if $warnings}
-        {if !empty($cron_ok) || $warnings > 1}
-            <h4 class="custom-mb-8 custom-mt-0">[`Warning`]</h4>
-        {/if}
+    {if empty($cron_ok) || empty($return_path_ok['status']) || empty($routing_ok) || !empty($need_from_replace)}
+        <h4 class="custom-mb-8 custom-mt-0">[`Warning`]</h4>
     {/if}
 
+    {$_prev_warning_schown = false}
+
     {if empty($cron_ok)}
-        {if $warnings <= 1}
-            <h4 class="custom-mb-8 custom-mt-0">[`Warning`]</h4>
-        {/if}
-        <div class="small">
-            <p class="custom-mt-8">
-                [`No <tt>cron</tt> jobs, required for long mailings, have been set up for your account.`]
-                <strong>{sprintf_wp('Without <tt>cron</tt> jobs set up, do not close your browser window after clicking on the “%s” button to complete the email sending process.', _w('Launch campaign'))}</strong>
-            </p>
+        <div id="m-cron-notice">
+            <div class="small">
+                <p class="custom-mt-8">
+                    [`No <tt>cron</tt> jobs, required for long mailings, have been set up for your account.`]
+                    <strong>{sprintf_wp('Without <tt>cron</tt> jobs set up, do not close your browser window after clicking on the “%s” button to complete the email sending process.', _w('Launch campaign'))}</strong>
+                </p>
 
-            <p>{sprintf_wp(
-                'To ensure that sending is completed without your input, please set up <tt>cron</tt> jobs (<a href="%s" target="_blank">view instructions</a>), with the commands specified below, in your web-hosting control panel:',
-                _w('https://developers.webasyst.com/tips/cron/')
-            )}</p>
+                <p>{sprintf_wp(
+                    'To ensure that sending is completed without your input, please set up <tt>cron</tt> jobs (<a href="%s" target="_blank">view instructions</a>), with the commands specified below, in your web-hosting control panel:',
+                    _w('https://developers.webasyst.com/tips/cron/')
+                )}</p>
 
-            <p class="bold">{$cron_command}</p>
+                <p class="bold">{$cron_command}</p>
+            </div>
         </div>
+        {$_prev_warning_schown = true}
     {/if}
 
     {if $return_path_ok['status'] == false}
+        {if $_prev_warning_schown}
+            <hr class="custom-my-24">
+        {/if}
         <p class="small">
-            <i class="fas fa-exclamation-triangle text-orange"></i>
+            {if $_prev_warning_schown}<i class="fas fa-exclamation-triangle text-orange"></i> {/if}
             {if $return_path_ok['reason'] == 1 || $return_path_ok['reason'] == 2 || $return_path_ok['reason'] == 3}
                 [`Return-Path address specified above is not available.`]
             {elseif $return_path_ok['reason'] == 4}
@@ -47,22 +48,74 @@
             {/if}
             [`Return-Path address is used to automatically process bounced emails.`]
         </p>
+        {$_prev_warning_schown = true}
     {/if}
 
     {if empty($routing_ok)}
+        {if $_prev_warning_schown}
+            <hr class="custom-my-24">
+        {/if}
         <p class="small">
-            {if $warnings > 1}<i class="fas fa-exclamation-triangle"></i>{/if}
+            {if $_prev_warning_schown}<i class="fas fa-exclamation-triangle text-orange"></i> {/if}
             [`You have no routing rules defined for Mailer application.`]
             [`Unsubscribe links in your message will not work.`]
             {sprintf_wp('To set up routing rules use %sSite application%s.', '<a href="../site/#/routing/" target="_blank">', '</a>')}
         </p>
+        {$_prev_warning_schown = true}
     {/if}
 
-    {if $warnings}
-        <hr class="custom-my-24">
+    {if $need_from_replace}
+        {if $_prev_warning_schown}
+            <hr class="custom-my-24">
+        {/if}
+        <p class="small">
+            {if $_prev_warning_schown}<i class="fas fa-exclamation-triangle text-orange"></i> {/if}
+            {sprintf_wp(
+                'Sender address <em>%s</em> cannot be used for sending email campaigns via the Webasyst service because of the <em>%s</em> domain’s DMARC policy level <strong>%s</strong>.',
+                $need_from_replace.original_from_email,
+                $need_from_replace.domain,
+                $need_from_replace.dmarc_policy
+            )}
+            <br><br>
+            [`To prevent messages from being rejected or marked as SPAM by recipients’ servers, the sender’s information will be replaced as follows in the message headers:`]
+            <br><br>
+            <span class="bold">From:</span>
+            {if !empty($need_from_replace.from_name)}
+                {$need_from_replace.from_name} &lt;{$need_from_replace.from_email}&gt;
+            {else}
+                {$need_from_replace.from_email}
+            {/if}
+            {if !empty($need_from_replace.reply_to_email)}
+                <br>
+                <span class="bold">Reply-To:</span>
+                {if !empty($need_from_replace.reply_to_name)}
+                    {$need_from_replace.reply_to_name} &lt;{$need_from_replace.reply_to_email}&gt;
+                {else}
+                    {$need_from_replace.reply_to_email}
+                {/if}
+            {/if}
+        </p>
+        <a href="javascript:void(0)" class="button nobutton rounded custom-my-8 js-sendercheck-accept" data-from="{$need_from_replace.from_email}"{if !empty($need_from_replace.reply_to_email)} data-reply-to="{$need_from_replace.reply_to_email}"{/if}>
+            <i class="fas fa-check"></i> [`Accept replacement`]
+        </a>
+        <a href="javascript:void(0)" class="button nobutton rounded custom-my-8 js-edit-from">
+            <i class="fas fa-pen"></i> [`Edit email From`]
+        </a>
+        <p class="small">
+            {sprintf_wp(
+                'If you do not want such a replacement and would like to use only sender address <em>%s</em> then change the DMARC policy for domain name <strong>%s</strong> (it may be required to wait up to 2 days for this change to take effect). Or use a sender address on a different domain, or subdomain, with a different DMARC policy level.',
+                $need_from_replace.original_from_email,
+                $need_from_replace.domain
+            )}
+        </p>
+        {$_prev_warning_schown = true}
     {/if}
 
     {if $scheduled}
+        {if $_prev_warning_schown}
+            <hr class="custom-my-24">
+        {/if}
+
         <p class="custom-my-0 flexbox middle wrap vertical">
             <i class="fas fa-clock fa-3x text-blue custom-my-12"></i>
             <span>
@@ -78,7 +131,11 @@
             {/if}
             <button type="button" class="cancel-schedule button outlined rounded smaller gray custom-mb-12">[`Cancel`]</button>
         </p>
-    {else}
+    {elseif empty($need_from_replace)}
+        {if $_prev_warning_schown}
+            <hr class="custom-my-24">
+        {/if}
+
         <p class="flexbox middle wrap vertical">
             <span{if !$estimated_duration} class="custom-mb-16"{/if}>
                 {_w('Ready to send to <span class="bold">%d recipients</span>.', 'Ready to send to <span class="bold">%d recipients</span>.', $unique_recipients)}

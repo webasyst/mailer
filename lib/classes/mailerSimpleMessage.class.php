@@ -20,6 +20,12 @@ class mailerSimpleMessage
     protected function getTransport()
     {
         if ($this->data['sender_id']) {
+            $sender_model = new mailerSenderModel();
+            $sender = $sender_model->getById($this->data['sender_id']);
+            if (!$sender) {
+                $sender = $sender_model->getEmptyRow();
+                $sender['id'] = $this->data['sender_id'];
+            }
             $params_model = new mailerSenderParamsModel();
             $params = $params_model->getBySender($this->data['sender_id']);
             if (!isset($params['type'])) {
@@ -52,22 +58,32 @@ class mailerSimpleMessage
                     return mailerTestTransport::newInstance();
                 case 'default':
                     return $this->getDefaultTransport();
+                case 'wa':
+                    return new mailerWaTransport($sender, $params);
                 default:
-                    $params = array(
-                        'type' => $params['type'],
-                        'sender_params' => $params,
-                        'sender_id' => $this->data['sender_id'],
-                    );
-                    $result = wa()->event('sender.transport', $params);
+                    $result = self::getPluginTransport($sender, $params);
                     if ($result) {
-                        $result = end($result);
-                    }
-                    if ($result && $result instanceof Swift_Transport) {
                         return $result;
                     }
             }
         }
         return $this->getDefaultTransport();
+    }
+
+    public static function getPluginTransport($sender, $sender_params)
+    {
+        $params = array(
+            'type' => $sender_params['type'],
+            'sender_id' => $sender['id'],
+            'sender' => $sender,
+            'sender_params' => $sender_params,
+        );
+        $result = wa()->event('sender.transport', $params);
+        foreach(ifempty($result, []) as $transport) {
+            if ($transport && $transport instanceof Swift_Transport) {
+                return $transport;
+            }
+        }
     }
 
     protected function getDefaultTransport()
@@ -92,7 +108,8 @@ class mailerSimpleMessage
         return $m;
     }
 
-    // !!! never used except in obsolete code of FrontendSubscribe. Remove?
+    // Used in FrontendSubscribe to send confirmation email when client subscribes via form.
+    // Sends confirmation using default system transport.
     public function send()
     {
         $args = func_get_args();

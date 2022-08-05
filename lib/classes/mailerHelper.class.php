@@ -579,5 +579,50 @@ class mailerHelper
         $e = explode('@', $email);
         return trim(preg_replace('/[^a-z0-9]/i', '', $e[0])) . 'wamail';
     }
-}
 
+    public static function getSenderTypes()
+    {
+        static $sender_types = null;
+        if ($sender_types !== null) {
+            return $sender_types;
+        }
+
+        $sender_types = array(
+            'wa' => [
+                'name' => 'Webasyst Email Sender',
+                'description' => '<i class="fas fa-check-circle text-green"></i> ' . _w('Running an email campaign via Webasyst services will ensure reliable message deliverability.'),
+                'dkim_irrelevant' => _w('DKIM is set up on Webasyst servers and does not require additional setup in the Mailer app.'),
+                'return_path_built_in' => true,
+            ],
+            'default' => [
+                'name' => _w('System Default'),
+                'description' => _w('When this option is selected messages are sent by the default transport specified in the Webasyst system settings.')
+            ],
+            'mail' => [
+                'name' => _w('PHP mail() function'),
+                'description' => _w('Some web-hosting companies allow sending email message by means of this transport only. If it is required to specify additional parameters for the mail() function you can enter them in the provided text field. The default parameters are -f%s.')
+            ],
+            'smtp' => [
+                'name' => _w('SMTP'),
+                'description' => _w('Special server which is specifically used for sending email messages. You can send newsletters via any SMTP server for which you have connection credentials: host, port, user name, and password. It can be the SMTP server of your web-hosting company or that of a public mail service such as Gmail, Yahoo! Mail, Outlook.com, etc.')
+            ],
+        );
+        if (function_exists('proc_open')) {
+            $sender_types['sendmail'] = [
+                'name' => _w('Sendmail'),
+                'description' => _w('This is the web server’s system command for sending email in UNIX-like operating systems. The “Sendmail” option will allow you to specify a non-standard system command for sending messages if you are an experienced server administrator.')
+            ];
+        }
+        $sender_types['test'] = [
+            'name' => _w('Debug mailer'),
+            'return_path_built_in' => true,
+            'description' => "",
+        ];
+
+        /**
+         */
+        wa()->event('sender.types', $sender_types);
+
+        return $sender_types;
+    }
+}

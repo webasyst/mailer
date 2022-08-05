@@ -12,7 +12,7 @@
                                 <span class="icon rounded bg-blue custom-p-8 custom-mr-4">
                                     <i class="fas fa-pen-alt text-white" style="font-size: 87.5%;"></i>
                                 </span>
-                                <span class="text">[`Compose letter`]</span>
+                                <span class="text">[`Compose message`]</span>
                             </a>
                         </li>
                         <li class="m-second-step">
@@ -30,7 +30,7 @@
                                 <span class="icon rounded bg-light-gray custom-p-8 custom-mr-4">
                                     <i class="fas fa-paper-plane text-white" style="font-size: 87.5%;"></i>
                                 </span>
-                                <span class="text">[`Check and send`]</span>
+                                <span class="text">[`Check &amp; send`]</span>
                             </a>
                         </li>
                     </ul>
@@ -41,7 +41,7 @@
                                 <span class="icon rounded bg-blue custom-p-8 custom-mr-4">
                                     <i class="fas fa-pen-alt text-white" style="font-size: 87.5%;"></i>
                                 </span>
-                                <span class="text">[`Compose letter`]</span>
+                                <span class="text">[`Compose message`]</span>
                             </a>
                         </li>
                         <li class="m-second-step m-disabled">
@@ -57,7 +57,7 @@
                                 <span class="icon rounded bg-light-gray custom-p-8 custom-mr-4">
                                     <i class="fas fa-paper-plane text-white" style="font-size: 87.5%;"></i>
                                 </span>
-                                <span class="text">[`Check and send`]</span>
+                                <span class="text">[`Check &amp; send`]</span>
                             </a>
                         </li>
                     </ul>
@@ -110,7 +110,7 @@
             <em class="hint">[`Ctrl+S`]</em>
             <a href="javascript:void(0)" class="small js-about-revolvapp text-light-gray align-right wide"><i class="fas fa-info-circle"></i> <span class="desktop-and-tablet-only">[`About Revolvapp`]</span></a>
             {if !empty($campaign.id)}
-                <a href="#/campaigns/recipients/{$campaign.id}/" class="button light-gray custom-ml-auto">
+                <a href="#/campaigns/recipients/{$campaign.id}/" class="button light-gray custom-ml-auto js-button-next">
                     [`Next`]
                     <i class="fas fa-arrow-right fa-xs"></i>
                 </a>
@@ -135,9 +135,11 @@
 
         // DOM
         const $form = $('#{$form_id}');
+        const $actions_wrapper = $('.js-actions-wrapper');
         const $subject = $form.find('#message-subject');
-        const $textarea = $('.js-redactor-body');
-        const $submit_btn = $('.js-campaign-save');
+        const $textarea = $form.find('.js-redactor-body');
+        const $submit_btn = $actions_wrapper.find('.js-campaign-save');
+        const $next_btn = $actions_wrapper.find('.js-button-next');
 
         // VARS
         var original_subject = $subject.val();
@@ -189,6 +191,16 @@
             });
         });
 
+        // Next button: save campaign in background and move to next step without asking for confirmation
+        $next_btn.on('click', function (e) {
+            e && e.preventDefault();
+            if ($submit_btn.is('.yellow:not([disabled])')) {
+                $.wa.mailer.saveCampaign($form, $submit_btn);
+                $submit_btn.removeClass('yellow');
+            }
+            window.location.hash = $next_btn.attr('href');
+        });
+
         var h;
         $(document).on('keydown', h = function (event) {
             // Change button color to yellow when something's typed into the editor
@@ -204,7 +216,7 @@
             if (!$.wa.mailer.isCtrlS(event)) {
                 return;
             }
-            form.submit();
+            $form.submit();
             event.preventDefault();
             return false;
         });

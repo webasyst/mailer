@@ -80,7 +80,7 @@ class mailerMessageLogModel extends waModel
 
         $search_sql = '';
         if ($search) {
-            $search_sql = " AND CONCAT(c.name, ' ', l.email) LIKE :search ";
+            $search_sql = " AND CONCAT(l.name, ' ', l.email) LIKE :search ";
         }
 
         $error_class_sql = '';
@@ -102,9 +102,9 @@ class mailerMessageLogModel extends waModel
 //            $datetime_sql = " AND datetime BETWEEN i:startinterval AND i:endinterval ";
         }
 
-        $ordername_sql = ' ORDER BY l.datetime, c.name, l.id';
+        $ordername_sql = ' ORDER BY l.datetime, l.name, l.id';
         if ($ordername) {
-            $ordername_sql = " ORDER BY c.name, l.id";
+            $ordername_sql = " ORDER BY IFNULL(c.name, l.name), l.id";
         }
 
         $sql = "SELECT ".($total_rows !== null ? 'SQL_CALC_FOUND_ROWS' : '')." l.*, c.name as cname
@@ -407,7 +407,7 @@ class mailerMessageLogModel extends waModel
                     break;
                 case 1:
                 case 2:
-                    $l['status_text'] = $ot . ' class="unknown">' . _w('Unknown') . $ct;
+                    $l['status_text'] = $ot . ' class="sent">' . _w('Sent ') . $ct;
                     break;
                 case 3:
                 case 4:
