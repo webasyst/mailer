@@ -195,10 +195,13 @@
         $next_btn.on('click', function (e) {
             e && e.preventDefault();
             if ($submit_btn.is('.yellow:not([disabled])')) {
-                $.wa.mailer.saveCampaign($form, $submit_btn);
+                $.wa.mailer.saveCampaign($form, $submit_btn, function (r) {
+                    window.location.hash = $next_btn.attr('href');
+                });
                 $submit_btn.removeClass('yellow');
+            } else {
+                window.location.hash = $next_btn.attr('href');
             }
-            window.location.hash = $next_btn.attr('href');
         });
 
         var h;

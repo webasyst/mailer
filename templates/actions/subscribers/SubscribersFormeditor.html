@@ -42,7 +42,7 @@
                             </div>
                         </div>
                         <div data-fld-wrapper="email" class="custom-mb-12 js-flexbox flexbox{if isset($form.params.captionplace) && $form.params.captionplace == 'above'} vertical{/if}">
-                            <div class="name caption editable editable_el {$form.params.captionplace|default:'left'}{if $form.params.captionplace == 'above'} custom-mb-4{/if}" {if isset($form.params.captionplace) && $form.params.captionplace == 'left'} style="width: 30%; margin-right: 0.5rem"{/if} title="[`Edit field label`]">
+                            <div class="name caption editable editable_el {$form.params.captionplace|default:'left'}{if isset($form.params.captionplace) && $form.params.captionplace == 'above'} custom-mb-4{/if}" {if isset($form.params.captionplace) && $form.params.captionplace == 'left'} style="width: 30%; margin-right: 0.5rem"{/if} title="[`Edit field label`]">
                                 <label class="editable_text">
                                     {if isset($form.params.fields.email.caption)}{$form.params.fields.email.caption|escape}{else}[`Email`]{/if}
                                 </label>
@@ -707,7 +707,7 @@
 
     $confirm_wrapper.on('change', '.combined-selector select', function() {
         var select = $(this);
-        var input = select.parent().find('input:text');
+        var input = select.closest('.combined-selector').find('input:text');
         if (select.val() == '') {
             input.hide().removeClass('hidden').slideDown(delay).prop('disabled', false);
             if (select.children('[value="'+input.val().replace(/"/g, '')+'"]').length) {

@@ -167,5 +167,9 @@
                 });
     {/if}
 
+    $('.js-app-sidebar').on('click', function () {
+        $.wa.mailer.stopDispatch(0);
+    })
+
     $.wa.mailer.setTitle();
 })($);</script>

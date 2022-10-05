@@ -333,6 +333,7 @@ table.zebra a.link-hang-right {
 .templates-tiles li {
     cursor: pointer;
     margin: 0 !important;
+    width: 182px !important;
 }
 .templates-tiles li .wrapper {
     position: relative;

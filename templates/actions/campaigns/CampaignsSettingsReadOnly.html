@@ -25,7 +25,11 @@
             </div>
             <div class="field custom-mt-8">
                 <div class="name custom-pt-0">[`Email Reply-To`]</div>
-                <div class="value small text-dark-gray">{$sender_params.reply_to|escape}</div>
+                <div class="value small text-dark-gray">
+                    {if isset($sender_params.reply_to)}
+                        {$sender_params.reply_to|escape}
+                    {/if}
+                </div>
             </div>
         {else}
             <div class="field">
