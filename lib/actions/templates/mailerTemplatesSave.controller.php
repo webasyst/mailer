@@ -14,6 +14,7 @@ class mailerTemplatesSaveController extends waJsonController
         $id = waRequest::post('id');
         $data = waRequest::post('data');
         if ($data) {
+            $data['count_products'] = mailerHelper::getCountProducts($data['rebody']);
             if (!empty($data['sender_id'])) {
                 $sender_model = new mailerSenderModel();
                 $sender = $sender_model->getById($data['sender_id']);
@@ -42,7 +43,7 @@ class mailerTemplatesSaveController extends waJsonController
         }
 
         if (!empty($data['body'])) {
-            mailerHelper::copyMessageFiles($id, $data['body']);
+            mailerHelper::copyMessageFiles($id, $data);
         }
 
         // Save params
@@ -98,8 +99,44 @@ class mailerTemplatesSaveController extends waJsonController
             }
         }
 
+        $this->clearFolder($id, $data);
+
         // Return message id to browser
         $this->response['id'] = $id;
+    }
+
+    /**
+     * Удаление файлов шаблона, которые не используются в шаблоне
+     *
+     * @param $id
+     * @param $data
+     * @return void
+     * @throws waException
+     */
+    private function clearFolder($id, $data)
+    {
+//        if (empty($data['body'])) {
+            return;
+//        }
+        $folder = wa()->getDataPath('files/'.$id, true, 'mailer');
+        $template_folder = substr($folder, strpos($folder, 'wa-data'));
+        $handle = opendir($folder);
+        while (false !== ($f = readdir($handle))) {
+            $file = "$template_folder/$f";
+            if (is_dir($file)) {
+                continue;
+            }
+            if ($f != '.' && $f != '..') {
+                if (
+                    file_exists("$folder/$f")
+                    && strpos($data['body'], $file) === false
+                    && strpos($data['rebody'], $file) === false
+                ) {
+                    unlink("$folder/$f");
+                }
+            }
+        }
+        closedir($handle);
     }
 }
 

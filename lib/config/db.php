@@ -52,6 +52,7 @@ return array(
         'subject' => array('varchar', 255, 'null' => 0),
         'body' => array('mediumtext', 'null' => 0),
         'rebody' => array('mediumtext', 'null' => 0),
+        'count_products' => array('int', 11, 'null' => 0, 'default' => '0'),
         'attachments' => array('text'),
         'list_id' => array('int', 11, 'null' => 0, 'default' => '0'),
         'is_template' => array('tinyint', 1, 'null' => 0, 'default' => '0'),

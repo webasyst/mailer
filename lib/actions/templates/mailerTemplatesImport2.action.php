@@ -141,7 +141,7 @@ class mailerTemplatesImport2Action extends waViewAction
         // When found, mark this file to extract later and replace its URL in template.
         $data_path = wa()->getDataPath('files/'.$template_id.'/', true, 'mailer');
         $url_prefix = wa()->getDataUrl('files/'.$template_id.'/', true, 'mailer', true);
-        $url_prefix = str_replace(['https://', 'http://'], waRequest::server('HTTPS') ? 'https://' : 'http://', $url_prefix);
+        $url_prefix = str_replace(['https://', 'http://'], waRequest::isHttps() ? 'https://' : 'http://', $url_prefix);
         $files_to_extract = array();
 
         for ($i = 0; $i < $archive->numFiles; $i++) {

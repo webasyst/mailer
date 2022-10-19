@@ -22,8 +22,11 @@ class mailerCampaignsStep0Action extends waViewAction
             $this->redirect('?module=campaigns&action=step1');
         }
 
-        foreach($templates as &$v) {
-            if (!trim($v['subject'])) {
+        foreach ($templates as $key => &$v) {
+            if ((int) $v['count_products'] > 0) {
+                unset($templates[$key]);
+                continue;
+            } elseif (!trim($v['subject'])) {
                 $v['subject'] = _w('<no subject>');
             }
             $v['image'] = mailerHelper::getTemplatePreviewUrl($v['id']);

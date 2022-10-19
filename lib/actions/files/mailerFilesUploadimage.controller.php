@@ -19,7 +19,7 @@ class mailerFilesUploadimageController extends waUploadJsonController
             } else {
                 $this->response = wa()->getDataUrl('files/'.$this->name, true, 'mailer', true);
             }
-            $this->response = str_replace(['https://', 'http://'], waRequest::server('HTTPS') ? 'https://' : 'http://', $this->response);
+            $this->response = str_replace(['https://', 'http://'], waRequest::isHttps() ? 'https://' : 'http://', $this->response);
         }
     }
 

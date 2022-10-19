@@ -20,7 +20,26 @@ if ($tmpls_dir && is_readable($tmpls_dir) && is_dir($tmpls_dir) && class_exists(
     $tmpls = waFiles::listdir($tmpls_dir);
 
     // Первичная сортировка
-    $pattern = ['Promo', 'Flare', 'Transactional', 'Text', 'Digest', 'Invoice', 'Columns', 'List', 'Sidebar'];
+    $pattern = [
+        'Promo',
+        'Flare',
+        'Transactional',
+        'Text',
+        'Digest',
+        'Invoice',
+        'Columns',
+        'List',
+        'Sidebar',
+        'Ecom_Holliday',
+        'Ecom_Sweet',
+        'Pets',
+        'Black_Friday',
+        'Interior',
+        'Real_Estate',
+        'Journeys',
+        'Street_Food',
+        'Workshops',
+    ];
     $tmpls_sorted = [];
     foreach ($pattern as $v) {
         if (in_array($v, $tmpls)) {

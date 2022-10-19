@@ -38,7 +38,7 @@ class mailerBackendFilesAction extends waViewAction {
                     //$mpm->save($campaign['id'], $params);
                 }
 
-                mailerHelper::copyMessageFiles($campaign['id'], $campaign['body']);
+                mailerHelper::copyMessageFiles($campaign['id'], $campaign);
             } else {
                 // No template specified: create from scratch
                 $campaign = $tm->getEmptyTemplate();

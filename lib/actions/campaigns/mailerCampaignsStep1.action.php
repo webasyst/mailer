@@ -8,6 +8,7 @@ class mailerCampaignsStep1Action extends waViewAction
     public function execute()
     {
         $campaign_id = waRequest::get('campaign_id', 0, 'int');
+        $product_ids = waRequest::get('products', [], waRequest::TYPE_ARRAY_INT);
         $campaign = null;
         $mm = new mailerMessageModel();
         if ($campaign_id) {
@@ -41,7 +42,7 @@ class mailerCampaignsStep1Action extends waViewAction
                     $mpm->save($campaign['id'], $params);
                 }
 
-                mailerHelper::copyMessageFiles($campaign['id'], $campaign['body']);
+                mailerHelper::copyMessageFiles($campaign['id'], $campaign);
             } else {
                 // No template specified: create from scratch
                 $campaign = $tm->getEmptyTemplate();
@@ -62,6 +63,10 @@ class mailerCampaignsStep1Action extends waViewAction
         $files = @scandir(wa()->getDataPath('files/'.$campaign_id, true, 'mailer'));
         if ($files && count($files) > 2) {
             $contains_files = true;
+        }
+
+        if (!empty($product_ids)) {
+            mailerShopProduct::pasteProduct($campaign, $product_ids);
         }
 
         mailerHelper::assignCampaignSidebarVars($this->view, $campaign);

@@ -130,6 +130,7 @@
         const $form = $('#{$form_id}');
         const $subject = $form.find('#message-subject');
         let $submit_btn = $form.find('.js-template-save');
+        let templ_id = $form.find('[name="id"]').val() || '';
 
         $(window).on('wa_mailer_editor_changes', function(event) {
             if ($submit_btn) {
@@ -140,7 +141,7 @@
         $(window).on('wa_loaded', function() {
             $.wa.mailer.setEditor($form, {
                 revolvPath: '{$wa_app_static_url}js/vendor/revolvapp/',
-                uploadPath: '?module=files&action=uploadimage&r=x&absolute=1',
+                uploadPath: '?module=files&action=uploadimage&r=x&absolute=1&message_id='+ templ_id,
                 csrf: '{waRequest::cookie("_csrf", "")}',
                 oldStyle: {if isset($t.id) && empty($t.rebody)}true{else}false{/if},
                 defaultTemplate: `{include file="../../../js/vendor/revolvapp/templates/index.html"}`

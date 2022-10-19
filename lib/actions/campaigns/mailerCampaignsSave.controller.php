@@ -92,7 +92,7 @@ class mailerCampaignsSaveController extends waJsonController
         }
 
         if (!empty($data['body'])) {
-            mailerHelper::copyMessageFiles($message_id, $data['body']);
+            mailerHelper::copyMessageFiles($message_id, $data);
         }
 
         // Save message params

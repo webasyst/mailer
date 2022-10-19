@@ -1675,6 +1675,33 @@ msgstr "Колонки"
 msgid "Sidebar"
 msgstr "Сайдбар"
 
+msgid "Ecom_Holliday"
+msgstr "Скидки"
+
+msgid "Ecom_Sweet"
+msgstr "Праздник"
+
+msgid "Pets"
+msgstr "Питомцы"
+
+msgid "Black_Friday"
+msgstr "Чёрная пятница"
+
+msgid "Interior"
+msgstr "Интерьер"
+
+msgid "Real_Estate"
+msgstr "Недвижимость"
+
+msgid "Journeys"
+msgstr "Путешествия"
+
+msgid "Street_Food"
+msgstr "Еда"
+
+msgid "Workshops"
+msgstr "Семинары"
+
 msgid "Copy"
 msgstr "Скопировать"
 

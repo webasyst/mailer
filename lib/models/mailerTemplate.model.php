@@ -13,7 +13,7 @@ class mailerTemplateModel extends mailerMessageModel
         if ($only_html) {
             $where .= ' AND m.rebody = ""';
         }
-        $sql = "SELECT m.id, m.name, m.subject, m.body, m.rebody, mp.value AS description, CAST(mps.value AS SIGNED) AS sort
+        $sql = "SELECT m.id, m.name, m.subject, m.body, m.rebody, m.count_products, mp.value AS description, CAST(mps.value AS SIGNED) AS sort
                 FROM ".$this->table." AS m
                     LEFT JOIN mailer_message_params AS mp
                         ON mp.message_id=m.id

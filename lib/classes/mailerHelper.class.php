@@ -43,11 +43,14 @@ class mailerHelper
     }
 
     /**
-     * Make sure all images linked inside $message_body are inside the asset dir of message $message_id.
-     * Create asset dir if necessary, copy files, replace in $message_body and update the message in DB.
+     * Make sure all images linked inside $template_data are inside the asset dir of message $message_id.
+     * Create asset dir if necessary, copy files, replace in $template_data and update the message in DB.
      */
-    public static function copyMessageFiles($message_id, &$message_body)
+    public static function copyMessageFiles($message_id, &$template_data)
     {
+        $message_body = ifset($template_data, 'body', '');
+        $message_rebody = ifset($template_data, 'rebody', '');
+
         // Copy images mentioned in html code into new campaign's directory
         $url = wa()->getDataUrl('files/', true, 'mailer');
         $path = wa()->getDataPath('files/', true, 'mailer');
@@ -68,13 +71,17 @@ class mailerHelper
                     waFiles::copy($old_path, $new_path);
                 }
                 $message_body = str_replace($url.$old_file, $url.$message_id.'/'.$new_file, $message_body);
+                $message_rebody = str_replace($url.$old_file, $url.$message_id.'/'.$new_file, $message_rebody);
             }
 
             // Update campaign body
             $tm = new mailerTemplateModel();
             $tm->updateById($message_id, array(
                 'body' => $message_body,
+                'rebody' => $message_rebody,
             ));
+            $template_data['body'] = $message_body;
+            $template_data['rebody'] = $message_rebody;
         }
     }
 
@@ -624,5 +631,17 @@ class mailerHelper
         wa()->event('sender.types', $sender_types);
 
         return $sender_types;
+    }
+
+    /**
+     * @param $rebody
+     * @return int
+     */
+    public static function getCountProducts($rebody)
+    {
+        $rebody = ifempty($rebody, '');
+        preg_match_all('#<re-image[^<>]+product_image[^<>]+>#', $rebody, $product_image, PREG_SET_ORDER);
+
+        return count($product_image);
     }
 }
