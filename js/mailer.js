@@ -144,7 +144,7 @@
 
                     for (i; i < hash.length; i++) {
                         var h = hash[i];
-                        if (i < 2) {
+                        if (i < 3) {
                             if (i === 0) {
                                 actionName = h;
                             } else if (parseInt(h, 10) != h && h.indexOf('=') == -1) {
@@ -196,6 +196,10 @@
             this.load("?module=templates");
         },
 
+        templatesShopAction: function () {
+            this.load("?module=templates&tab=shop");
+        },
+
         // Import template from archive page
         templatesImportAction: function () {
             this.load("?module=templates&action=import1");
@@ -206,8 +210,16 @@
             this.load("?module=templates&action=edit&id=" + id);
         },
 
+        templateShopAction: function (id) {
+            this.load("?module=templates&action=edit&id=" + id);
+        },
+
         // New template page
         templatesAddAction: function () {
+            this.load("?module=templates&action=add");
+        },
+
+        templatesShopAddAction: function () {
             this.load("?module=templates&action=add");
         },
 

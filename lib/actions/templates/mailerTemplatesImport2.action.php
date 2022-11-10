@@ -50,7 +50,7 @@ class mailerTemplatesImport2Action extends waViewAction
         // Import template from file.
         $template_id = null;
         if ($import_index !== null) {
-            $template_id = self::importTemplateFile($archive, $import_index, $error_msg);
+            list($template_id, $shop_template) = self::importTemplateFile($archive, $import_index, $error_msg);
         }
 
         $archive->close();
@@ -61,7 +61,7 @@ class mailerTemplatesImport2Action extends waViewAction
             if ($this->whichUI() == '1.3') {
                 echo '<script>window.location.hash = "#/template/'.$template_id.'/"; $(".dialog").trigger("close"); $.wa.mailer.reloadSidebar(); </script>';
             }else{
-                echo '<script>window.location.hash = "#/template/'.$template_id.'/"; $(".dialog:visible").data("dialog")?.close(); $.wa.mailer.reloadSidebar(); </script>';
+                echo '<script>window.location.hash = "#/template/'.($shop_template ? 'shop/' : '').$template_id.'/"; $(".dialog:visible").data("dialog")?.close(); $.wa.mailer.reloadSidebar(); </script>';
             }
             exit;
         } else if ($error_msg) {
@@ -127,6 +127,7 @@ class mailerTemplatesImport2Action extends waViewAction
         $data['is_template'] = 1;
         $data['create_datetime'] = date("Y-m-d H:i:s");
         $data['create_contact_id'] = wa()->getUser()->getId();
+        $data['count_products'] = mailerShopProduct::getCountProducts($re_html);
         if (empty($data['subject']) && preg_match('~<title>([^<]+)</title>~', $html, $m)) {
             $data['subject'] = $m[1];
         }
@@ -198,7 +199,7 @@ class mailerTemplatesImport2Action extends waViewAction
             'rebody' => $re_html,
         ));
 
-        return $template_id;
+        return [$template_id, $data['count_products'] > 0];
     }
 
     public static function importFirst($archive_filename)
@@ -220,7 +221,7 @@ class mailerTemplatesImport2Action extends waViewAction
 
         $error_msg = '';
         $import_index = key($html_files);
-        $result = self::importTemplateFile($archive, $import_index, $error_msg);
+        list($result, $shop_template) = self::importTemplateFile($archive, $import_index, $error_msg);//
         $archive->close();
 
         return $result;

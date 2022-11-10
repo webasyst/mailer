@@ -84,7 +84,12 @@ Revolvapp.lang['ru'] = {
         "misc-image-text": "Изображение с текстом",
         "misc-text-image": "Текст с изображением",
         "misc-image-heading-text": "Изображение с заголовком и текстом",
-        "misc-heading-text-image": "Заголовок и текст с изображением"
+        "misc-heading-text-image": "Заголовок и текст с изображением",
+        "product-top": "Товар и текст внизу",
+        "product-left": "Товар и текст справа",
+        "product-right": "Товар и текст слева",
+        "product-2columns": "Товары в две колонки",
+        "product-3columns": "Товары в три колонки"
     },
     "headings": {
         "heading-1": "Заголовок 1",

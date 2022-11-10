@@ -66,7 +66,13 @@ class mailerCampaignsStep1Action extends waViewAction
         }
 
         if (!empty($product_ids)) {
-            mailerShopProduct::pasteProduct($campaign, $product_ids);
+            $mailer_shop = new mailerShopProduct($campaign, $product_ids);
+            $campaign = array_merge($campaign, $mailer_shop->getTemplate());
+            waRequest::setParam('id', $campaign['id']);
+            waRequest::setParam('data', $campaign);
+
+            /** сохраняем рассылку с подставленными данными продуктов */
+            (new mailerCampaignsSaveController())->execute();
         }
 
         mailerHelper::assignCampaignSidebarVars($this->view, $campaign);

@@ -39,6 +39,10 @@ if ($tmpls_dir && is_readable($tmpls_dir) && is_dir($tmpls_dir) && class_exists(
         'Journeys',
         'Street_Food',
         'Workshops',
+        'Igrushki',
+        'Kosmetika',
+        'Podarki',
+        'Zhyoltyy',
     ];
     $tmpls_sorted = [];
     foreach ($pattern as $v) {

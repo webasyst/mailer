@@ -632,16 +632,4 @@ class mailerHelper
 
         return $sender_types;
     }
-
-    /**
-     * @param $rebody
-     * @return int
-     */
-    public static function getCountProducts($rebody)
-    {
-        $rebody = ifempty($rebody, '');
-        preg_match_all('#<re-image[^<>]+product_image[^<>]+>#', $rebody, $product_image, PREG_SET_ORDER);
-
-        return count($product_image);
-    }
 }

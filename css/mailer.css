@@ -930,14 +930,14 @@ label input { margin-top: -3px; }
     box-shadow: none !important;
 }
 
-.tabs > li > a {
+.step-tab .tabs > li > a {
     border-bottom: 0 !important;
 }
-.tabs > li.selected > a {
+.step-tab .tabs > li.selected > a {
     font-weight: 600;
 }
 
-.tabs > li .text {
+.step-tab .tabs > li .text {
     font-size: 0.9375rem;
 }
 

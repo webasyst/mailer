@@ -8,6 +8,10 @@ class mailerCampaignsSaveController extends waJsonController
     public function execute()
     {
         $message_id = waRequest::post('id', 0, 'int');
+        $message_id = ifempty($message_id, waRequest::param('id', 0, waRequest::TYPE_INT));
+
+        $data = waRequest::post('data', array());
+        $data = ifempty($data, waRequest::param('data', []));
 
         // Check whether campaign can be modified
         $mm = new mailerMessageModel();
@@ -29,7 +33,6 @@ class mailerCampaignsSaveController extends waJsonController
             }
         }
 
-        $data = waRequest::post('data', array());
         $sender_params = array();
         // Populate from_name and from_email from sender data
         if (!empty($data['sender_id'])) {

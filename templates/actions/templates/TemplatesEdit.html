@@ -4,7 +4,7 @@
         <div class="article-body">
             <div class="campaign-header">
                 <div class="flexbox middle custom-mb-24 small">
-                    <a href="#/templates/" class="text-gray" title="[`Templates`]">
+                    <a href="#/templates/" class="text-gray js-link-back" title="[`Templates`]">
                         <i class="fas fa-arrow-circle-left large"></i>
                         <span class="custom-ml-4">[`Templates`]</span>
                     </a>
@@ -131,7 +131,10 @@
         const $subject = $form.find('#message-subject');
         let $submit_btn = $form.find('.js-template-save');
         let templ_id = $form.find('[name="id"]').val() || '';
+        let $link_back = $('.js-link-back');
+        let hash = $.storage.get('mailer/hash').split('/');
 
+        $link_back.attr('href', (hash.indexOf('shop') === -1 ? '#/templates/' : '#/templates/shop/'));
         $(window).on('wa_mailer_editor_changes', function(event) {
             if ($submit_btn) {
                 $submit_btn.addClass('yellow');
@@ -183,7 +186,8 @@
                     $button: $submit_btn,
                     status: 'success',
                     callback() {
-                        $.wa.setHash('#/template/' + response.data.id + "/");
+                        $link_back.attr('href', (response.data.shop > 0 ? '#/templates/shop/' : '#/templates/'));
+                        $.wa.setHash('#/template/'+ (response.data.shop > 0 ? 'shop/' : '') + response.data.id + "/");
                         $(document).prop('title', $subject.val() + ' – ' + accountName);
                     }
                 });
@@ -298,8 +302,8 @@
                         if (response.status == 'ok') {
                             $.storage.del('mailer/hash');
                             $.wa.mailer.stopDispatch(1);
-                            window.location.hash = '#/templates/';
-                            $.wa.mailer.load("?module=templates", function () {
+                            window.location.hash = '#/templates/'+ (hash.indexOf('shop') === -1 ? '' : 'shop/');
+                            $.wa.mailer.load("?module=templates"+ (hash.indexOf('shop') === -1 ? '' : '&tab=shop'), function () {
                                 $submit_btn = null;
                                 $.wa.mailer.alertNotification({
                                     isCloseable: true,

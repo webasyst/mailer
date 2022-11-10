@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 2.0.6\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\n"
 
@@ -1702,6 +1702,18 @@ msgstr "Еда"
 msgid "Workshops"
 msgstr "Семинары"
 
+msgid "Igrushki"
+msgstr "Игрушки"
+
+msgid "Kosmetika"
+msgstr "Косметика"
+
+msgid "Podarki"
+msgstr "Подарки"
+
+msgid "Zhyoltyy"
+msgstr "Жёлтый"
+
 msgid "Copy"
 msgstr "Скопировать"
 
@@ -1983,3 +1995,54 @@ msgstr "Принять изменение"
 
 msgid "Edit email From"
 msgstr "Редактировать адрес From"
+
+msgid "Webasyst Email Sender"
+msgstr ""
+
+msgid "Basic"
+msgstr "Основные"
+
+msgid "Store"
+msgstr "Магазин"
+
+msgid "These templates will allow you to embed products data from the Store app in a message. To use these templates, open the %sProducts%s section in the Store app, select the desired products, and execute the “%s” action on them."
+msgstr "Эти шаблоны могут подставлять в письмо данные о товарах из приложения «Магазин». Для использования этих шаблонов перейдите в раздел «%sТовары%s» в приложении «Магазин», выберите нужные товары и выполните с ними действие «%s»."
+
+msgid "No sender email address specified."
+msgstr "Не указан email-адрес отправителя."
+
+msgid "Invalid sender email address."
+msgstr "Некорректный email-адрес отправителя."
+
+msgid "Invalid Reply-to email address."
+msgstr "Некорректный адрес Reply-to."
+
+msgid "Access denied."
+msgstr "Доступ запрещен."
+
+msgid "API error"
+msgstr "Ошибка API"
+
+msgid "Failed to send email: %s"
+msgstr "Не удалось отправить сообщение: %s"
+
+msgid "Create a new email campaign"
+msgstr "Создать новую email-рассылку"
+
+msgid "Email campaign"
+msgstr "Сделать рассылку"
+
+msgid "Select a template"
+msgstr "Выберите шаблон"
+
+msgid "No name"
+msgstr "Без названия"
+
+msgid "You have no email templates that support embedding selected products data.<br><br>Create such a template in the %sMailer%s app."
+msgstr "У вас нет ни одного email-шаблона, который может автоматически заполняться данными о выбранных товарах.<br><br>Создайте такой шаблон в приложении «%sРассылки%s»."
+
+msgid "To show products from the Store app in an email message, add green blocks to your template. Special variables contained in those blocks are automatically replaced with selected products’ information when you create a new email campaign."
+msgstr "Для того чтобы шаблон умел подставлять в письмо товары из приложения «Магазин», добавьте в шаблон зеленые блоки — они содержат специальные переменные, которые при создании рассылки заменяются на информацию о выбранных товарах."
+
+msgid "Create new template"
+msgstr "Создать новый шаблон"

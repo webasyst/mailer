@@ -139,7 +139,7 @@ class mailerWaTransport implements mailerExtendedTransportInterface, mailerBounc
                     $this->logError("Unable to send email:\n".wa_dump_helper($message_data)."\nAPI returned:\n".wa_dump_helper($res));
 
                     $error_description = ifset($res, 'response', 'error_description', _w('API error'));
-                    throw new mailerTransportSoftfailException(sprintf_wp('Unable to send email: %s', $error_description));
+                    throw new mailerTransportSoftfailException(sprintf_wp('Failed to send email: %s', $error_description));
                 }
             }
         }

@@ -24,6 +24,26 @@ class mailerTemplatesAction extends waViewAction
         }
         unset($v);
 
+        $shop = null;
+        if (wa()->appExists('shop')) {
+            $tab = waRequest::get('tab', '');
+            foreach($templates as $key => &$tmp) {
+                switch ($tab) {
+                    case 'shop':
+                        if ($tmp['count_products'] == 0) {
+                            unset($templates[$key]);
+                        }
+                        break;
+                    default:
+                        if ($tmp['count_products'] > 0) {
+                            unset($templates[$key]);
+                        }
+                }
+            }
+            $shop = wa()->getConfig()->getBackendUrl(true).'shop/?action=products';
+        }
+
         $this->view->assign('templates', $templates);
+        $this->view->assign('shop', $shop);
     }
 }

@@ -14,7 +14,7 @@ class mailerTemplatesSaveController extends waJsonController
         $id = waRequest::post('id');
         $data = waRequest::post('data');
         if ($data) {
-            $data['count_products'] = mailerHelper::getCountProducts($data['rebody']);
+            $data['count_products'] = mailerShopProduct::getCountProducts($data['rebody']);
             if (!empty($data['sender_id'])) {
                 $sender_model = new mailerSenderModel();
                 $sender = $sender_model->getById($data['sender_id']);
@@ -103,6 +103,7 @@ class mailerTemplatesSaveController extends waJsonController
 
         // Return message id to browser
         $this->response['id'] = $id;
+        $this->response['shop'] = ifempty($data, 'count_products', 0);
     }
 
     /**

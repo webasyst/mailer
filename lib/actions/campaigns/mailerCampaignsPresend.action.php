@@ -94,12 +94,12 @@ class mailerCampaignsPresendAction extends waViewAction
         }
         $validator = new waEmailValidator();
         if (!trim($campaign['from_email'])) {
-            $errormsg[] = _w('No message from email.');
+            $errormsg[] = _w('No sender email address specified.');
         } elseif (!$validator->isValid($campaign['from_email'])) {
-            $errormsg[] = _w('Invalid message from email address.');
+            $errormsg[] = _w('Invalid sender email address.');
         }
         if (!empty($campaign['reply_to']) && !$validator->isValid($campaign['reply_to'])) {
-            $errormsg[] = _w('Invalid message reply-to email address.');
+            $errormsg[] = _w('Invalid Reply-to email address.');
         }
 
         // Check if there are recipients selected
