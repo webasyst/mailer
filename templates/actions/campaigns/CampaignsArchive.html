@@ -103,7 +103,7 @@
                                 {if $m.status == mailerMessageModel::STATUS_SENT}
                                     {$m.recipients_num}
                                 {else}
-                                    {$m.processed_num}/{$m.recipients_num}
+                                    {$m.actualy_sent_num}/{$m.recipients_num - $m.exceptions_num}
                                 {/if}
                             </td>
                             <td class="align-right m-opened-num-cell">

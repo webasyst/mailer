@@ -167,7 +167,7 @@ Revolvapp.lang['ru'] = {
         "heading-level": "Уровень заголовка",
         "responsive-on-mobile": "Адаптивность для мобильных устройств"
     },
-    "variable": {
+    "vars": {
         "variable": "Переменные"
     },
     "code": {
@@ -178,9 +178,9 @@ Revolvapp.lang['ru'] = {
     "style": {
         "style": "Стиль",
         "remove-style": "Удалить стиль"
+    },
+    "products": {
+        "button_title": "Магазин",
+        "description": 'Эти блоки будут заполняться данными о товарах из приложения «Магазин».',
     }
 };
-
-Revolvapp.lang['en']['variable'] = {
-    "variable": "Variables"
-}

@@ -124,7 +124,8 @@
                                             <a href="javascript:void(0);" data-new-sender="1">
                                                 <i class="fas fa-plus-circle"></i>
                                                 <span>
-                                                    {if count($senders) == 1 && $senders[0].type == 'wa'}
+                                                    {$first_sender = reset($senders)}
+                                                    {if count($senders) == 1 && $first_sender.type == 'wa'}
                                                         [`Add own server`]
                                                     {else}
                                                         [`Add a new sender`]

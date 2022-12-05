@@ -41,9 +41,9 @@
     <script src="{$wa_app_static_url}js/vendor/revolvapp/revolvapp.min.js"></script>
     <script src="{$wa_app_static_url}js/vendor/revolvapp/plugins/reorder/reorder.min.js"></script>
     <script src="{$wa_app_static_url}js/vendor/revolvapp/plugins/code/code.min.js"></script>
-    <script src="{$wa_app_static_url}js/vendor/revolvapp/plugins/variable/variable.min.js"></script>
+    <script src="{$wa_app_static_url}js/vendor/revolvapp/plugins/vars/vars.min.js"></script>
     <script src="{$wa_app_static_url}js/vendor/revolvapp/plugins/definedlinks/definedlinks.min.js"></script>
-    <script src="{$wa_app_static_url}js/vendor/revolvapp/blocks/products.js"></script>
+    <script src="{$wa_app_static_url}js/vendor/revolvapp/plugins/products/products.min.js"></script>
     <script src="{$wa_app_static_url}js/vendor/revolvapp/languages/translate.js"></script>
 
 
@@ -106,65 +106,6 @@
         </div>
     </div>
 
-    <div class="dialog" id="available-smarty-variables">
-        <div class="dialog-background"></div>
-        <div class="dialog-body">
-            <h3 class="dialog-header">[`Insert variable`]</h3>
-            <div class="dialog-content fields">
-                <div class="field">
-                    <div class="name custom-pt-0 break-all">
-                        <a href="javascript:void(0)" class="uppercase semibold">
-                            [`Unsubscribe URL`]
-                            <span class="hidden var-code">
-                                &lt;a href=&quot;{sprintf('{$unsubscribe_link}')}&quot;&gt;[`Unsubscribe`]&lt;/a&gt;
-                            </span>
-                        </a>
-                    </div>
-                    <div class="value">
-                        <span class="small text-gray">
-                            [`In every outgoing message this variable will be replaced with a unique link pointing to recipient’s personal subscription management page.`]
-                        </span>
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="name custom-pt-0 break-all">
-                        <a href="javascript:void(0)" class="uppercase semibold">
-                            [`“Open in browser” link`]
-                            <span class="hidden var-code">
-                                &lt;a href=&quot;{sprintf('{$mailview_link}')}&quot;&gt;[`Open in browser`]&lt;/a&gt;
-                            </span>
-                        </a>
-                    </div>
-                    <div class="value">
-                        <span class="small text-gray">
-                        [`This variable will be replaced with a personal recipient link that can be used to view message on browser.`]
-                    </div>
-                </div>
-
-                <p class="bold">
-                    [`Following variables will be replaced with recipient’s contact data:`]
-                </p>
-                {foreach mailerHelper::getVars() as $var_id => $var_name}
-                    <div class="field">
-                        <div class="name custom-pt-0 break-all">
-                            <a href="javascript:void(0)" class="uppercase semibold">
-                                <span class="var-code">{$var_id|escape}</span>
-                            </a>
-                        </div>
-                        <div class="value">
-                            <span class="small text-gray">
-                                {$var_name|escape}
-                            </span>
-                        </div>
-                    </div>
-                {/foreach}
-            </div>
-            <footer class="dialog-footer flexbox middle wrap">
-                <a href="javascript:void(0)" class="js-close-dialog button light-gray">[`Cancel`]</a>
-            </footer>
-        </div
-    </div>
-
     <script>
         let hash = $.wa.mailer.getHash();
         if (hash) {
@@ -194,7 +135,7 @@
 
         $.wa.mailer.init({
             lang: '{substr($wa->locale(), 0, 2)}',
-            variables: {mailerHelper::getVars()|json_encode}
+            vars: {mailerHelper::getVars()|json_encode}
         });
     </script>
 </body>

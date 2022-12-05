@@ -1663,17 +1663,8 @@ msgstr "Дайджест"
 msgid "Flare"
 msgstr "Анонс"
 
-msgid "Invoice"
-msgstr "Инвойс"
-
 msgid "Transactional"
 msgstr "Уведомление"
-
-msgid "Columns"
-msgstr "Колонки"
-
-msgid "Sidebar"
-msgstr "Сайдбар"
 
 msgid "Ecom_Holliday"
 msgstr "Скидки"
@@ -2046,3 +2037,27 @@ msgstr "Для того чтобы шаблон умел подставлять 
 
 msgid "Create new template"
 msgstr "Создать новый шаблон"
+
+msgid "Contact fields"
+msgstr "Поля контакта"
+
+msgid "Variables from the list below will be substituted with actual contact data of message recipients"
+msgstr "Переменные из списка ниже будут заменены при отправке письма на данные контакта, которому адресовано письмо"
+
+msgid "Unsubscribe link"
+msgstr "Ссылка для отписки от рассылок"
+
+msgid "“View in browser” link"
+msgstr "Ссылка для просмотра письма в браузере"
+
+msgid "Enter a message subject and a text. Then proceed to selecting the recipients and to the message sending."
+msgstr "Введите тему и текст сообщения. Затем перейдите к выбору получателей и отправке сообщения."
+
+msgid "Tips & lessons"
+msgstr "Советы и уроки"
+
+msgid "See also %stips & lessons%s"
+msgstr "Смотрите также %sсоветы и уроки%s"
+
+msgid "https://support.webasyst.com/mailer/"
+msgstr "https://support.webasyst.ru/mailer/"

@@ -542,27 +542,24 @@
         initRevolv: function ($editor, $template, $textarea, options) {
             const that = this;
 
-            const baseVariables = ['{$unsubscribe_link}', '{$mailview_link}'];
-            const editorVariables = baseVariables.concat(Object.keys(that.options.variables))
-
             return Revolvapp($editor, {
-                plugins: ['reorder', 'code', 'variable', 'definedlinks'],
-                variable: {
-                    items: editorVariables,
-                    template: {
-                        start: '',
-                        end: ''
-                    }
+                plugins: ['reorder', 'code', 'vars', 'definedlinks', 'products'],
+                vars: {
+                    items: that.options.vars,
+                    icon: '<i class="fas fa-percent"></i>'
                 },
                 editor: {
                     path: options.revolvPath,
                     lang: that.options.lang || 'en'
                 },
+                blocks: {
+                    hidden: ['product-top', 'product-left', 'product-right', 'product-2columns', 'product-3columns']
+                },
                 definedlinks: {
                     items: [
                         { "name": $_('Select...'), "url": false },
-                        { "name": $_('Unsubscribe URL'), "url": '{$unsubscribe_link}' },
-                        { "name": $_('“Open in browser” link'), "url": '{$mailview_link}' }
+                        { "name": $_('Unsubscribe URL'), "url": '%UNSUBSCRIBE_LINK%' },
+                        { "name": $_('“Open in browser” link'), "url": '%MAILVIEW_LINK%' }
                     ]
                 },
                 image: {
@@ -590,9 +587,6 @@
                                 <div class="m-ace-toolbar flexbox middle space-16 semibold">
                                     <a href="javascript:void(0)" class="text-dark-gray js-ace-upload">
                                         <i class="fas fa-images valign-middle"></i> <span class="small desktop-and-tablet-only">${$_('Images & files upload')}</span>
-                                    </a>
-                                    <a href="javascript:void(0)" class="text-dark-gray js-ace-variable">
-                                        <i class="fas fa-dollar-sign valign-middle"></i> <span class="small desktop-and-tablet-only">${$_('Insert variable')}</span>
                                     </a>
                                 </div>
                             </div>`;

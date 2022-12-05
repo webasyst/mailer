@@ -205,7 +205,8 @@ $html .= <<<HTML
         });
     };
 
-    $('li[data-action="send_mailer"]').on('click', function () {
+    $('li[data-action="send_mailer"]').on('click', 'a', function (e) {
+        e.preventDefault();
         let tr;
         let product_ids = [];
         let product_checked = $('#product-list input:checked');

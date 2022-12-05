@@ -1089,15 +1089,7 @@ label input { margin-top: -3px; }
     overflow:      hidden;
 }
 
-#available-smarty-variables .name {
-    width: 50%
-}
-
 @media screen and (max-width: 760px) {
-    #available-smarty-variables .name {
-        width: 100%
-    }
-
     .rex-path {
         display: none !important;
     }

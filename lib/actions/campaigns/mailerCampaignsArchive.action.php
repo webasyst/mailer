@@ -87,7 +87,7 @@ class mailerCampaignsArchiveAction extends waViewAction
                 $m['text'] = $text;
             } else {
                 // Add empty stats
-                foreach(array('recipients_num', 'bounced_num', 'opened_num', 'clicked_num', 'unsubscribed_num', 'percent_complete') as $k) {
+                foreach(array('recipients_num', 'bounced_num', 'opened_num', 'clicked_num', 'unsubscribed_num', 'percent_complete', 'actualy_sent_num') as $k) {
                     $m[$k] = '';
                 }
             }
@@ -110,20 +110,16 @@ class mailerCampaignsArchiveAction extends waViewAction
                     $messages[$message_id]['recipients_num'] += $s[$i];
                 }
 
-                $messages[$message_id]['processed_num']     = $messages[$message_id]['recipients_num'] - $s[0];
-                $messages[$message_id]['exceptions_num']    = $s[-3] + $s[-4];
-                $messages[$message_id]['bounced_num']       = $s[-1] + $s[-2];
-                $messages[$message_id]['not_sent_num']      = $s[0];
-                $messages[$message_id]['sent_num']          = $messages[$message_id]['processed_num'] - $messages[$message_id]['bounced_num'];
-                $messages[$message_id]['opened_num']        = $s[4] + $s[3] + $s[2];
-                $messages[$message_id]['unsubscribed_num']  = $s[5];
-
-                if ($messages[$message_id]['recipients_num'] - $messages[$message_id]['exceptions_num'] > 0) {
-                    $messages[$message_id]['percent_complete'] = ($messages[$message_id]['recipients_num'] - $messages[$message_id]['exceptions_num'] - $messages[$message_id]['not_sent_num'])*100.0 / ($messages[$message_id]['recipients_num'] - $messages[$message_id]['exceptions_num']);
-                } else {
-                    $messages[$message_id]['percent_complete'] = 100;
-                }
-                $messages[$message_id]['percent_complete'] = round($messages[$message_id]['percent_complete']);
+                $messages[$message_id]['processed_num']    = $messages[$message_id]['recipients_num'] - $s[0];
+                $messages[$message_id]['exceptions_num']   = $s[-3] + $s[-4];
+                $messages[$message_id]['bounced_num']      = $s[-1] + $s[-2];
+                $messages[$message_id]['not_sent_num']     = $s[0];
+                $messages[$message_id]['sent_num']         = $messages[$message_id]['processed_num'] - $messages[$message_id]['bounced_num'];
+                $messages[$message_id]['opened_num']       = $s[4] + $s[3] + $s[2];
+                $messages[$message_id]['unsubscribed_num'] = $s[5];
+                $messages[$message_id]['actualy_sent_num'] = $s[-2] + $s[-1] + $s[1] + $s[2] + $s[3] + $s[4] + $s[5];
+                $messages[$message_id]['percent_complete'] = ($messages[$message_id]['actualy_sent_num'] / ($messages[$message_id]['recipients_num'] - $messages[$message_id]['exceptions_num'])) * 100;
+                $messages[$message_id]['percent_complete'] = round(min($messages[$message_id]['percent_complete'], 100));
             }
 
             // Add return path errors

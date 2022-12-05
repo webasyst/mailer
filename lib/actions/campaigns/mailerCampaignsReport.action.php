@@ -145,16 +145,8 @@ class mailerCampaignsReportAction extends waViewAction
         $stats['unsubscribed_num']  = $s[5];
         $stats['actualy_sent_num']  = $s[-2] + $s[-1] + $s[1] + $s[2] + $s[3] + $s[4] + $s[5];
 
-        if ($stats['recipients_num'] - $stats['exceptions_num'] > 0) {
-            $stats['percent_complete_precise'] = ($stats['actualy_sent_num'])*100.0 / ($stats['recipients_num'] - $stats['exceptions_num']);
-        } else {
-            $stats['percent_complete_precise'] = 100;
-        }
-        if ($stats['recipients_num'] > 0) {
-            $stats['percent_complete_precise_all'] = ($stats['actualy_sent_num'])*100.0 / $stats['recipients_num'];
-        } else {
-            $stats['percent_complete_precise_all'] = 100;
-        }
+        $stats['percent_complete_precise'] = ($stats['actualy_sent_num'] / ($stats['recipients_num'] - $stats['exceptions_num'])) * 100;
+        $stats['percent_complete_precise'] = round(min($stats['percent_complete_precise'], 100));
 
         if ($stats['actualy_sent_num'] > 0) {
             list($stats['exceptions_percent'], $stats['exceptions_percent_formatted'])     = self::formatInt($stats['exceptions_num'] * 100 / $stats['actualy_sent_num']);

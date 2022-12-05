@@ -21,15 +21,6 @@ if ($tmpls_dir && is_readable($tmpls_dir) && is_dir($tmpls_dir) && class_exists(
 
     // Первичная сортировка
     $pattern = [
-        'Promo',
-        'Flare',
-        'Transactional',
-        'Text',
-        'Digest',
-        'Invoice',
-        'Columns',
-        'List',
-        'Sidebar',
         'Ecom_Holliday',
         'Ecom_Sweet',
         'Pets',
@@ -43,6 +34,11 @@ if ($tmpls_dir && is_readable($tmpls_dir) && is_dir($tmpls_dir) && class_exists(
         'Kosmetika',
         'Podarki',
         'Zhyoltyy',
+        'Promo',
+        'Flare',
+        'Transactional',
+        'Text',
+        'Digest',
     ];
     $tmpls_sorted = [];
     foreach ($pattern as $v) {

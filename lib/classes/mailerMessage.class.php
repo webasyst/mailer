@@ -61,16 +61,18 @@ class mailerMessage extends mailerSimpleMessage
         }
 
         // get contact fields used in template
-        if (preg_match_all('~\$([a-z0-9_]+)~is', $this->data['body'], $match)) {
+        if (preg_match_all('~\$[a-z0-9_]+|%[a-z0-9_]+%~is', strtolower($this->data['body']), $match)) {
             $this->contact_fields = array();
             $fields = waContactFields::getAll();
             $fields['id'] = true;
-            foreach($match[1] as $fld) {
+            foreach($match[0] as $fld) {
+                $fld = trim($fld, '$%');
                 if (empty($fields[$fld])) {
                     continue;
                 }
                 $this->contact_fields[] = $fld;
             }
+            $this->contact_fields = array_unique($this->contact_fields);
         }
         // replace urls for google analytics
         if (!empty($this->params['google_analytics'])) {
@@ -357,6 +359,7 @@ class mailerMessage extends mailerSimpleMessage
                     $this->assignContactData($view, ifset($contacts[$row['contact_id']], array()));
                 }
                 $_body = str_replace(['<style', '</style>'], ['{literal}<style', '</style>{/literal}'], $this->data['body']);
+                $_body = $this->replaceVariables($_body);
                 $body = $view->fetch('string:'.$_body);
                 $message->setBody($body, 'text/html', 'utf-8');
                 $message->addPart(mailerHtml2text::convert($body), 'text/plain');
@@ -538,6 +541,7 @@ class mailerMessage extends mailerSimpleMessage
                     $subject = $view->fetch('string:'.$this->data['subject']);
                     $message->setSubject($subject);
                     $_body = str_replace(['<style', '</style>'], ['{literal}<style', '</style>{/literal}'], $this->data['body']);
+                    $_body = $this->replaceVariables($_body);
                     $body = $view->fetch('string:'.$_body);
                     $message->setBody($body, 'text/html', 'utf-8');
                     $message->addPart(mailerHtml2text::convert($body), 'text/plain');
@@ -804,8 +808,8 @@ class mailerMessage extends mailerSimpleMessage
         $this->prepareBody();
 
         $message = $this->data;
-
-        $message['body'] = preg_replace('!<a[^/]+\{\$mailview_link\}[^/]+/a>!i', '', $message['body']);
+        $message['body'] = $this->replaceVariables($message['body']);
+        $message['body'] = preg_replace(['!<a[^/]+\{\$mailview_link\}[^/]+/a>!i', '#\{\$mailview_link}#'], '', $message['body']);
 
         // set List-Unsubscribe
         $unsubscribe_link = $this->getUnsubscribeLink($log);
@@ -828,5 +832,18 @@ class mailerMessage extends mailerSimpleMessage
         return true;
     }
 
-}
+    private function replaceVariables($body = '')
+    {
+        $vars = [];
+        $replacement = [];
+        foreach (mailerHelper::getVars() as $_var) {
+            unset($_var['description']);
+            $vars = array_merge($vars, array_keys($_var));
+        }
+        foreach ($vars as $_var) {
+            $replacement[] = '{$'.strtolower(trim($_var, '%')).'}';
+        }
 
+        return str_replace($vars, $replacement, $body);
+    }
+}

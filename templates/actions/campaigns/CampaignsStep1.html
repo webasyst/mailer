@@ -74,7 +74,9 @@
                            value="{$campaign.subject|escape}"
                            placeholder="[`Subject`]">
                     {if empty($campaign.id)}
-                        <p class="hint custom-mt-0">[`Be sure to enter your message subject and text to proceed to recipient selection and message sending steps.`]</p>
+                        <p class="custom-mt-0">
+                            <span class="small gray">[`Enter a message subject and a text. Then proceed to selecting the recipients and to the message sending.`]
+                        </p>
                     {/if}
                 </div>
 
@@ -106,15 +108,16 @@
 <section class="bottombar sticky box js-actions-wrapper">
     <div class="article width-100">
         <div class="article-body custom-py-8 flexbox middle space-16">
-            <button form="{$form_id}" type="submit" class="button js-campaign-save">[`Save`]</button>
-            <em class="hint">[`Ctrl+S`]</em>
-            <a href="javascript:void(0)" class="small js-about-revolvapp text-light-gray align-right wide"><i class="fas fa-info-circle"></i> <span class="desktop-and-tablet-only">[`About Revolvapp`]</span></a>
+            <button form="{$form_id}" type="submit" class="button js-campaign-save custom-mr-8">[`Save`]</button>
+            <em class="hint custom-mr-20">[`Ctrl+S`]</em>
             {if !empty($campaign.id)}
                 <a href="#/campaigns/recipients/{$campaign.id}/" class="button light-gray custom-ml-auto js-button-next">
                     [`Next`]
                     <i class="fas fa-arrow-right fa-xs"></i>
                 </a>
             {/if}
+            <a href="javascript:void(0)" class="small js-about-revolvapp text-light-gray align-right wide"><i class="fas fa-info-circle"></i> <span class="desktop-and-tablet-only">[`About Revolvapp`]</span></a>
+            <a href="https://support.webasyst.ru/mailer/" target="_blank" class="small">[`Tips & lessons`]<i class="fas fa-external-link-alt custom-ml-4 small"></i></a>
         </div>
     </div>
 </section>
@@ -266,21 +269,6 @@
                 template_id: {$t.id|default:0},
                 campaign_id: {$campaign.id|default:0}
             }, html => $.waDialog({ html }))
-        })
-
-        // Variables Dialog
-        $('#{$form_id}').on('click', '.js-ace-variable', function() {
-            $.waDialog({
-                $wrapper: $('#available-smarty-variables').clone(),
-                onOpen($dialog, dialog) {
-                    const $textarea = $('.js-redactor-body');
-                    $dialog.find('a').on('click', function () {
-                        const variable = $(this).find('.var-code').text().trim()
-                        $textarea.trigger('wa_insert_var', variable);
-                        dialog.close()
-                    })
-                }
-            })
         })
 
         // About Revolvapp

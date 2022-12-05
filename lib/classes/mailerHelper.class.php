@@ -9,15 +9,23 @@ class mailerHelper
     {
         $exclude = array('company_contact_id');
         $fields = waContactFields::getAll();
-        $vars = array(
-            //'<a href="{$unsubscribe_link}">'._w('Unsubscribe').'</a>' => _w('Unsubscribe URL'),
-        );
+        $contact_fields = _w('Contact fields');
+        $vars = [
+            0 => [
+                '%UNSUBSCRIBE_LINK%' => _w('Unsubscribe link'),
+                '%MAILVIEW_LINK%' => _w('“View in browser” link')
+            ],
+            $contact_fields => [
+                'description' => _w('Variables from the list below will be substituted with actual contact data of message recipients')
+            ]
+        ];
+
         foreach ($fields as $f) {
             $id = $f->getId();
             if (!in_array($id, $exclude)) {
-                $vars['{$'.$id.'}'] = $f->getName();
+                $vars[$contact_fields]['%'.strtoupper($id).'%'] = $f->getName();
                 if ($id == 'name') {
-                    $vars['{$'.$id.'}'] = _w('Full name');
+                    $vars[$contact_fields]['%'.strtoupper($id).'%'] = _w('Full name');
                 }
             }
         }
