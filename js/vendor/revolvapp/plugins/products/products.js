@@ -255,7 +255,7 @@
         translations: {
             en: {
                 "products": {
-                    "button_title": "Shop",
+                    "button_title": "Store",
                     "description": "These blocks will be filled with products details from the Store app."
                 }
             }

@@ -23,7 +23,7 @@ class mailerShopBackend_productsHandler extends waEventHandler
                 'no_name'  => _wd('mailer', 'No name'),
                 'empty'    => sprintf(
                     _wd('mailer', 'You have no email templates that support embedding selected products data.<br><br>Create such a template in the %sMailer%s app.'),
-                    "<a href=\"${backend_url}mailer/#/templates/\">",
+                    "<a href=\"{$backend_url}mailer/#/templates/\">",
                     '</a>'
                 )
             ];
@@ -139,7 +139,7 @@ $html .= <<<HTML
         $(html).waDialog({
             width: '750px',
             height: '350px',
-            title: '<span class="close-cross"><i class="icon16 cross cancel"></i></span>${lang['template']}',
+            title: '<span class="close-cross"><i class="icon16 cross cancel"></i></span>{$lang['template']}',
             onLoad: function () {
                 let that = this;
                 $('i.cancel').on('click', function () {
@@ -155,7 +155,7 @@ $html .= <<<HTML
                         if (response.errors) {
                             console.warn(response.errors);
                         } else if (0 === response.data.length) {
-                            $(that).find('.dialog-body').append('<div class="align-center"><br><br><span>'+'${lang['empty']}'+'</span></div>');
+                            $(that).find('.dialog-body').append('<div class="align-center"><br><br><span>'+'{$lang['empty']}'+'</span></div>');
                         } else {
                             let tm;
                             $(that).find('.dialog-body').append('<br><ul id="template-list" class="templates-tiles thumbs li250px"></ul>');
@@ -171,7 +171,7 @@ $html .= <<<HTML
                                                     <div class="catch-clicks"></div>\
                                                 </div>\
                                             </div>\
-                                            <h6 class="preview_h6">'+ (tm.subject || '${lang['no_name']}') +'</h6>\
+                                            <h6 class="preview_h6">'+ (tm.subject || '{$lang['no_name']}') +'</h6>\
                                         </div>\
                                     </li>\
                                 ');
@@ -197,7 +197,7 @@ $html .= <<<HTML
                             ');
                         }
                         $('.templates-tiles').on('click', 'li', function () {
-                            window.location.href = '${letter_url}'+ $(this).attr('rel') +'&products='+ product_ids.join(',');
+                            window.location.href = '{$letter_url}'+ $(this).attr('rel') +'&products='+ product_ids.join(',');
                         });
                     }
                 });

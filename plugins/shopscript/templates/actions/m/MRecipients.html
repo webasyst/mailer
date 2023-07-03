@@ -6,7 +6,7 @@
             <span class="red">([`access error`])</span>
         {/if}
     {/if}
-    <a id="customize-sc-plugin-settings" class="small inline-link" href="javascript:void(0)"><b>[`customize`]</b></a>
+    <a id="customize-sc-plugin-settings" class="small" href="javascript:void(0)"><b>[`customize`]</b></a>
 </p>
 
 {if empty($settings_error)}
@@ -33,7 +33,7 @@
         $().waDialog({
             'url': '?plugin=shopscript&module=m&action=settings&campaign_id={$campaign_id}',
             'buttons': $('<div></div>')
-                        .append($('<input type="submit" class="button green" value="'+$_('Save')+'">'))
+                        .append($('<input type="submit" class="button" value="'+$_('Save')+'">'))
                         .append('<span> '+$_('or')+' </span>')
                         .append(
                             $('<a href="#">'+$_('cancel')+'</a>').click(function() {

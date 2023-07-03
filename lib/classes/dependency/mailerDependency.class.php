@@ -297,7 +297,7 @@ abstract class mailerDependency
             }
         }
     }
-    
+
     /**
      * Inside of this common handler it can be called concrete handler with name _callMailerRecipientsPrepareHandlerPrepareRecipient
      *
@@ -334,8 +334,8 @@ abstract class mailerDependency
 
         if (false !== strpos($hash, '/shop_customers')) {
             // Shop customer hash - this catcher (dependency level) knows about it
-            $recipient['group'] = _w('Shop customers');
-            $recipient['name'] = _w('Shop customers');
+            $recipient['group'] = _w('Store customers');
+            $recipient['name'] = _w('Store customers');
         } elseif ($hash == '/') {
             // All contacts hash - this catcher (dependency level) knows about it
             $recipient['name'] = _w('All contacts');

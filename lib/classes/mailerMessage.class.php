@@ -45,7 +45,7 @@ class mailerMessage extends mailerSimpleMessage
             $rpm = new mailerReturnPathModel();
             $return_path_settings = $rpm->getByEmail($this->data['return_path']);
             if (!array_key_exists('no_plus_in_rp', $this->params)) {
-                $this->params['no_plus_in_rp'] = $return_path_settings['no_plus'];
+                $this->params['no_plus_in_rp'] = ifset($return_path_settings['no_plus'], 0);
             }
         }
 
@@ -309,7 +309,7 @@ class mailerMessage extends mailerSimpleMessage
             $row = array(
                 'id' => $row_id,
                 'name' => $name,
-                'email' => $email,
+                'email' => $this->encodeEmail($email),
                 'contact_id' => ifset($emails_to_id[$email], 0),
             );
             $error = '';
@@ -475,6 +475,7 @@ class mailerMessage extends mailerSimpleMessage
                 $contacts = $cc->getContacts(implode(',', $this->contact_fields), 0, $limit);
             }
             foreach ($rows as $row_id => $row) {
+                $row['email'] = $this->encodeEmail($row['email']);
                 $recipient_status = mailerMessageLogModel::STATUS_SENDING_ERROR;
                 try {
                     // Every once in a while notify plugins about how many messages we send,

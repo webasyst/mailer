@@ -47,7 +47,7 @@
     var form = $('#m-sc-settings-form');
     var submit = form.parents('.dialog').find(':submit');
     submit.unbind('click').click(function() {
-        submit.unbind('click').after('<i class="icon16 loading after-button"></i>');
+        submit.unbind('click').after('<i class="fas fa-spinner fa-spin loading"></i>');
         $.post(form.attr('action'), form.serialize(), function(result) {
             submit.siblings('.loading').remove();
             form.parents('.dialog-content').html(result);

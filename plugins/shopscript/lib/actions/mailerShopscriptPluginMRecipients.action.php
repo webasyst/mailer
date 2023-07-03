@@ -57,8 +57,8 @@ class mailerShopscriptPluginMRecipientsAction extends waViewAction
         $this->view->assign('options', $options);
         $this->view->assign('campaign_id', $campaign_id);
         $this->view->assign('settings_error', $settings_error);
-        $this->view->assign('mysql_host', $settings['mysql_host']);
-        $this->view->assign('mysql_db', $settings['mysql_db']);
+        $this->view->assign('mysql_host', ifset($settings['mysql_host'], ''));
+        $this->view->assign('mysql_db', ifset($settings['mysql_db'], ''));
     }
 }
 

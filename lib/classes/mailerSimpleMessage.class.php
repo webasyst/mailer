@@ -103,7 +103,7 @@ class mailerSimpleMessage
         $m = Swift_Message::newInstance()
             ->setCharset('utf-8')
             ->setEncoder(new Swift_Mime_ContentEncoder_Base64ContentEncoder())
-            ->setFrom($this->data['from_email'], $this->data['from_name'])
+            ->setFrom($this->encodeEmail($this->data['from_email']), $this->data['from_name'])
             ->setSubject($this->data['subject']);
         return $m;
     }
@@ -131,5 +131,13 @@ class mailerSimpleMessage
         // generate new message-ID
         $message->generateId();
         $mailer->send($message);
+    }
+
+    protected function encodeEmail($email)
+    {
+        if ($email && is_string($email) && !preg_match("/^[a-z0-9~@+:\[\]\.-]+$/ui", $email)) {
+            $email = waIdna::enc($email);
+        }
+        return $email;
     }
 }

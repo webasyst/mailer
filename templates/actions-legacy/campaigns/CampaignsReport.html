@@ -524,7 +524,7 @@
             startInterval = 0,
             endInterval = 0;
 
-        if (time) {
+        if (time > 0) {
 //            $('#time').val(time);
             startInterval = parseInt('{$message_start_date|default:0}');
             endInterval = time*60*60 + startInterval;

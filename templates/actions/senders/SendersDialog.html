@@ -38,18 +38,22 @@
                         <div class="wa-select small">
                             <select id="transport-type" name="params[type]">
                                 {foreach $sender_types as $id => $s}
-                                    <option value="{$id|escape}"{if $params.type==$id} selected{/if}>
-                                        {if is_string($s)}
-                                            {$s}
-                                        {else}
-                                            {ifset($s.name)}
-                                        {/if}
-                                    </option>
+                                    {if PHP_MAJOR_VERSION < 8 || $id != 'mail' || $params.type == $id}
+                                        <option value="{$id|escape}"{if $params.type==$id} selected{/if}>
+                                            {if is_string($s)}
+                                                {$s}
+                                            {else}
+                                                {ifset($s.name)}
+                                            {/if}
+                                        </option>
+                                    {/if}
                                 {/foreach}
                             </select>
                         </div>
                         {foreach $sender_types as $id => $s}
-                            <p class="hint" data-sender="{$id}" style="display: none;">{$s.description}</p>
+                            {if PHP_MAJOR_VERSION < 8 || $id != 'mail' || $params.type == $id}
+                                <p class="hint" data-sender="{$id}" style="display: none;">{$s.description}</p>
+                            {/if}
                             {if $id == 'wa' && !$waid_is_connected}
                                 <p>
                                 {sprintf_wp(

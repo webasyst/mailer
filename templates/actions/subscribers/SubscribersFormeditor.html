@@ -488,7 +488,9 @@
         });
     };
 
-    calc_label_width('{$form.params.captionplace|default:'left'}');
+    $(function () {
+        calc_label_width('{$form.params.captionplace|default:'left'}');
+    })
 
     var editable_el = el => {
         const $wrapper = $(el),

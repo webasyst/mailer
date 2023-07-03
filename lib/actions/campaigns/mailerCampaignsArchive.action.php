@@ -19,7 +19,7 @@ class mailerCampaignsArchiveAction extends waViewAction
     public function execute()
     {
         // POST parameters
-        $search = waRequest::request('search');
+        $search = waRequest::request('search', '');
         $start  = waRequest::request('start', 0, 'int');
         $limit  = 50;
         $order  = waRequest::request('order', '!id');
@@ -118,7 +118,7 @@ class mailerCampaignsArchiveAction extends waViewAction
                 $messages[$message_id]['opened_num']       = $s[4] + $s[3] + $s[2];
                 $messages[$message_id]['unsubscribed_num'] = $s[5];
                 $messages[$message_id]['actualy_sent_num'] = $s[-2] + $s[-1] + $s[1] + $s[2] + $s[3] + $s[4] + $s[5];
-                $messages[$message_id]['percent_complete'] = ($messages[$message_id]['actualy_sent_num'] / ($messages[$message_id]['recipients_num'] - $messages[$message_id]['exceptions_num'])) * 100;
+                $messages[$message_id]['percent_complete'] = ($messages[$message_id]['actualy_sent_num'] / max($messages[$message_id]['recipients_num'] - $messages[$message_id]['exceptions_num'], 1)) * 100;
                 $messages[$message_id]['percent_complete'] = round(min($messages[$message_id]['percent_complete'], 100));
             }
 

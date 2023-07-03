@@ -36,18 +36,22 @@
             <div class="value">
                 <select id="transport-type" name="params[type]">
                     {foreach $sender_types as $id => $s}
-                        <option value="{$id|escape}"{if $params.type==$id} selected{/if}>
-                            {if is_string($s)}
-                                {$s}
-                            {else}
-                                {ifset($s.name)}
-                            {/if}
-                        </option>
+                        {if PHP_MAJOR_VERSION < 8 || $id != 'mail' || $params.type == $id}
+                            <option value="{$id|escape}"{if $params.type==$id} selected{/if}>
+                                {if is_string($s)}
+                                    {$s}
+                                {else}
+                                    {ifset($s.name)}
+                                {/if}
+                            </option>
+                        {/if}
                     {/foreach}
                 </select>
                 <br/>
                 {foreach $sender_types as $id => $s}
-                <span class="hint" data-sender="{$id}" style="display: none;">{$s.description}</span>
+                    {if PHP_MAJOR_VERSION < 8 || $id != 'mail' || $params.type == $id}
+                        <span class="hint" data-sender="{$id}" style="display: none;">{$s.description}</span>
+                    {/if}
                 {/foreach}
             </div>
         </div>
