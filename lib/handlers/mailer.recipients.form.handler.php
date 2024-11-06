@@ -32,7 +32,7 @@ class mailerMailerRecipientsFormHandler extends waEventHandler
             'name' => _w('Additional emails'),
             'content' => null,
             'opened' => false,
-            'comment' => _w('Use this field  to manually enter any additional email addresses. If such addresses are not yet contained in the Contacts application, they will be added there as new contacts once the sending of this message is completed.'),
+            'comment' => _w('Use this field  to manually enter any additional email addresses. If such addresses are not yet contained in your contacts database, they will be added there as new contacts once the sending of this message is completed.'),
 
             // not part of event interface, but used internally here
             'count' => 0,

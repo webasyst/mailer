@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 3.3.2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\n"
 
@@ -850,8 +850,8 @@ msgstr "Воспользуйтесь одним из готовых шаблон
 msgid "Be sure to enter your message subject and text to proceed to recipient selection and message sending steps."
 msgstr "Введите тему и текст сообщения. После этого вы сможете перейти к выбору получателей и отправке сообщения."
 
-msgid "To specify recipients for your campaign, select the desired contact groups provided by the Contacts application or enter additional email addresses."
-msgstr "В качестве получателей рассылки могут быть указаны электронные адреса из приложения «Контакты», а также дополнительные адреса, добавленные вручную."
+msgid "To specify recipients for your campaign, select available contact groups or enter additional email addresses."
+msgstr "В качестве получателей рассылки выберите доступные группы контактов или введите также дополнительные email-адреса."
 
 msgid "Your contacts may be speaking different languages. You can limit the recipient list by selecting only the desired languages."
 msgstr "Ваши контакты говорят на разных языках. Вы можете ограничить список получателей рассылки, выбрав нужные языки."
@@ -862,8 +862,8 @@ msgstr "Категории — это группы контактов, кото�
 msgid "This option allows selecting contacts who have opted for receiving your email newsletters using a subscription form (see the Subscribers section)."
 msgstr "Позволяет выбрать адреса контактов, которые сами подписались на ваши рассылки с помощью формы подписки (см. раздел «Подписчики»)."
 
-msgid "Use this field  to manually enter any additional email addresses. If such addresses are not yet contained in the Contacts application, they will be added there as new contacts once the sending of this message is completed."
-msgstr "В этом поле можно вручную указать любые электронные адреса. Если в приложении «Контакты» еще нет таких адресов, то они будут автоматически добавлены в него в виде новых контактов сразу после завершения рассылки."
+msgid "Use this field  to manually enter any additional email addresses. If such addresses are not yet contained in your contacts database, they will be added there as new contacts once the sending of this message is completed."
+msgstr "В этом поле можно вручную указать любые электронные адреса. Если в вашей базе контактов еще нет таких адресов, то они будут автоматически добавлены в него в виде новых контактов сразу после завершения рассылки."
 
 msgid "No subscribed addresses yet."
 msgstr "Пока никто не подписался."
@@ -1813,6 +1813,9 @@ msgstr[0] "%d письмо"
 msgstr[1] "%d письма"
 msgstr[2] "%d писем"
 
+msgid "%s messages"
+msgstr "%s писем"
+
 msgid "hour"
 msgstr "час"
 
@@ -1837,11 +1840,26 @@ msgstr "Стоимость"
 msgid "%s / message"
 msgstr "%s / письмо"
 
+msgid "%s/message"
+msgstr "%s/письмо"
+
+msgid "Balance"
+msgstr "Баланс"
+
 msgid "Current balance"
 msgstr "Текущий баланс"
 
 msgid "Top up balance"
 msgstr "Пополнить баланс"
+
+msgid "Top up"
+msgstr "Пополнить"
+
+msgid "Add credit"
+msgstr "Пополнить"
+
+msgid "Transactional email service."
+msgstr "Сервис отправки email-рассылок."
 
 msgid "Add IP address to the white list"
 msgstr "Добавить IP-адрес в белый список"
@@ -2061,3 +2079,6 @@ msgstr "Смотрите также %sсоветы и уроки%s"
 
 msgid "https://support.webasyst.com/mailer/"
 msgstr "https://support.webasyst.ru/mailer/"
+
+msgid "%s/email"
+msgstr "%s/письмо"

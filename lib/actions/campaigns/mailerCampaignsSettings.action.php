@@ -89,14 +89,20 @@ class mailerCampaignsSettingsAction extends waViewAction
         // Fill senders params
         $spm = $this->getSenderParamsModel();
         $sender_params = $spm->getAll();
-        $senders = array_map(function($sender) use ($sender_params) {
-            return array_merge($sender, array_reduce(array_filter($sender_params, function($el) use ($sender) {
-                return $el['sender_id'] == $sender['id'];
-            }), function($result, $el) {
-                $result[$el['name']] = $el['value'];
-                return $result;
-            }));
-        }, $senders);
+        $senders = array_map(function ($sender) use ($sender_params) {
+            return array_merge(
+                $sender,
+                (array) array_reduce(
+                    array_filter($sender_params, function ($el) use ($sender) {
+                        return $el['sender_id'] == ifset($sender, 'id', '');
+                    }),
+                    function ($result, $el) {
+                        $result[$el['name']] = $el['value'];
+                        return $result;
+                    }
+                )
+            );
+        }, (array) $senders);
 
         if (!$this->isWaidConnected() || wa()->whichUI() == '1.3') {
             // Remove Webasyst Transport sender in case of absent connection to Webasyst ID or UI 1.3
@@ -230,7 +236,7 @@ class mailerCampaignsSettingsAction extends waViewAction
                     // TODO: не стоит ли тут добавить остаток бесплатного лимита?
                 }
 
-                $response = $this->getWaTransportApi()->call('ip-white-list');
+                $response = $this->getWaTransportApi()->getIpWhiteList();
                 $white_list = ifset($response, 'response', 'list', []);
                 $is_allowed_ip = ifset($response, 'response', 'is_allowed_ip', true);
                 $current_ip = ifset($response, 'response', 'your_ip', '');
@@ -324,10 +330,7 @@ class mailerCampaignsSettingsAction extends waViewAction
     protected function getWaTransportBalanceResponse()
     {
         if ($this->wa_transport_balance_response === null && $this->isWaidConnected()) {
-            $this->wa_transport_balance_response = $this->getWaTransportApi()->call('balance', [
-                'service' => 'EMAIL',
-                'locale' => wa()->getLocale()
-            ]);
+            $this->wa_transport_balance_response = $this->getWaTransportApi()->getBalance('EMAIL');
         }
         return $this->wa_transport_balance_response;
     }

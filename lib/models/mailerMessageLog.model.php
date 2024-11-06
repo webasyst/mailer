@@ -209,6 +209,9 @@ class mailerMessageLogModel extends waModel
                 'm_id' => $message_id
             )
         )->fetchAssoc();
+        if (empty($campaign_start) || empty($campaign_start['start'])) {
+            return null;
+        }
         return strtotime($campaign_start['start']);
         /*
                 $campaign_start = $this->query(

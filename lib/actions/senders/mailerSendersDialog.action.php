@@ -46,7 +46,7 @@ class mailerSendersDialogAction extends waViewAction
             $api = new mailerWaTransportServiceApi();
             $waid_is_connected = $api->isConnected();
             if ($waid_is_connected) {
-                $response = $api->call('balance', ['service' => 'EMAIL', 'locale' => wa()->getLocale()]);
+                $response = $api->getBalance('EMAIL');
                 $status = ifset($response, 'status', null);
                 if (empty($status) || $status >= 400) {
                     $notice = ifset($response, 'response', 'error_description', ifset($response, 'response', 'error', ''));
@@ -56,7 +56,7 @@ class mailerSendersDialogAction extends waViewAction
                     $price = wa_currency_html(ifset($response, 'response', 'price', ''), ifset($response, 'response', 'currency_id', ''));
                     $free_limits = ifset($response, 'response', 'free_limits', '');
 
-                    $response = $api->call('ip-white-list');
+                    $response = $api->getIpWhiteList();
                     $white_list = ifset($response, 'response', 'list', []);
                     $is_allowed_ip = ifset($response, 'response', 'is_allowed_ip', true);
                     $current_ip = ifset($response, 'response', 'your_ip', '');
@@ -97,7 +97,7 @@ class mailerSendersDialogAction extends waViewAction
          * @since 2.1.2
          */
         $event_result = wa()->event('sender.type_settings', ref([
-            'sender_id' => $sender['id'],
+            'sender_id' => ifset($sender, 'id', null),
             'sender' => $sender,
             'sender_params' => $params,
             'types' => &$sender_types,

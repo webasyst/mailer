@@ -11,6 +11,7 @@ class mailerReturnpathSaveController extends waJsonController
         $id = waRequest::post('id');
         $data = waRequest::post('data');
         $data['ssl'] = empty($data['ssl']) ? 0 : 1;
+        $data['no_plus'] = empty($data['no_plus']) ? 1 : 0;
 
         $rpm = new mailerReturnPathModel();
         if ($id) {

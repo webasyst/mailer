@@ -582,6 +582,9 @@ class mailerHelper
 
     public static function getOneStringKey($dkim_pub_key)
     {
+        if (empty($dkim_pub_key)) {
+            return '';
+        }
         $one_string_key = trim(preg_replace('/^\-{5}[^\-]+\-{5}(.+)\-{5}[^\-]+\-{5}$/s', '$1', trim($dkim_pub_key)));
         //$one_string_key = str_replace('-----BEGIN PUBLIC KEY-----', '', $dkim_pub_key);
         //$one_string_key = trim(str_replace('-----END PUBLIC KEY-----', '', $one_string_key));

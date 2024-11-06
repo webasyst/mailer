@@ -12,7 +12,8 @@ class mailerContactsProfileTabHandler extends waEventHandler
             mailerMessageModel::STATUS_SENT,
         );
 
-        $contact_id = $params;
+        $contact_id = (is_array($params) ? ifset($params, 'id', 0) : $params);
+        $counter_inside = is_array($params) ? ifset($params, 'counter_inside', true) : waRequest::param('profile_tab_counter_inside', true);
         $mm = new mailerMessageModel();
         $counters = $mm->countByRecipient($contact_id, $statuses, true);
 
@@ -50,19 +51,20 @@ class mailerContactsProfileTabHandler extends waEventHandler
             waSystem::setActive($old_app);
             return array();
         }
-
-        $colors = array(
-            0 => '#080', 1 => 'black', 2 => 'red'
-        );
-        foreach ($colors as $k => $color) {
-            if (!$title_counters[$k]) {
-                unset($title_counters[$k]);
-            } else {
-                $title_counters[$k] = "<span style='color: {$color} !important;'>{$title_counters[$k]}</span>";
+        if ($counter_inside) {
+            $colors = array(
+                0 => '#080', 1 => 'black', 2 => 'red'
+            );
+            foreach ($colors as $k => $color) {
+                if (!$title_counters[$k]) {
+                    unset($title_counters[$k]);
+                } else {
+                    $title_counters[$k] = "<span style='color: {$color} !important;'>{$title_counters[$k]}</span>";
+                }
             }
         }
 
-        $title = _w('Campaigns') . ' (' . ($title_counters ? implode('/', $title_counters) : 0) . ')';
+        $title = _w('Campaigns').($counter_inside && $title_counters ? ' ('.implode('/', $title_counters).')' : '');
         if ($unsubscribe_emails) {
             $title .= ' <i class="icon16 status-red-tiny"></i>';
         }
@@ -70,7 +72,7 @@ class mailerContactsProfileTabHandler extends waEventHandler
         $result = array();
         $result[] = array(
             'title' => $title,
-            'count' => null,
+            'count' => ($counter_inside ? null : array_sum(array_values($title_counters))),
             'url' => wa()->getAppUrl('mailer').'?module=backend&action=contactTab&id='.$contact_id,
             'html' => ''
         );

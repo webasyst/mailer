@@ -96,11 +96,4 @@ class mailerConfig extends waAppConfig
 
         return $speeds;
     }
-
-    public function onCount()
-    {
-        (new mailerWaTransportApiUrlConfig())->keepEndpointsSynchronized();
-
-        return null;
-    }
 }

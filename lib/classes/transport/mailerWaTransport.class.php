@@ -120,7 +120,7 @@ class mailerWaTransport implements mailerExtendedTransportInterface, mailerBounc
             $this->spamtest_message_data = $message_data;
         }
 
-        $res = $this->api->serviceCall('EMAIL', $message_data, waNet::METHOD_POST, ['request_format' => waNet::FORMAT_JSON]);
+        $res = $this->api->sendEmail($message_data);
 
         $status = ifset($res, 'status', null);
 

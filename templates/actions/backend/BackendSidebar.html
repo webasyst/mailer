@@ -118,13 +118,48 @@
             </li>
             {if $wa->user()->getRights($wa->app(), 'design')}
                 <li class="sidebar-design-link">
-                    <a href="#/design/">
+                    <a href="#/design/themes/">
                         <i class="fas fa-palette"></i>
                         <span>[`Design`]</span>
                     </a>
                 </li>
             {/if}
         </ul>
+
+        {if $waid_is_connected}
+            <div class="box custom-mb-4">
+                <div class="blank box rounded js-balance-wrapper">
+                    <div class="flexbox space-8">
+                        <div class="wide custom-mt-2">
+                            <header class="heading custom-m-0 js-balance-toggle-content">
+                                <span>
+                                    <span class="title b-all-drafts">[`Webasyst Email`]</span>
+                                </span>
+                            </header>
+                            <div class="flexbox space-8 custom-mt-4 wrap small">
+                                <div class="bold large">{$wa_balance}</div>
+                                <div>
+                                <a href="javascript:void(0)" class="button green smaller js-balance-button">[`Add credit`]</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="custom-mt-0">
+                            <a href="javascript:void(0)" class="js-balance-toggle text-light-gray small">
+                                <span class="js-balance-toggle-content"><i class="fas fa-chevron-down"></i></span>
+                                <span class="js-balance-toggle-content" style="display: none;"><i class="fas fa-chevron-up custom-mt-8"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                    <p class="hint custom-mt-8 js-balance-toggle-content">
+                        <i class="fas fa-check-circle text-green small"></i> [`Transactional email service.`]
+                        <span class="nowrap">{sprintf_wp('%s/email', $wa_price)}</span>
+                        {if !empty($wa_letters_count)}
+                            <b class="nowrap">&#8776;{$wa_letters_count}</b>
+                        {/if}
+                    </p>
+                </div>
+            </div>
+        {/if}
     </div>
 {/if}
 
@@ -146,6 +181,65 @@
     });
 </script>
 
+{if $waid_is_connected}
+<script>
+    (function () {
+        "use strict";
+        const response_code_str = {_w('Response code: %s.')|json_encode};
+        const code_sent_to_phone_str = {_w('Code has been sent to phone number %s.')|json_encode};
+        const code_sent_to_email_str = {_w('Code has been sent to email address %s.')|json_encode};
+
+        const $balance = $('.js-balance-wrapper');
+        let balance_collapsed = localStorage.getItem('mailer_sidebar_balance_collapsed');
+        try {
+            balance_collapsed = balance_collapsed === null ? false : JSON.parse(balance_collapsed);
+        } catch (e) {
+            balance_collapsed = false;
+        }
+        if (balance_collapsed) {
+            $balance.find('.js-balance-toggle-content').toggle();
+        }
+        $balance.on('click', '.js-balance-toggle', function(e){
+            e.preventDefault();
+            $balance.find('.js-balance-toggle-content').toggle();
+            balance_collapsed = !balance_collapsed;
+            localStorage.setItem('mailer_sidebar_balance_collapsed', balance_collapsed);
+        })
+
+        $balance.on('click', '.js-balance-button:not(.disabled)', function (e) {
+            e.preventDefault();
+            $(this).addClass('disabled');
+            const $button = $(this);
+            $.get('?module=senders&action=balanceWa', function (data) {
+                const resp = data.data.response;
+                const status = data.data.status || '-';
+                const err = resp.error_description || resp.error || resp.errors || null;
+                if (data.status === 'fail') {
+                    console.warn('balance', data);
+                    responseDialog(status, '');
+                    $button.removeClass('disabled');
+                } else if (err) {
+                    responseDialog(status, err.toString());
+                    $button.removeClass('disabled');
+                } else if (typeof resp.url !== 'undefined') {
+                    document.location = resp.url;
+                }
+            });
+        });
+
+        function responseDialog(code, message) {
+            let content = response_code_str.replace('%s', code);
+            content += message ? '<br><pre class="small gray">'+ message +'</pre>' : '';
+            $.waDialog({
+                header: $('#js-dialog-elements header.js-header-2').html(),
+                content: content,
+                footer: $('#js-dialog-elements footer').html(),
+            });
+        }
+
+    })();
+</script>
+{/if}
 {*
  * Plugin blocks
  *}

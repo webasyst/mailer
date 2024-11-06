@@ -55,7 +55,6 @@
                 <div class="name">[`Secure (SSL)`]</div>
                 <div class="value">
                     <span class="switch small">
-                        <input type="hidden" name="data[ssl]" value="0">
                         <input type="checkbox" name="data[ssl]" value="1"{if isset($data.ssl)} checked="checked"{/if}>
                     </span>
                 </div>
@@ -64,8 +63,7 @@
                 <div class="name">[`Sub-addressing`]</div>
                 <div class="value">
                     <span class="switch small">
-                        <input type="hidden" name="data[no_plus]" value="1">
-                        <input type="checkbox" name="data[no_plus]" value="0" {if !isset($data.no_plus)} checked="checked"{/if}>
+                        <input type="checkbox" name="data[no_plus]" value="1"{if !isset($data.no_plus)} checked="checked"{/if}>
                     </span>
                     <p class="hint custom-mt-8">[`Disable if your mail server does not support sub-addressing in email addresses, i.e. addresses containing the “+” character.`]</p>
                 </div>
