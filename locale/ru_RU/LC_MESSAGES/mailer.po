@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\n"
 
@@ -1856,10 +1856,19 @@ msgid "Top up"
 msgstr "Пополнить"
 
 msgid "Add credit"
-msgstr "Пополнить"
+msgstr "Пополнить баланс"
 
-msgid "Transactional email service."
+msgid "Transactional bulk email service."
 msgstr "Сервис отправки email-рассылок."
+
+msgid "Transactional bulk email service with pay-as-you-go pricing."
+msgstr "Сервис массовых email-рассылок с оплатой за отправленные письма."
+
+msgid "How it works"
+msgstr "Как это работает"
+
+msgid "Enable for free"
+msgstr "Подключите бесплатно"
 
 msgid "Add IP address to the white list"
 msgstr "Добавить IP-адрес в белый список"
@@ -1894,6 +1903,9 @@ msgstr "Выбранный транспорт не требует настрой
 msgid "<a href=\"%s\">Connect to Webasyst ID</a> to use the Webasyst sender server."
 msgstr "<a href=\"%s\">Подключите Webasyst ID</a>, чтобы пользоваться отправителем Webasyst."
 
+msgid "Webasyst Email is a bulk email service with pay-as-you-go pricing."
+msgstr "Webasyst Email — служба массовых email-рассылок с оплатой только за отправленные письма."
+
 msgid "Running an email campaign via Webasyst services will ensure reliable message deliverability."
 msgstr "Отправка рассылки через службы Webasyst обеспечит надежную доставку сообщений получателям."
 
@@ -1905,9 +1917,6 @@ msgstr "Для этого необходимо <a href=\"javascript:void(0)\" cl
 
 msgid "Switch plan"
 msgstr "Сменить тариф"
-
-msgid "Free"
-msgstr "Бесплатно"
 
 msgid "The IP address of the server where your Mailer app is installed is in the list of banned addresses."
 msgstr "IP-адрес сервера, на котором установлено ваше приложение «Рассылки», попал в список запрещенных адресов."
@@ -1954,8 +1963,8 @@ msgstr "Когда вы отправляете сообщения через с�
 msgid "SMTP server"
 msgstr "SMTP-сервер"
 
-msgid "Try the Webasyst Email Sender to send email campaigns!"
-msgstr "Попробуйте Webasyst Email Sender для отправки рассылки!"
+msgid "Try Webasyst Email to send email campaigns!"
+msgstr "Попробуйте Webasyst Email для отправки рассылок!"
 
 msgid "Not used for the selected transport."
 msgstr "Не используется для выбранного транспорта."
@@ -2082,3 +2091,39 @@ msgstr "https://support.webasyst.ru/mailer/"
 
 msgid "%s/email"
 msgstr "%s/письмо"
+
+msgid "Webasyst Email"
+msgstr "Webasyst Email"
+
+msgid "Revert to original"
+msgstr "Восстановить из исходной версии"
+
+msgid "Limit of %d free message reached"
+msgid_plural "Limit of %d free messages reached"
+msgstr[0] "Достигнут лимит из %d бесплатного сообщения"
+msgstr[1] "Достигнут лимит из %d бесплатных сообщений"
+msgstr[2] "Достигнут лимит из %d бесплатных сообщений"
+
+msgid "%d message left"
+msgid_plural "%d messages left"
+msgstr[0] "Осталось %s сообщение"
+msgstr[1] "Осталось %s сообщения"
+msgstr[2] "Осталось %s сообщений"
+
+msgid "Try for free"
+msgstr "Пробуйте бесплатно"
+
+msgid "Free"
+msgstr "Бесплатно"
+
+msgid "Free message limit reached"
+msgstr "Достигнут лимит бесплатных сообщений"
+
+msgid "No access to Webasyst API."
+msgstr "Нет доступа к API Webasyst."
+
+msgid "https://www.webasyst.com/pricing/#services"
+msgstr "https://www.webasyst.ru/pricing/#services"
+
+msgid "<%s>Connect to Webasyst ID<%s> to use Webasyst Email."
+msgstr "<%s>Подключитесь к Webasyst ID<%s>, чтобы использовать Webasyst Email."

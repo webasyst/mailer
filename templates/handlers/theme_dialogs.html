@@ -20,7 +20,7 @@
         </div>
         <div class="dialog-footer">
             <button type="submit" class="button red">[s`Revert to original`]</button>
-            <a href="#/design/themes/" class="js-close-dialog light-gray">[`Cancel`]</a>
+            <a href="javascript:void(0)" class="js-close-dialog button light-gray">[`Cancel`]</a>
         </div>
         <input type="hidden" name="theme" value="{$theme.app_id|escape}:{$theme.id|escape}">
     </form>
@@ -39,29 +39,42 @@ $(function() {
 
                     $submit_btn.on('click', function (event) {
                         event.preventDefault();
-                        $.wa.mailer.buttonLoader({
-                            $button: $submit_btn,
-                            status: 'loader'
-                        });
+                        if ($.wa.mailer) {
+                            $.wa.mailer.buttonLoader({
+                                $button: $submit_btn,
+                                status: 'loader'
+                            });
+                        } else {
+                            $submit_btn.prepend('<span class="js-loading custom-mr-4"><i class="fas fa-spinner fa-spin"></i></span>');
+                        }
+
                         $.post("?module=design&action=themeReset", $form.serialize(), response => {
                             if (response.status === 'ok') {
-                                $.wa.mailer.buttonLoader({
-                                    $button: $submit_btn,
-                                    status: 'success',
-                                    callback() {
-                                        if(response.data.redirect) {
-                                            location.href = location.href.replace(/(\?|#).*$/,'') + response.data.redirect;
-                                            location.reload();
-                                        } else {
-                                            location.reload();
+                                if ($.wa.mailer) {
+                                    $.wa.mailer.buttonLoader({
+                                        $button: $submit_btn,
+                                        status: 'success',
+                                        callback() {
+                                            if(response.data.redirect) {
+                                                location.href = location.href.replace(/(\?|#).*$/,'') + response.data.redirect;
+                                                location.reload();
+                                            } else {
+                                                location.reload();
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                                } else {
+                                    location.reload();
+                                }
                             } else {
-                                $.wa.mailer.buttonLoader({
-                                    $button: $submit_btn,
-                                    status: 'failed'
-                                });
+                                if ($.wa.mailer) {
+                                    $.wa.mailer.buttonLoader({
+                                        $button: $submit_btn,
+                                        status: 'failed'
+                                    });
+                                } else {
+                                    $submit_btn.find('.js-loading').remove();
+                                }
                                 alert(response.errors);
                             }
                         }, "json");

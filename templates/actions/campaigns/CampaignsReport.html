@@ -719,6 +719,8 @@
             $.wa.mailer.setTitle();
         })($);
         </script>
-        {$wa->installer->reviewWidget('app/mailer')}
+        {if $wa->installer && method_exists($wa->installer, 'reviewWidget')}
+            {$wa->installer->reviewWidget('app/mailer')}
+        {/if}
     </div>
 </div>

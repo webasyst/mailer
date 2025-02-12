@@ -126,40 +126,66 @@
             {/if}
         </ul>
 
-        {if $waid_is_connected}
-            <div class="box custom-mb-4">
-                <div class="blank box rounded js-balance-wrapper">
-                    <div class="flexbox space-8">
-                        <div class="wide custom-mt-2">
-                            <header class="heading custom-m-0 js-balance-toggle-content">
-                                <span>
-                                    <span class="title b-all-drafts">[`Webasyst Email`]</span>
-                                </span>
-                            </header>
-                            <div class="flexbox space-8 custom-mt-4 wrap small">
-                                <div class="bold large">{$wa_balance}</div>
-                                <div>
-                                <a href="javascript:void(0)" class="button green smaller js-balance-button">[`Add credit`]</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="custom-mt-0">
-                            <a href="javascript:void(0)" class="js-balance-toggle text-light-gray small">
-                                <span class="js-balance-toggle-content"><i class="fas fa-chevron-down"></i></span>
-                                <span class="js-balance-toggle-content" style="display: none;"><i class="fas fa-chevron-up custom-mt-8"></i></span>
-                            </a>
+        <div class="box custom-mb-4">
+            <div class="blank box rounded js-balance-wrapper">
+                <div class="flexbox space-8">
+                    <div class="wide custom-mt-2">
+                        <header class="heading custom-m-0 custom-pb-4">
+                            <span>
+                                <span class="title b-all-drafts">[`Webasyst Email`]</span>
+                            </span>
+                        </header>
+                        <div class="js-balance-toggle-content">
+                            {if $waid_is_connected}
+                                {if $wa_api_error}
+                                    <p class="state-caution-hint custom-mt-8"><i class="fas fa-exclamation-triangle"></i> [`No access to Webasyst API.`]</p>
+                                    <p class="state-error-hint custom-my-8"><i class="fas fa-exclamation-triangle"></i> {$wa_api_error}</p>
+                                {else}
+                                    {if $wa_total}
+                                        <p class="bold small custom-my-0">{_ws('%d email', '%d emails', $wa_total)}</p>
+                                    {/if}
+                                    {if $wa_is_positive_balance}
+                                        <p class="bold small custom-my-0">{$wa_balance}</p>
+                                    {/if}
+
+                                    <p class="hint custom-mt-4 custom-mb-12">
+                                        <i class="fas fa-check-circle text-green"></i> [`Transactional bulk email service with pay-as-you-go pricing.`]
+                                        <a href="[`https://www.webasyst.com/pricing/#services`]" target="_blank" class="nowrap">[`How it works`]</a>
+                                    </p>
+                                    <p class="custom-mt-8 custom-mb-4">
+                                        <a href="javascript:void(0)" class="button green smallest js-balance-button">[`Add credit`]</a>
+                                    </p>
+                                {/if}
+                            {else}
+                                <p class="hint custom-mt-4 custom-mb-12">
+                                    [`Transactional bulk email service with pay-as-you-go pricing.`]
+                                    <a href="[`https://www.webasyst.com/pricing/#services`]" target="_blank" class="nowrap">[`How it works`]</a>
+                                </p>
+                                <a href="{$wa_backend_url}webasyst/settings/waid/" class="button light-gray smallest custom-mb-4">[s`Enable for free`]</a>
+                            {/if}
                         </div>
                     </div>
-                    <p class="hint custom-mt-8 js-balance-toggle-content">
-                        <i class="fas fa-check-circle text-green small"></i> [`Transactional email service.`]
-                        <span class="nowrap">{sprintf_wp('%s/email', $wa_price)}</span>
-                        {if !empty($wa_letters_count)}
-                            <b class="nowrap">&#8776;{$wa_letters_count}</b>
-                        {/if}
-                    </p>
+                    <div class="custom-mt-0">
+                        <a href="javascript:void(0)" class="js-balance-toggle text-light-gray small">
+                            <span class="js-balance-toggle-content"><i class="fas fa-chevron-up"></i></span>
+                            <span class="js-balance-toggle-content" style="display: none;"><i class="fas fa-chevron-down" style="position: relative; top: -2px;"></i></span>
+                        </a>
+                    </div>
                 </div>
             </div>
-        {/if}
+
+            <div class="dialog" id="js-dialog-elements">
+                <header class="dialog-header js-header-1"><h1>[s`Confirmation code`]</h1></header>
+                <header class="dialog-header js-header-2"><h3>[s`Server response`]</h3></header>
+                <div class="dialog-content">
+                    <input type="text" class="semibold js-code" placeholder="1234">
+                    <button class="button js-code-confirm">[s`Confirm`]</button>
+                    <div class="gray custom-mt-8 js-message"></div>
+                </div>
+                <footer class="dialog-footer"><button class='button gray js-close-dialog'>[s`Close`]</button></footer>
+            </div>
+
+        </div>
     </div>
 {/if}
 
@@ -179,10 +205,7 @@
             $sidebar.find('.sidebar-mobile-toggle').trigger('touchstart')
         })
     });
-</script>
 
-{if $waid_is_connected}
-<script>
     (function () {
         "use strict";
         const response_code_str = {_w('Response code: %s.')|json_encode};
@@ -239,7 +262,6 @@
 
     })();
 </script>
-{/if}
 {*
  * Plugin blocks
  *}

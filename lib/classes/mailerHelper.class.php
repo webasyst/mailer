@@ -607,7 +607,7 @@ class mailerHelper
 
         $sender_types = array(
             'wa' => [
-                'name' => 'Webasyst Email Sender',
+                'name' => 'Webasyst Email',
                 'description' => '<i class="fas fa-check-circle text-green"></i> ' . _w('Running an email campaign via Webasyst services will ensure reliable message deliverability.'),
                 'dkim_irrelevant' => _w('DKIM is set up on Webasyst servers and does not require additional setup in the Mailer app.'),
                 'return_path_built_in' => true,

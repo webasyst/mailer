@@ -111,7 +111,7 @@
                                             <a href="javascript:void(0);" id="sender-select-{$s.id}" data-id="{$s.id}" data-type="{$s.type}"{if !empty($s.no_return_path)} data-no-return-path="1"{/if}>
                                                 {if $s.type == 'wa'}
                                                     <i class="fas fa-mail-bulk"></i>
-                                                    <span>Webasyst Email Sender</span>
+                                                    <span>Webasyst Email</span>
                                                 {else}
                                                     <i class="fas fa-server"></i>
                                                     <span>{$s.name|escape} &lt;{$s.email|escape}&gt;</span>
@@ -211,7 +211,7 @@
                     {if !empty($wa_sender)}
                         <div id="wa-transport" class="{if $params.sender_type != 'wa'}hidden {/if}custom-mt-16">
                             {if empty($wa_api_error)}
-                                <h6>[`Webasyst Email Sender`]</h6>
+                                <h6>[`Webasyst Email`]</h6>
                                 {include './includes/transport.wa.html' inline}
                             {else}
                                 <div class="alert warning">

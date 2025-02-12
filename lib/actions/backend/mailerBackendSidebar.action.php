@@ -83,43 +83,51 @@ class mailerBackendSidebarAction extends waViewAction
         $this->view->assign('unsubscribers_count', $unsubscribers_count);
         $this->view->assign('undeliverable_count', $undeliverable_count);
 
-        if ($this->isWaidConnected()) {
-            $response = $this->getWaTransportBalanceResponse();
-            $status = ifset($response, 'status', null);
-            if (empty($status) || $status >= 400) {
-                $notice = ifset($response, 'response', 'error_description', ifset($response, 'response', 'error', ''));
-            } else {
-                $balance_amount = ifset($response, 'response', 'amount', 0);
-                $currency_id = ifset($response, 'response', 'currency_id', '');
-                $price_value = ifset($response, 'response', 'price', 0);
-                $free_limits = ifset($response, 'response', 'free_limits', []);
-                $remaining_free_calls = ifset($response, 'response', 'remaining_free_calls', []);
+        $this->assignWaTransportBlock();
+    }
 
-                $balance = $this->formatAmount($balance_amount, $currency_id);
-                $price = $this->formatAmount($price_value, $currency_id);
-
-                if ($balance_amount > 0 && $price_value > 0) {
-                    $letters_count = intval(floor($balance_amount / $price_value));
-                    if ($letters_count > 10000) {
-                        $letters_count = sprintf_wp('%s messages', intval($letters_count / 1000) . 'K');
-                    } elseif ($letters_count > 0) {
-                        $letters_count = _w('%d message', '%d messages', $letters_count);
-                    } else {
-                        $letters_count = '';
-                    }
-                    // TODO: не стоит ли тут добавить остаток бесплатного лимита?
-                }
-            }
+    private function assignWaTransportBlock()
+    {
+        try {
+            $wa_service_api = new waServicesApi();
+            $waid_is_connected = $wa_service_api->isConnected();
+        } catch (Throwable $e) {
+            $waid_is_connected = false;
         }
+
+        $this->view->assign('waid_is_connected', $waid_is_connected);
+        if (!$waid_is_connected) {
+            return;
+        }
+
+        $balance_amount = 0;
+        $res = $wa_service_api->getBalance(waServicesApi::EMAIL_MESSAGE_SERVICE);
+
+        $status = ifset($res, 'status', null);
+        if (empty($status) || $status >= 400) {
+            $api_error = ifset($res, 'response', 'error_description', ifset($res, 'response', 'error', ''));
+        } else {
+            $balance_amount = ifset($res, 'response', 'amount', 0);
+            $currency_id = ifset($res, 'response', 'currency_id', '');
+            $balance = $this->formatAmount($balance_amount, $currency_id);
+
+            $price_value = ifset($res, 'response', 'price', 0);
+            if ($balance_amount > 0 && $price_value > 0) {
+                $messages_count = intval(floor($balance_amount / $price_value));
+            }
+            $remaining_free_calls = ifempty($res, 'response', 'remaining_free_calls', []);
+            $remaining_pack = ifset($remaining_free_calls, 'pack', 0);
+            unset($remaining_free_calls['pack']);
+        }
+
         $this->view->assign([
-            'waid_is_connected' => $this->isWaidConnected(),
-            'wa_api_error'      => ifset($notice, []),
+            'wa_api_error'     => ifset($api_error),
+            'wa_is_positive_balance' => $balance_amount > 0,
             'wa_balance'        => ifset($balance, '—'),
-            'wa_price'          => ifset($price, '—'),
-            'wa_free_limits'    => ifset($free_limits, []),
-            'wa_remaining_free_calls' => ifset($remaining_free_calls, []),
-            'wa_letters_count'  => ifset($letters_count, null),
-        ]);
+            'wa_total'   => ifset($messages_count, 0)
+                            + ifset($remaining_free_calls, 'total', 0)
+                            + ifset($remaining_pack, 0),
+            ]);
     }
 
     protected function getWaTransportApi()
@@ -139,14 +147,6 @@ class mailerBackendSidebarAction extends waViewAction
         return $this->waid_is_connected;
     }
 
-    protected function getWaTransportBalanceResponse()
-    {
-        if ($this->wa_transport_balance_response === null && $this->isWaidConnected()) {
-            $this->wa_transport_balance_response = $this->getWaTransportApi()->getBalance('EMAIL');
-        }
-        return $this->wa_transport_balance_response;
-    }
-
     protected function formatAmount($amount, $currency_id)
     {
         $precision = strpos(strrev(strval($amount)), '.');
@@ -155,4 +155,3 @@ class mailerBackendSidebarAction extends waViewAction
         return $currency_id === 'RUB' ? $amount_str . ' <span class="ruble">₽</span>' : '$' . $amount_str;
     }
 }
-

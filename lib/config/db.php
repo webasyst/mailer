@@ -106,6 +106,7 @@ return array(
         'login' => array('varchar', 255, 'null' => 0),
         'password' => array('varchar', 255, 'null' => 0),
         'ssl' => array('tinyint', 1, 'null' => 0),
+        'no_plus' => array('tinyint', 1, 'null' => 0, 'default' => '0'),
         'last_error' => array('text'),
         'last_campaign_date' => array('date'),
         ':keys' => array(

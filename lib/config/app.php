@@ -5,7 +5,7 @@ return array(
     'icon' => 'img/mailer.svg',
     'frontend' => true,
     'plugins' => true,
-    'version' => '2.2.10',
+    'version' => '2.2.12',
     'critical' => '2.0.0',
     'vendor' => 'webasyst',
     'license' => 'Webasyst',

@@ -242,7 +242,9 @@
 
 <div id="error-text-dialog"></div>
 <div id="update-container" class="hidden"></div>
-{$wa->installer->reviewWidget('app/mailer')}
+{if $wa->installer && method_exists($wa->installer, 'reviewWidget')}
+    {$wa->installer->reviewWidget('app/mailer')}
+{/if}
 <script>
 (function () { "use strict";
 {if $wa->locale() === 'ru_RU'}

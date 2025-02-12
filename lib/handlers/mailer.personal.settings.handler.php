@@ -51,7 +51,7 @@ class mailerMailerPersonalSettingsHandler extends waEventHandler
         $view->assign('theme_id', $theme_id);
         $view->assign('parent_themes', $parent_themes);
 
-        $template = wa()->getAppPath('templates/handlers/PersonalSettings.html', 'mailer');
+        $template = wa()->getAppPath('templates/handlers'.(wa()->whichUI() == '1.3' ? '-legacy' : '').'/PersonalSettings.html', 'mailer');
         return $view->fetch($template);
     }
 }
